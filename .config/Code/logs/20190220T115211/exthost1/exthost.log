@@ -1,0 +1,28 @@
+[2019-02-20 11:52:13.900] [exthost] [info] extension host started
+[2019-02-20 11:52:13.941] [exthost] [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch {"startup":true,"activationEvent":"*"}
+[2019-02-20 11:52:13.941] [exthost] [info] ExtensionService#loadCommonJSModule /usr/share/code/resources/app/extensions/debug-auto-launch/dist/extension
+[2019-02-20 11:52:13.945] [exthost] [info] ExtensionService#_doActivateExtension vscode.emmet {"startup":true,"activationEvent":"*"}
+[2019-02-20 11:52:13.945] [exthost] [info] ExtensionService#loadCommonJSModule /usr/share/code/resources/app/extensions/emmet/dist/extension
+[2019-02-20 11:52:13.949] [exthost] [info] ExtensionService#_doActivateExtension vscode.git {"startup":true,"activationEvent":"*"}
+[2019-02-20 11:52:13.950] [exthost] [info] ExtensionService#loadCommonJSModule /usr/share/code/resources/app/extensions/git/dist/main
+[2019-02-20 11:52:13.993] [exthost] [info] ExtensionService#_doActivateExtension vscode.merge-conflict {"startup":true,"activationEvent":"*"}
+[2019-02-20 11:52:13.993] [exthost] [info] ExtensionService#loadCommonJSModule /usr/share/code/resources/app/extensions/merge-conflict/dist/extension
+[2019-02-20 11:52:13.996] [exthost] [info] ExtensionService#_doActivateExtension hbenl.vscode-test-explorer {"startup":true,"activationEvent":"*"}
+[2019-02-20 11:52:13.996] [exthost] [info] ExtensionService#loadCommonJSModule /home/divum/.vscode/extensions/hbenl.vscode-test-explorer-2.5.0/out/main.js
+[2019-02-20 11:52:14.007] [exthost] [info] ExtensionService#_doActivateExtension vscode.python {"startup":false,"activationEvent":"onLanguage:python"}
+[2019-02-20 11:52:14.007] [exthost] [info] ExtensionService#loadCommonJSModule /usr/share/code/resources/app/extensions/python/out/pythonMain
+[2019-02-20 11:52:14.007] [exthost] [info] ExtensionService#_doActivateExtension batisteo.vscode-django {"startup":false,"activationEvent":"onLanguage:python"}
+[2019-02-20 11:52:14.007] [exthost] [info] ExtensionService#loadCommonJSModule /home/divum/.vscode/extensions/batisteo.vscode-django-0.19.0/out/extension
+[2019-02-20 11:52:14.014] [exthost] [info] ExtensionService#_doActivateExtension donjayamanne.jupyter {"startup":false,"activationEvent":"onLanguage:python"}
+[2019-02-20 11:52:14.014] [exthost] [info] ExtensionService#loadCommonJSModule /home/divum/.vscode/extensions/donjayamanne.jupyter-1.1.4/out/src/extension
+[2019-02-20 11:52:14.362] [exthost] [info] ExtensionService#_doActivateExtension fabioz.vscode-pydev {"startup":false,"activationEvent":"onLanguage:python"}
+[2019-02-20 11:52:14.362] [exthost] [info] ExtensionService#loadCommonJSModule /home/divum/.vscode/extensions/fabioz.vscode-pydev-0.1.5/out/extension
+[2019-02-20 11:52:14.413] [exthost] [info] ExtensionService#_doActivateExtension hyesun.py-paste-indent {"startup":false,"activationEvent":"onLanguage:python"}
+[2019-02-20 11:52:14.413] [exthost] [info] ExtensionService#loadCommonJSModule /home/divum/.vscode/extensions/hyesun.py-paste-indent-0.1.1/out/extension.js
+[2019-02-20 11:52:14.414] [exthost] [info] ExtensionService#_doActivateExtension ms-python.python {"startup":false,"activationEvent":"onLanguage:python"}
+[2019-02-20 11:52:14.414] [exthost] [info] ExtensionService#loadCommonJSModule /home/divum/.vscode/extensions/ms-python.python-2019.1.0/out/client/extension
+[2019-02-20 11:52:14.553] [exthost] [info] ExtensionService#_doActivateExtension tht13.python {"startup":false,"activationEvent":"onLanguage:python"}
+[2019-02-20 11:52:14.554] [exthost] [info] ExtensionService#loadCommonJSModule /home/divum/.vscode/extensions/tht13.python-0.2.3/out/client/src/pythonMain
+[2019-02-20 11:52:14.577] [exthost] [info] ExtensionService#_doActivateExtension VisualStudioExptTeam.vscodeintellicode {"startup":false,"activationEvent":"onLanguage:python"}
+[2019-02-20 11:52:14.577] [exthost] [info] ExtensionService#loadCommonJSModule /home/divum/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.1.3/out/extension
+[2019-02-20 11:52:14.887] [exthost] [info] eager extensions activated

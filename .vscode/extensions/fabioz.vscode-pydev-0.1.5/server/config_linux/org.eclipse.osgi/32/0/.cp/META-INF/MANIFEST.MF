@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.python.pydev.pydev_lsp;singleton:=true
+Export-Package: org.python.pydev.pydev_lsp,org.python.pydev.pydev_lsp.
+ completions,org.python.pydev.pydev_lsp.settings
+Bundle-Name: PyDevLSP
+Bundle-Version: 0.1.5.201805051749
+Require-Bundle: org.eclipse.core.runtime,org.eclipse.lsp4j,org.eclipse
+ .core.resources,org.eclipse.lsp4j.jsonrpc,org.eclipse.core.filebuffer
+ s,org.eclipse.ls.core,org.eclipse.text,org.python.pydev.core,org.pyth
+ on.pydev.ast,org.python.pydev.shared_core,org.python.pydev.parser,com
+ .python.pydev.analysis
+Bundle-ManifestVersion: 2
+Bundle-Activator: org.python.pydev.pydev_lsp.PyDevLanguageServerPlugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Brainwy Software Ltda
+
+

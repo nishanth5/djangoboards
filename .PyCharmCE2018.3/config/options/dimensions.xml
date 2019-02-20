@@ -1,0 +1,27 @@
+<application>
+  <component name="DimensionService">
+    <location key="WELCOME_SCREEN.0.0.1366.768" x="715" y="362" />
+    <location key="com.intellij.ide.util.TipDialog.0.0.1366.768" x="378" y="225" />
+    <location key="search.everywhere.popup.0.0.1366.768" x="378" y="88" />
+    <location key="SettingsEditor.0.0.1366.768@120dpi" x="69" y="24" />
+    <location key="SettingsEditor.0.0.1366.768" x="69" y="24" />
+    <location key="FileChooserDialogImpl.0.0.1366.768" x="503" y="141" />
+    <location key="#Vim_Emulation.0.0.1366.768" x="472" y="106" />
+    <location key="#views.0.0.1366.768" x="449" y="24" />
+    <location key="#com.intellij.execution.impl.EditConfigurationsDialog.0.0.1366.768" x="180" y="55" />
+    <location key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog.0.0.1366.768" x="412" y="141" />
+    <location key="#Notifications.0.0.1366.768" x="488" y="127" />
+    <location key="find.popup.0.0.1366.768" x="382" y="62" />
+    <size key="GridCell.Tab.0.left.0.0.1366.768" width="1235" height="165" />
+    <size key="GridCell.Tab.0.center.0.0.1366.768" width="1235" height="165" />
+    <size key="GridCell.Tab.0.right.0.0.1366.768" width="1235" height="165" />
+    <size key="GridCell.Tab.0.bottom.0.0.1366.768" width="1235" height="165" />
+    <size key="search.everywhere.popup.0.0.1366.768" width="672" height="678" />
+    <size key="GridCell.Tab.1.left.0.0.1366.768" width="1235" height="205" />
+    <size key="GridCell.Tab.1.center.0.0.1366.768" width="1235" height="205" />
+    <size key="GridCell.Tab.1.right.0.0.1366.768" width="1235" height="205" />
+    <size key="GridCell.Tab.1.bottom.0.0.1366.768" width="1235" height="205" />
+    <size key="FileChooserDialogImpl.0.0.1366.768" width="424" height="511" />
+    <size key="find.popup.0.0.1366.768" width="684" height="681" />
+  </component>
+</application>

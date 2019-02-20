@@ -1,0 +1,642 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en-US" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8" lang="en-US" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9" lang="en-US" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-US" prefix="og: http://ogp.me/ns#"> <!--<![endif]-->
+<head>
+        <!-- META TAGS -->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Pingback URL -->
+        <link rel="pingback" href="https://fizzbuzzer.com/xmlrpc.php" />
+
+        <!-- RSS -->
+        <link rel="alternate" type="application/rss+xml" title="fizzbuzzer.com" href="https://fizzbuzzer.com/feed/" />
+        <link rel="alternate" type="application/atom+xml" title="fizzbuzzer.com" href="https://fizzbuzzer.com/feed/atom/" />
+
+        <title>Radio transmitters challenge - fizzbuzzer.com</title>
+
+<!-- This site is optimized with the Yoast SEO plugin v7.5.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="Hackerland is a one-dimensional city with n houses, where each house i is located at some x_i on the x-axis. The Mayor wants to install radio transmitters on the roofs of the cityâ€™s houses. Each transmitter has a range, k, meaning it can transmit a signal to all houses le k units of distance away."/>
+<link rel="canonical" href="https://fizzbuzzer.com/radio-transmitters-challenge/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Radio transmitters challenge - fizzbuzzer.com" />
+<meta property="og:description" content="Hackerland is a one-dimensional city with n houses, where each house i is located at some x_i on the x-axis. The Mayor wants to install radio transmitters on the roofs of the cityâ€™s houses. Each transmitter has a range, k, meaning it can transmit a signal to all houses \le k units of distance away." />
+<meta property="og:url" content="https://fizzbuzzer.com/radio-transmitters-challenge/" />
+<meta property="og:site_name" content="fizzbuzzer.com" />
+<meta property="article:tag" content="algorithms" />
+<meta property="article:section" content="Algorithms" />
+<meta property="article:published_time" content="2016-12-28T16:59:23+00:00" />
+<meta property="article:modified_time" content="2017-08-18T16:37:25+00:00" />
+<meta property="og:updated_time" content="2017-08-18T16:37:25+00:00" />
+<meta property="og:image" content="https://lucaslouca.com/wp-content/uploads/2016/12/radio-transmitters-1.png" />
+<meta property="og:image:secure_url" content="https://lucaslouca.com/wp-content/uploads/2016/12/radio-transmitters-1.png" />
+<meta property="og:image" content="https://lucaslouca.com/wp-content/uploads/2016/12/radio-transmitters-2.png" />
+<meta property="og:image:secure_url" content="https://lucaslouca.com/wp-content/uploads/2016/12/radio-transmitters-2.png" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="fizzbuzzer.com &raquo; Feed" href="https://fizzbuzzer.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="fizzbuzzer.com &raquo; Comments Feed" href="https://fizzbuzzer.com/comments/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/fizzbuzzer.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.9"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='simple_tooltips_style-css'  href='https://fizzbuzzer.com/wp-content/plugins/simple-tooltips/zebra_tooltips.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-css'  href='https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=_2.7.2_beta' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-theme-pspad-css'  href='https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/themes/pspad/pspad.css?ver=_2.7.2_beta' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-font-consolas-css'  href='https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/fonts/consolas.css?ver=_2.7.2_beta' type='text/css' media='all' />
+<link rel='stylesheet' id='bbp-default-css'  href='https://fizzbuzzer.com/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.14-6684' type='text/css' media='screen' />
+<link rel='stylesheet' id='dpsp-frontend-style-css'  href='https://fizzbuzzer.com/wp-content/plugins/social-pug/assets/css/style-frontend.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='google-fonts-css'  href='//fonts.googleapis.com/css?family=Roboto%7CDroid%2BSerif%3A400%2C700%2C400italic%2C700italic&#038;subset=latin%2Clatin-ext&#038;ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='font-awesome-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/font-awesome/css/font-awesome.min.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='bootstrap-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/bootstrap.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='main-stylesheet-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/main.css?ver=4.9.9' type='text/css' media='all' />
+<style id='main-stylesheet-inline-css' type='text/css'>
+
+		body,
+		.main-nav div > ul > li a,
+		h3.search-header,
+		form.search-form .input-common, form.search-form input.search-term, form.search-form input.search-btn,
+		.faq-item h3.faq-question
+
+
+		{
+			font-family: "Roboto", sans-serif;
+		}
+		
+</style>
+<link rel='stylesheet' id='responsive-stylesheet-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/responsive.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='pretty-photo-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/prettyphoto/css/prettyPhoto.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='inspiry-parent-default-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/style.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-css-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/custom.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='child-default-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase-child/style.css?ver=4.9.9' type='text/css' media='all' />
+<link rel='stylesheet' id='child-custom-css'  href='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase-child/child-custom.css?ver=4.9.9' type='text/css' media='all' />
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"https:\/\/fizzbuzzer.com\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=_2.7.2_beta'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/plugins/social-pug/assets/js/front-end.js?ver=4.9.9'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/plugins/wp-hide-post/public/js/wp-hide-post-public.js?ver=2.0.10'></script>
+<link rel='https://api.w.org/' href='https://fizzbuzzer.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://fizzbuzzer.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://fizzbuzzer.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.9.9" />
+<link rel='shortlink' href='https://fizzbuzzer.com/?p=1194' />
+<link rel="alternate" type="application/json+oembed" href="https://fizzbuzzer.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ffizzbuzzer.com%2Fradio-transmitters-challenge%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://fizzbuzzer.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ffizzbuzzer.com%2Fradio-transmitters-challenge%2F&#038;format=xml" />
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-7454381545661952",
+    enable_page_level_ads: true
+  });
+</script><style type="text/css" data-source="Social Pug"></style><meta name="twitter:card" 		content="summary_large_image" /><meta property="og:url"			content="https://fizzbuzzer.com/radio-transmitters-challenge/" /><meta property="og:type"			content="article" /><meta property="og:title"			content="Radio transmitters challenge" /><meta property="og:description" 	content="Problem statement Hackerland is a one-dimensional city with $latex n$ houses, where each house $latex" /><meta property="og:image" 		content="" /><!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]--><style type='text/css' id='dynamic-css'>
+
+body{
+color:#6f7579;
+}
+
+h1, h2, h3, h4, h5, h6, h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{
+color:#3b4348;
+}
+
+a{
+color:#3b4348;
+}
+
+a:hover, a:focus, a:active{
+color:#395996;
+}
+
+</style><style type='text/css' id='quick-css'>
+
+p {
+    text-align: justify;
+}
+
+</style><style type="text/css">
+/* <![CDATA[ */
+img.latex {vertical-align: middle; display:inline-block; border: none; }
+/* ]]> */
+</style>
+<link rel="icon" href="https://fizzbuzzer.com/wp-content/uploads/2017/08/logo-fizzbuzzer-small.png" sizes="32x32" />
+<link rel="icon" href="https://fizzbuzzer.com/wp-content/uploads/2017/08/logo-fizzbuzzer-small.png" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="https://fizzbuzzer.com/wp-content/uploads/2017/08/logo-fizzbuzzer-small.png" />
+<meta name="msapplication-TileImage" content="https://fizzbuzzer.com/wp-content/uploads/2017/08/logo-fizzbuzzer-small.png" />
+
+<!-- BEGIN GADWP v5.3.3 Universal Analytics - https://exactmetrics.com/ -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-47719288-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- END GADWP Universal Analytics -->
+		<style type="text/css" id="wp-custom-css">
+			p.search-tag-line {
+    font-family: "Open Sans", sans-serif;
+    font-style: normal;
+}		</style>
+	</head>
+<body class="post-template-default single single-post postid-1194 single-format-standard">
+
+
+        <!-- Start of Header -->
+        <div class="header-wrapper">
+            <header>
+                <div class="container">
+
+
+                                            <h2 class="logo-heading">
+                            <a href="https://fizzbuzzer.com"  title="fizzbuzzer.com">
+                                fizzbuzzer.com                            </a>
+                        </h2>
+                        <span class="tag-line"></span>
+                        
+
+                    <!-- Start of Main Navigation -->
+                    <nav class="main-nav">
+                        <div class="clearfix"><ul>
+<li class="page_item page-item-2035 current_page_parent"><a href="https://fizzbuzzer.com/articles/">Articles List</a></li>
+<li class="page_item page-item-2033"><a href="https://fizzbuzzer.com/">Home</a></li>
+</ul></div>
+                    </nav>
+                    <!-- End of Main Navigation -->
+
+                </div>
+            </header>
+        </div>
+        <!-- End of Header -->
+
+        <!-- Start of Search Wrapper -->
+                <div class="search-area-wrapper search-area-theme-option" style="background-image: url('https://fizzbuzzer.com/wp-content/uploads/2019/01/banner4.jpg')">
+                    <div class="search-area container">
+                                <h3 class="search-header">Looking for good programming challenges? </h3>
+                <p class="search-tag-line">Use the search below to find our solutions for selected questions!</p>
+
+                <form id="search-form" class="search-form clearfix" method="get" action="https://fizzbuzzer.com/" autocomplete="off">
+                    <input class="search-term required" type="text" id="s" name="s" placeholder="Type your search terms here" title="* Please enter a search term!" />
+                    <input class="search-btn" type="submit" value="Search" />
+                    <div id="search-error-container"></div>
+                </form>
+            </div>
+        </div>
+        <!-- End of Search Wrapper -->
+
+<!-- Start of Page Container -->
+<div class="page-container">
+    <div class="container">
+        <div class="row">
+
+            <!-- start of page content -->
+            <div class="span8 page-content">
+
+                    <ul class="breadcrumb"><li><a href="https://fizzbuzzer.com">fizzbuzzer.com</a><span class="divider">/</span></li><li><a href="https://fizzbuzzer.com/category/algorithms/">Algorithms</a> <span class="divider">/</span></li><li><li class="active">Radio transmitters challenge</li></ul>                            <article id="post-1194" class="clearfix post-1194 post type-post status-publish format-standard hentry category-algorithms tag-algorithms">
+                            <h1 class="post-title"><a href="https://fizzbuzzer.com/radio-transmitters-challenge/">Radio transmitters challenge</a></h1>
+
+                            <div class="post-meta clearfix">
+                                <span class="date"><i class="fa fa-calendar-o"></i>28 Dec, 2016</span>
+                                <span class="category"><i class="fa fa-folder-open-o"></i><a href="https://fizzbuzzer.com/category/algorithms/">Algorithms</a></span>
+                                                                <span class="like-count"><i class="fa fa-thumbs-o-up"></i>0</a></span>
+                            </div><!-- end of post meta -->
+
+                            <p class="dpsp-share-text">Sharing is caring!</p><div id="dpsp-content-top" class="dpsp-content-wrapper dpsp-shape-rounded dpsp-column-auto dpsp-has-spacing dpsp-has-buttons-count dpsp-show-on-mobile dpsp-button-style-1 dpsp-has-icon-background dpsp-has-button-background"><ul class="dpsp-networks-btns-wrapper dpsp-networks-btns-content"><li><a rel="nofollow" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffizzbuzzer.com%2Fradio-transmitters-challenge%2F&t=Radio+transmitters+challenge" class="dpsp-network-btn dpsp-facebook dpsp-has-count dpsp-first"><span class="dpsp-network-label-wrapper"><span class="dpsp-network-label">Facebook</span><span class="dpsp-network-count">0</span></span></a></li><li><a rel="nofollow" href="https://twitter.com/intent/tweet?text=Radio+transmitters+challenge&url=https%3A%2F%2Ffizzbuzzer.com%2Fradio-transmitters-challenge%2F" class="dpsp-network-btn dpsp-twitter dpsp-last"><span class="dpsp-network-label-wrapper"><span class="dpsp-network-label">Twitter</span></span></a></li></ul></div><p><strong>Problem statement</strong><br />
+Hackerland is a one-dimensional city with <img src='https://s0.wp.com/latex.php?latex=n&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='n' title='n' class='latex' /> houses, where each house <img src='https://s0.wp.com/latex.php?latex=i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='i' title='i' class='latex' /> is located at some <img src='https://s0.wp.com/latex.php?latex=x_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='x_i' title='x_i' class='latex' /> on the x-axis. The Mayor wants to install radio transmitters on the roofs of the city&#8217;s houses. Each transmitter has a range, <img src='https://s0.wp.com/latex.php?latex=k&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='k' title='k' class='latex' />, meaning it can transmit a signal to all houses <img src='https://s0.wp.com/latex.php?latex=%5Cle+k&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\le k' title='\le k' class='latex' /> units of distance away.</p>
+<p>Given a map of Hackerland and the value of <img src='https://s0.wp.com/latex.php?latex=k&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='k' title='k' class='latex' />, can you find and print the minimum number of transmitters needed to cover every house in the city? (Every house must be covered by at least one transmitter) Each transmitter must be installed on top of an existing house.</p>
+<p><strong>Input Format</strong><br />
+The first line contains two space-separated integers describing the respective values of <img src='https://s0.wp.com/latex.php?latex=n&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='n' title='n' class='latex' /> (the number of houses in Hackerland) and <img src='https://s0.wp.com/latex.php?latex=k&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='k' title='k' class='latex' /> (the range of each transmitter).<br />
+The second line contains <img src='https://s0.wp.com/latex.php?latex=n&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='n' title='n' class='latex' /> space-separated integers describing the respective locations of each house (i.e., <img src='https://s0.wp.com/latex.php?latex=x_1%2C+x_2%2C%5Cdots%2Cx_n&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='x_1, x_2,\dots,x_n' title='x_1, x_2,\dots,x_n' class='latex' />).</p>
+<p><strong>Constraints</strong><br />
+<img src='https://s0.wp.com/latex.php?latex=1+%5Cle+n%2C+k+%5Cle+10%5E%7B5%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='1 \le n, k \le 10^{5}' title='1 \le n, k \le 10^{5}' class='latex' /><br />
+<img src='https://s0.wp.com/latex.php?latex=1+%5Cle+x_i+%5Cle+10%5E%7B5%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='1 \le x_i \le 10^{5}' title='1 \le x_i \le 10^{5}' class='latex' /><br />
+There may be more than one house at the same location.</p>
+<p><strong>Output Format</strong><br />
+Print a single integer denoting the minimum number of transmitters needed to cover all the houses.</p>
+<p><strong>Sample Input 0</strong></p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5c62890e544e7162466364" class="crayon-syntax crayon-theme-pspad crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+5 1
+1 2 3 4 5</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5c62890e544e7162466364-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544e7162466364-2">2</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5c62890e544e7162466364-1"><span class="crayon-cn">5</span><span class="crayon-h"> </span><span class="crayon-cn">1</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544e7162466364-2"><span class="crayon-cn">1</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-h"> </span><span class="crayon-cn">3</span><span class="crayon-h"> </span><span class="crayon-cn">4</span><span class="crayon-h"> </span><span class="crayon-cn">5</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0003 seconds] -->
+<p></p>
+<p><strong>Sample Output 0</strong></p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5c62890e544ef600632787" class="crayon-syntax crayon-theme-pspad crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+2</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5c62890e544ef600632787-1">1</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5c62890e544ef600632787-1"><span class="crayon-cn">2</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0001 seconds] -->
+<p></p>
+<p><strong>Explanation 0</strong><br />
+The diagram below depicts our map of Hackerland:</p>
+<p><a href="https://lucaslouca.com/wp-content/uploads/2016/12/radio-transmitters-1.png"><img src="https://lucaslouca.com/wp-content/uploads/2016/12/radio-transmitters-1.png" alt="" width="461" height="82" class="aligncenter size-full wp-image-1195" srcset="https://fizzbuzzer.com/wp-content/uploads/2016/12/radio-transmitters-1.png 461w, https://fizzbuzzer.com/wp-content/uploads/2016/12/radio-transmitters-1-300x53.png 300w" sizes="(max-width: 461px) 100vw, 461px" /></a></p>
+<p>We can cover the entire city by installing transmitters on houses at locations <img src='https://s0.wp.com/latex.php?latex=2&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='2' title='2' class='latex' /> and <img src='https://s0.wp.com/latex.php?latex=4&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='4' title='4' class='latex' />. Thus, we print <img src='https://s0.wp.com/latex.php?latex=2&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='2' title='2' class='latex' /> on a new line.</p>
+<p><strong>Sample Input 1</strong></p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5c62890e544f1539630856" class="crayon-syntax crayon-theme-pspad crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+8 2
+7 2 4 6 5 9 12 11 </textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5c62890e544f1539630856-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f1539630856-2">2</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5c62890e544f1539630856-1"><span class="crayon-cn">8</span><span class="crayon-h"> </span><span class="crayon-cn">2</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f1539630856-2"><span class="crayon-cn">7</span><span class="crayon-h"> </span><span class="crayon-cn">2</span><span class="crayon-h"> </span><span class="crayon-cn">4</span><span class="crayon-h"> </span><span class="crayon-cn">6</span><span class="crayon-h"> </span><span class="crayon-cn">5</span><span class="crayon-h"> </span><span class="crayon-cn">9</span><span class="crayon-h"> </span><span class="crayon-cn">12</span><span class="crayon-h"> </span><span class="crayon-cn">11</span><span class="crayon-h"> </span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0002 seconds] -->
+<p></p>
+<p><strong>Sample Output 1</strong></p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5c62890e544f3212206359" class="crayon-syntax crayon-theme-pspad crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+3</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5c62890e544f3212206359-1">1</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5c62890e544f3212206359-1"><span class="crayon-cn">3</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0001 seconds] -->
+<p></p>
+<p><strong>Explanation 1</strong><br />
+The diagram below depicts our map of Hackerland:</p>
+<p><a href="https://lucaslouca.com/wp-content/uploads/2016/12/radio-transmitters-2.png"><img src="https://lucaslouca.com/wp-content/uploads/2016/12/radio-transmitters-2.png" alt="" width="819" height="83" class="aligncenter size-full wp-image-1196" srcset="https://fizzbuzzer.com/wp-content/uploads/2016/12/radio-transmitters-2.png 819w, https://fizzbuzzer.com/wp-content/uploads/2016/12/radio-transmitters-2-300x30.png 300w, https://fizzbuzzer.com/wp-content/uploads/2016/12/radio-transmitters-2-768x78.png 768w" sizes="(max-width: 819px) 100vw, 819px" /></a></p>
+<p>We can cover the entire city by installing transmitters on houses at locations <img src='https://s0.wp.com/latex.php?latex=4&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='4' title='4' class='latex' />, <img src='https://s0.wp.com/latex.php?latex=9&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='9' title='9' class='latex' />, and <img src='https://s0.wp.com/latex.php?latex=12&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='12' title='12' class='latex' />. Thus, we print <img src='https://s0.wp.com/latex.php?latex=3&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='3' title='3' class='latex' /> on a new line.</p>
+<p><strong>Solution</strong><br />
+The first we are going to take is sort the array <code>x</code>:</p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5c62890e544f6597672165" class="crayon-syntax crayon-theme-pspad crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+Arrays.sort(x);</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5c62890e544f6597672165-1">1</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5c62890e544f6597672165-1"><span class="crayon-v">Arrays</span><span class="crayon-sy">.</span><span class="crayon-e">sort</span><span class="crayon-sy">(</span><span class="crayon-v">x</span><span class="crayon-sy">)</span><span class="crayon-sy">;</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0001 seconds] -->
+<p></p>
+<p>Next, we are going to iterate over all the elements <img src='https://s0.wp.com/latex.php?latex=x_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='x_i' title='x_i' class='latex' /> using a cursor <code>i</code>. As long as the current house, <code>x[i]</code> is within <img src='https://s0.wp.com/latex.php?latex=k&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='k' title='k' class='latex' /> points from the last transmitter-covered house, <code>x[last]</code>, we keep incrementing <code>i</code>. When we reach a house that is more than <img src='https://s0.wp.com/latex.php?latex=k&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='k' title='k' class='latex' /> points from the last transmitter-covered house, we know that we need to place one more transmitter. So we increment our transmitter count (<code>ans</code>) and update <code>last = i - 1</code>. We have now covered the left side of the transmitter. Since a transmitter can cover two sides, left and right, we need to increment our cursor <code>i</code> as long as <code>x[i]</code> is within <img src='https://s0.wp.com/latex.php?latex=k&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='k' title='k' class='latex' /> distance from <code>last</code>, for the right side. Once we are out of range we update <code>last</code> accordingly, but don&#8217;t place a new transmitter. We repeat the process for the left and right side until we have iterated over all houses.</p>
+<p>The sorting part has a running time of <img src='https://s0.wp.com/latex.php?latex=%5Cmathcal%7BO%7D%28nlogn%29&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\mathcal{O}(nlogn)' title='\mathcal{O}(nlogn)' class='latex' /> while the iteration over all the houses has a running time of <img src='https://s0.wp.com/latex.php?latex=%5Cmathcal%7BO%7D%28n%29&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\mathcal{O}(n)' title='\mathcal{O}(n)' class='latex' />. The full code is available below.</p>
+<p><strong>Full code</strong></p>
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5c62890e544f9864669969" class="crayon-syntax crayon-theme-pspad crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+public class RadioTransmitters {
+    private static int solve(int[] x, int k) {
+        int ans = 0;
+        Arrays.sort(x);
+
+        int n = x.length;
+        int last = 0;
+        int i = 0;
+        while (i &lt; x.length) {
+            while (i &lt; n &amp;&amp; x[i] &lt;= x[last] + k) {
+                i++;
+            }
+
+            ans++;
+            last = i - 1;
+            
+            while (i &lt; n &amp;&amp; x[i] &lt;= x[last] + k) {
+                i++;
+            }
+            last = i;
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        System.setIn(new FileInputStream(System.getProperty("user.home") + "/" + "in.txt"));
+        Scanner in = new Scanner(System.in);
+
+        int n = in.nextInt();
+        int k = in.nextInt();
+
+        int[] x = new int[n];
+        for (int i = 0; i &lt; n; i++) {
+            x[i] = in.nextInt();
+        }
+
+        System.out.println(solve(x, k));
+    }
+}</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-2">2</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-4">4</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-6">6</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-8">8</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-10">10</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-11">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-12">12</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-13">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-14">14</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-15">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-16">16</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-17">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-18">18</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-19">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-20">20</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-21">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-22">22</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-23">23</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-24">24</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-25">25</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-26">26</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-27">27</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-28">28</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-29">29</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-30">30</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-31">31</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-32">32</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-33">33</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-34">34</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-35">35</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-36">36</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-37">37</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-38">38</div><div class="crayon-num" data-line="crayon-5c62890e544f9864669969-39">39</div><div class="crayon-num crayon-striped-num" data-line="crayon-5c62890e544f9864669969-40">40</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5c62890e544f9864669969-1"><span class="crayon-m">public</span><span class="crayon-h"> </span><span class="crayon-t">class</span><span class="crayon-h"> </span><span class="crayon-e">RadioTransmitters</span><span class="crayon-h"> </span><span class="crayon-sy">{</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-2"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-m">private</span><span class="crayon-h"> </span><span class="crayon-m">static</span><span class="crayon-h"> </span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-e">solve</span><span class="crayon-sy">(</span><span class="crayon-t">int</span><span class="crayon-sy">[</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-v">x</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-v">k</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-sy">{</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-3"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-v">ans</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">0</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-4"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">Arrays</span><span class="crayon-sy">.</span><span class="crayon-e">sort</span><span class="crayon-sy">(</span><span class="crayon-v">x</span><span class="crayon-sy">)</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-5">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-6"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-v">n</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-v">x</span><span class="crayon-sy">.</span><span class="crayon-v">length</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-7"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-v">last</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">0</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-8"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-v">i</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">0</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-9"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">while</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-v">i</span><span class="crayon-h"> </span><span class="crayon-o">&lt;</span><span class="crayon-h"> </span><span class="crayon-v">x</span><span class="crayon-sy">.</span><span class="crayon-v">length</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-sy">{</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-10"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">while</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-v">i</span><span class="crayon-h"> </span><span class="crayon-o">&lt;</span><span class="crayon-h"> </span><span class="crayon-v">n</span><span class="crayon-h"> </span><span class="crayon-o">&amp;&amp;</span><span class="crayon-h"> </span><span class="crayon-v">x</span><span class="crayon-sy">[</span><span class="crayon-v">i</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-o">&lt;=</span><span class="crayon-h"> </span><span class="crayon-v">x</span><span class="crayon-sy">[</span><span class="crayon-v">last</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-v">k</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-sy">{</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-11"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">i</span><span class="crayon-o">++</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-12"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-sy">}</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-13">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-14"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">ans</span><span class="crayon-o">++</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-15"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">last</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-v">i</span><span class="crayon-h"> </span><span class="crayon-o">-</span><span class="crayon-h"> </span><span class="crayon-cn">1</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-16"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-17"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">while</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-v">i</span><span class="crayon-h"> </span><span class="crayon-o">&lt;</span><span class="crayon-h"> </span><span class="crayon-v">n</span><span class="crayon-h"> </span><span class="crayon-o">&amp;&amp;</span><span class="crayon-h"> </span><span class="crayon-v">x</span><span class="crayon-sy">[</span><span class="crayon-v">i</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-o">&lt;=</span><span class="crayon-h"> </span><span class="crayon-v">x</span><span class="crayon-sy">[</span><span class="crayon-v">last</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-v">k</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-sy">{</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-18"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">i</span><span class="crayon-o">++</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-19"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-sy">}</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-20"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">last</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-v">i</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-21"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-sy">}</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-22">&nbsp;</div><div class="crayon-line" id="crayon-5c62890e544f9864669969-23"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">return</span><span class="crayon-h"> </span><span class="crayon-v">ans</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-24"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-sy">}</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-25">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-26"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-m">public</span><span class="crayon-h"> </span><span class="crayon-m">static</span><span class="crayon-h"> </span><span class="crayon-t">void</span><span class="crayon-h"> </span><span class="crayon-e">main</span><span class="crayon-sy">(</span><span class="crayon-t">String</span><span class="crayon-sy">[</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-v">args</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-e">throws</span><span class="crayon-h"> </span><span class="crayon-e">FileNotFoundException</span><span class="crayon-h"> </span><span class="crayon-sy">{</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-27"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">System</span><span class="crayon-sy">.</span><span class="crayon-e">setIn</span><span class="crayon-sy">(</span><span class="crayon-r">new</span><span class="crayon-h"> </span><span class="crayon-e">FileInputStream</span><span class="crayon-sy">(</span><span class="crayon-v">System</span><span class="crayon-sy">.</span><span class="crayon-e">getProperty</span><span class="crayon-sy">(</span><span class="crayon-s">"user.home"</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-s">"/"</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-s">"in.txt"</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-28"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">Scanner </span><span class="crayon-st">in</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-r">new</span><span class="crayon-h"> </span><span class="crayon-e">Scanner</span><span class="crayon-sy">(</span><span class="crayon-v">System</span><span class="crayon-sy">.</span><span class="crayon-st">in</span><span class="crayon-sy">)</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-29">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-30"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-v">n</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-st">in</span><span class="crayon-sy">.</span><span class="crayon-e">nextInt</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-31"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-v">k</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-st">in</span><span class="crayon-sy">.</span><span class="crayon-e">nextInt</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-32">&nbsp;</div><div class="crayon-line" id="crayon-5c62890e544f9864669969-33"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-t">int</span><span class="crayon-sy">[</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-v">x</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-r">new</span><span class="crayon-h"> </span><span class="crayon-t">int</span><span class="crayon-sy">[</span><span class="crayon-v">n</span><span class="crayon-sy">]</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-34"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">for</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-t">int</span><span class="crayon-h"> </span><span class="crayon-v">i</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">0</span><span class="crayon-sy">;</span><span class="crayon-h"> </span><span class="crayon-v">i</span><span class="crayon-h"> </span><span class="crayon-o">&lt;</span><span class="crayon-h"> </span><span class="crayon-v">n</span><span class="crayon-sy">;</span><span class="crayon-h"> </span><span class="crayon-v">i</span><span class="crayon-o">++</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-sy">{</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-35"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">x</span><span class="crayon-sy">[</span><span class="crayon-v">i</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-st">in</span><span class="crayon-sy">.</span><span class="crayon-e">nextInt</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-sy">;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-36"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-sy">}</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-37">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-38"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">System</span><span class="crayon-sy">.</span><span class="crayon-v">out</span><span class="crayon-sy">.</span><span class="crayon-e">println</span><span class="crayon-sy">(</span><span class="crayon-e">solve</span><span class="crayon-sy">(</span><span class="crayon-v">x</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">k</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span><span class="crayon-sy">;</span></div><div class="crayon-line" id="crayon-5c62890e544f9864669969-39"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-sy">}</span></div><div class="crayon-line crayon-striped-line" id="crayon-5c62890e544f9864669969-40"><span class="crayon-sy">}</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0027 seconds] -->
+<p></p>
+                            </article>
+
+                                                        <div class="like-btn">
+
+                                <form id="like-it-form" action="https://fizzbuzzer.com/wp-admin/admin-ajax.php" method="post" >
+                                    <span class="like-it "><i class="fa fa-thumbs-o-up"></i>0</span>
+                                    <input type="hidden" name="post_id" value="1194" />
+                                    <input type="hidden" name="action" value="like_it" />
+                                </form>
+                                <span class="tags"><strong>Tags:&nbsp;&nbsp;</strong><a href="https://fizzbuzzer.com/tag/algorithms/" rel="tag">algorithms</a></span>
+                            </div>
+                                                        <section id="comments">
+
+	
+	
+	
+	
+    
+</section><!-- end of comments -->
+            </div>
+            <!-- end of page content -->
+
+            
+                                        <!-- start of sidebar -->
+                                        <aside class="span4 page-sidebar">
+                                            		<section class="widget">		<h3 class="title">Recent Posts</h3>		<ul>
+											<li>
+					<a href="https://fizzbuzzer.com/special-palindrome-again-challenge/">Special Palindrome Again Challenge</a>
+									</li>
+											<li>
+					<a href="https://fizzbuzzer.com/making-anagrams-challenge/">Making Anagrams Challenge</a>
+									</li>
+											<li>
+					<a href="https://fizzbuzzer.com/counting-inversions-challenge/">Counting Inversions Challenge</a>
+									</li>
+											<li>
+					<a href="https://fizzbuzzer.com/frequency-queries/">Frequency Queries</a>
+									</li>
+											<li>
+					<a href="https://fizzbuzzer.com/count-triplets/">Count Triplets Challenge</a>
+									</li>
+					</ul>
+		</section><section class="widget"><h3 class="title">Archives</h3>		<ul>
+			<li><a href='https://fizzbuzzer.com/2019/01/'>January 2019</a></li>
+	<li><a href='https://fizzbuzzer.com/2018/11/'>November 2018</a></li>
+	<li><a href='https://fizzbuzzer.com/2018/07/'>July 2018</a></li>
+	<li><a href='https://fizzbuzzer.com/2018/05/'>May 2018</a></li>
+	<li><a href='https://fizzbuzzer.com/2018/03/'>March 2018</a></li>
+	<li><a href='https://fizzbuzzer.com/2018/02/'>February 2018</a></li>
+	<li><a href='https://fizzbuzzer.com/2017/08/'>August 2017</a></li>
+	<li><a href='https://fizzbuzzer.com/2017/07/'>July 2017</a></li>
+	<li><a href='https://fizzbuzzer.com/2017/06/'>June 2017</a></li>
+	<li><a href='https://fizzbuzzer.com/2017/05/'>May 2017</a></li>
+	<li><a href='https://fizzbuzzer.com/2017/04/'>April 2017</a></li>
+	<li><a href='https://fizzbuzzer.com/2017/03/'>March 2017</a></li>
+	<li><a href='https://fizzbuzzer.com/2017/02/'>February 2017</a></li>
+	<li><a href='https://fizzbuzzer.com/2017/01/'>January 2017</a></li>
+	<li><a href='https://fizzbuzzer.com/2016/12/'>December 2016</a></li>
+	<li><a href='https://fizzbuzzer.com/2016/11/'>November 2016</a></li>
+	<li><a href='https://fizzbuzzer.com/2015/06/'>June 2015</a></li>
+	<li><a href='https://fizzbuzzer.com/2014/06/'>June 2014</a></li>
+	<li><a href='https://fizzbuzzer.com/2014/05/'>May 2014</a></li>
+	<li><a href='https://fizzbuzzer.com/2014/04/'>April 2014</a></li>
+		</ul>
+		</section><section class="widget"><h3 class="title">Categories</h3>		<ul>
+	<li class="cat-item cat-item-39"><a href="https://fizzbuzzer.com/category/algorithms/" >Algorithms</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="https://fizzbuzzer.com/category/design/" >Design</a>
+</li>
+	<li class="cat-item cat-item-47"><a href="https://fizzbuzzer.com/category/experiences/" >Experiences</a>
+</li>
+	<li class="cat-item cat-item-40"><a href="https://fizzbuzzer.com/category/implementation/" >Implementation</a>
+</li>
+	<li class="cat-item cat-item-43"><a href="https://fizzbuzzer.com/category/mathematics/" >Mathematics</a>
+</li>
+	<li class="cat-item cat-item-45"><a href="https://fizzbuzzer.com/category/tools/" >Tools</a>
+</li>
+		</ul>
+</section>                                        </aside>
+                                        <!-- end of sidebar -->
+        </div>
+    </div>
+</div>
+<!-- End of Page Container -->
+
+
+<!-- Start of Footer -->
+<footer id="footer-wrapper">
+    <div id="footer" class="container">
+        <div class="row">
+
+            <div class="span3">
+                <section class="widget"><h3 class="title">About fizzbuzzer.com</h3>			<div class="textwidget"><p>At fizzbuzzer.com we want toÂ help fellow software engineers become better at what they do by sharing our experiences during our quest to become better engineers ourselves. We provide you with software engineering interview and job experiences, programming questions and tutorials.</p>
+</div>
+		</section>            </div>
+
+            <div class="span3">
+                <section class="widget"><h3 class="title">Categories</h3>		<ul>
+	<li class="cat-item cat-item-39"><a href="https://fizzbuzzer.com/category/algorithms/" >Algorithms</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="https://fizzbuzzer.com/category/design/" >Design</a>
+</li>
+	<li class="cat-item cat-item-47"><a href="https://fizzbuzzer.com/category/experiences/" >Experiences</a>
+</li>
+	<li class="cat-item cat-item-40"><a href="https://fizzbuzzer.com/category/implementation/" >Implementation</a>
+</li>
+	<li class="cat-item cat-item-43"><a href="https://fizzbuzzer.com/category/mathematics/" >Mathematics</a>
+</li>
+	<li class="cat-item cat-item-45"><a href="https://fizzbuzzer.com/category/tools/" >Tools</a>
+</li>
+		</ul>
+</section>            </div>
+
+
+            <div class="span3">
+                <section class="widget"><h3 class="title">Login</h3>
+			<form method="post" action="https://fizzbuzzer.com/wp-login.php" class="bbp-login-form">
+				<fieldset>
+					<legend>Log In</legend>
+
+					<div class="bbp-username">
+						<label for="user_login">Username: </label>
+						<input type="text" name="log" value="" size="20" id="user_login" tabindex="101" />
+					</div>
+
+					<div class="bbp-password">
+						<label for="user_pass">Password: </label>
+						<input type="password" name="pwd" value="" size="20" id="user_pass" tabindex="102" />
+					</div>
+
+					<div class="bbp-remember-me">
+						<input type="checkbox" name="rememberme" value="forever"  id="rememberme" tabindex="103" />
+						<label for="rememberme">Remember Me</label>
+					</div>
+
+					<div class="bbp-submit-wrapper">
+
+						
+						<button type="submit" name="user-submit" id="user-submit" tabindex="104" class="button submit user-submit">Log In</button>
+
+						
+		<input type="hidden" name="user-cookie" value="1" />
+
+		<input type="hidden" id="bbp_redirect_to" name="redirect_to" value="https://fizzbuzzer.com/radio-transmitters-challenge/" /><input type="hidden" id="_wpnonce" name="_wpnonce" value="8931a1dff6" /><input type="hidden" name="_wp_http_referer" value="/radio-transmitters-challenge/" />
+					</div>
+
+					
+				</fieldset>
+			</form>
+
+		</section>            </div>
+
+
+            <div class="span3">
+                <section class="widget"><h3 class="title"><a class="rsswidget" href="https://fizzbuzzer.com/feed/"><img class="rss-widget-icon" style="border:0" width="14" height="14" src="https://fizzbuzzer.com/wp-includes/images/rss.png" alt="RSS" /></a> <a class="rsswidget" href="https://fizzbuzzer.com/">RSS</a></h3><ul><li><a class='rsswidget' href='https://fizzbuzzer.com/special-palindrome-again-challenge/'>Special Palindrome Again Challenge</a></li><li><a class='rsswidget' href='https://fizzbuzzer.com/making-anagrams-challenge/'>Making Anagrams Challenge</a></li><li><a class='rsswidget' href='https://fizzbuzzer.com/counting-inversions-challenge/'>Counting Inversions Challenge</a></li><li><a class='rsswidget' href='https://fizzbuzzer.com/frequency-queries/'>Frequency Queries</a></li></ul></section>            </div>
+
+        </div>
+    </div>
+    <!-- end of #footer -->
+
+    <!-- Footer Bottom -->
+    <div id="footer-bottom-wrapper">
+        <div id="footer-bottom" class="container">
+            <div class="row">
+                <div class="span6">
+                    <p class="copyright">
+                        Copyright Â© 2017 - fizzbuzzer.com                    </p>
+                </div>
+                <div class="span6">
+                                    </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Footer Bottom -->
+
+</footer>
+<!-- End of Footer -->
+
+<a href="#top" id="scroll-top"></a>
+
+<div id="amzn-assoc-ad-8e924cde-1e16-4560-b78f-8a2ac5d13ec9"></div><script async src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=8e924cde-1e16-4560-b78f-8a2ac5d13ec9"></script><script type='text/javascript' src='https://fizzbuzzer.com/wp-content/plugins/simple-tooltips/zebra_tooltips.js?ver=4.9.9'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.14-6684'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/prettyphoto/jquery.prettyPhoto.js?ver=4.9.9'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/jquery.easing.1.3.js?ver=4.9.9'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/jquery.validate.min.js?ver=4.9.9'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-includes/js/jquery/jquery.form.min.js?ver=4.2.1'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/jquery.liveSearch.js?ver=4.9.9'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var localized = {"nav_title":"Go to...","home_url":"https:\/\/fizzbuzzer.com\/"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/custom.js?ver=4.9.9'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-includes/js/comment-reply.min.js?ver=4.9.9'></script>
+<script type='text/javascript' src='https://fizzbuzzer.com/wp-includes/js/wp-embed.min.js?ver=4.9.9'></script>
+                			            
+                <script type="text/javascript">
+                    jQuery(function() {
+                                                
+                        jQuery(".tooltips img").closest(".tooltips").css("display", "inline-block");
+                    
+                        new jQuery.Zebra_Tooltips(jQuery('.tooltips').not('.custom_m_bubble'), {
+                            'background_color':     '',
+                            'color':				'#ffffff',
+                            'max_width':  500,
+                            'opacity':    .95, 
+                            'position':    'center'
+                        });
+                        
+                                            
+                    });
+                </script>        
+		
+</body>
+</html>
+òÛO      \b‰\b‰@	MI       5    :https://fizzbuzzer.com/radio-transmitters-challenge/ necko:classified 1 strongly-framed 1 security-info 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 request-method GET response-head HTTP/1.1 200 OK
+Date: Tue, 12 Feb 2019 08:51:26 GMT
+Server: Apache/2.4.27 (Amazon) OpenSSL/1.0.2k-fips PHP/7.0.27
+X-Powered-By: PHP/7.0.27
+Link: <https://fizzbuzzer.com/wp-json/>; rel="https://api.w.org/", <https://fizzbuzzer.com/?p=1194>; rel=shortlink
+Content-Type: text/html; charset=UTF-8
+ original-response-headers Date: Tue, 12 Feb 2019 08:51:26 GMT
+Server: Apache/2.4.27 (Amazon) OpenSSL/1.0.2k-fips PHP/7.0.27
+X-Powered-By: PHP/7.0.27
+Link: <https://fizzbuzzer.com/wp-json/>; rel="https://api.w.org/"
+Link: <https://fizzbuzzer.com/?p=1194>; rel=shortlink
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+ uncompressed-len 0 net-response-time-onstart 976 net-response-time-onstop 1269 predictor::resource-count 68 predictor::https://fizzbuzzer.com/wp-content/plugins/simple-tooltips/zebra_tooltips.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=_2.7.2_beta 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/themes/pspad/pspad.css?ver=_2.7.2_beta 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/fonts/consolas.css?ver=_2.7.2_beta 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.14-6684 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/social-pug/assets/css/style-frontend.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fonts.googleapis.com/css?family=Roboto%7CDroid%2BSerif%3A400%2C700%2C400italic%2C700italic&subset=latin%2Clatin-ext&ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/font-awesome/css/font-awesome.min.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/bootstrap.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/main.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/responsive.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/prettyphoto/css/prettyPhoto.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/style.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/custom.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase-child/style.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase-child/child-custom.css?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-includes/js/jquery/jquery.js?ver=1.12.4 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-includes/js/wp-emoji-release.min.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=_2.7.2_beta 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/social-pug/assets/js/front-end.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/wp-hide-post/public/js/wp-hide-post-public.js?ver=2.0.10 1,1,1549961485,4096 predictor::https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=n&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=i&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=x_i&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=k&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=%5Cle+k&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=x_1%2C+x_2%2C%5Cdots%2Cx_n&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=1+%5Cle+n%2C+k+%5Cle+10%5E%7B5%7D&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=1+%5Cle+x_i+%5Cle+10%5E%7B5%7D&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/uploads/2016/12/radio-transmitters-1.png 1,1,1549961485,4097 predictor::https://s0.wp.com/latex.php?latex=2&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=4&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/uploads/2016/12/radio-transmitters-2.png 1,1,1549961485,4097 predictor::https://s0.wp.com/latex.php?latex=9&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=12&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=3&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=%5Cmathcal%7BO%7D%28nlogn%29&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://s0.wp.com/latex.php?latex=%5Cmathcal%7BO%7D%28n%29&bg=ffffff&fg=000000&s=0 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-includes/images/rss.png 1,1,1549961485,4097 predictor::https://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=8e924cde-1e16-4560-b78f-8a2ac5d13ec9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/simple-tooltips/zebra_tooltips.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.14-6684 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/prettyphoto/jquery.prettyPhoto.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/jquery.easing.1.3.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/jquery.validate.min.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-includes/js/jquery/jquery.form.min.js?ver=4.2.1 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/jquery.liveSearch.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/js/custom.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-includes/js/comment-reply.min.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-includes/js/wp-embed.min.js?ver=4.9.9 1,1,1549961485,4096 predictor::https://www.google-analytics.com/analytics.js 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/uploads/2019/01/banner4.jpg 1,1,1549961485,4097 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/images/li-arrow.png 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/images/footer-bg.png 1,1,1549961485,4096 predictor::https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/css/font-awesome/fonts/fontawesome-webfont.woff2?v=4.3.0 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/social-pug/assets/fonts/socialpug.woff 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/plugins/crayon-syntax-highlighter/fonts/consolas/consolas-webfont.woff 1,1,1549961485,4096 predictor::https://www.google-analytics.com/r/collect?v=1&_v=j73&a=1628786284&t=pageview&_s=1&dl=https%3A%2F%2Ffizzbuzzer.com%2Fradio-transmitters-challenge%2F&dr=https%3A%2F%2Fwww.google.com%2F&ul=en-us&de=UTF-8&dt=Radio%20transmitters%20challenge%20-%20fizzbuzzer.com&sd=24-bit&sr=1366x768&vp=1150x324&je=0&_u=IEBAAEAB~&jid=680380951&gjid=211313507&cid=545215403.1549961488&tid=UA-47719288-1&_gid=155581147.1549961488&_r=1&z=1199048398 1,1,1549961485,4096 predictor::https://adservice.google.co.in/adsid/integrator.js?domain=fizzbuzzer.com 1,1,1549961485,4096 predictor::https://adservice.google.com/adsid/integrator.js?domain=fizzbuzzer.com 1,1,1549961485,4096 predictor::https://pagead2.googlesyndication.com/pagead/js/r20190206/r20190131/show_ads_impl.js 1,1,1549961485,4096 predictor::https://pagead2.googlesyndication.com/pub-config/r20160913/ca-pub-7454381545661952.js 1,1,1549961485,4096 predictor::https://www.googletagservices.com/activeview/js/current/osd.js?cb=%2Fr20100101 1,1,1549961485,4096 predictor::https://ir-na.amazon-adsystem.com/e/ir?l=w49&t=lucaslouca-20&o=1&cb=1549961489299 1,1,1549961485,4096 predictor::https://fizzbuzzer.com/wp-content/themes/inspiry-knowledgebase/images/scroll-top.png 1,1,1549961485,4096  

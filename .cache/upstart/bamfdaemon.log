@@ -1,0 +1,4 @@
+
+** (bamfdaemon:2461): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
+
+** (bamfdaemon:2461): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed

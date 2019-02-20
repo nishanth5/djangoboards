@@ -1,0 +1,44 @@
+WARN  2019-02-20 11:25:35 unity.iconloader IconLoader.cpp:756 Unable to load icon file:/// at size -1x22: Can't open directory
+[90m[main 2019-02-20T06:22:11.559Z][0m update#setState idle
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+[90m[main 2019-02-20T06:22:46.529Z][0m update#setState idle
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+[90m[main 2019-02-20T06:23:16.546Z][0m update#setState checking for updates
+[90m[main 2019-02-20T06:23:16.724Z][0m update#setState idle
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+[90m[main 2019-02-20T06:36:58.989Z][0m update#setState idle
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+[90m[main 2019-02-20T06:37:28.996Z][0m update#setState checking for updates
+[90m[main 2019-02-20T06:37:29.203Z][0m update#setState idle
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+[90m[main 2019-02-20T06:39:05.916Z][0m update#setState idle
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+[90m[main 2019-02-20T06:39:35.932Z][0m update#setState checking for updates
+[90m[main 2019-02-20T06:39:36.138Z][0m update#setState idle
+[90m[main 2019-02-20T06:51:33.913Z][0m update#setState idle
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+[90m[main 2019-02-20T06:52:03.922Z][0m update#setState checking for updates
+[90m[main 2019-02-20T06:52:04.192Z][0m update#setState idle
+[Parent 4260, Gecko_IOThread] WARNING: pipe error (104): Connection reset by peer: file /build/firefox-1juj5k/firefox-65.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 349
+[Parent 4260, Gecko_IOThread] WARNING: pipe error (104): Connection reset by peer: file /build/firefox-1juj5k/firefox-65.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 349
+[90m[main 2019-02-20T07:02:10.827Z][0m update#setState idle
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+[90m[main 2019-02-20T07:02:40.831Z][0m update#setState checking for updates
+[90m[main 2019-02-20T07:02:41.096Z][0m update#setState idle
+[90m[main 2019-02-20T07:02:47.113Z][0m update#setState idle
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+[90m[main 2019-02-20T07:03:17.141Z][0m update#setState checking for updates
+[90m[main 2019-02-20T07:03:17.321Z][0m update#setState idle
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.

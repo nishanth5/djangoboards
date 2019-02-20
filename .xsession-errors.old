@@ -1,0 +1,24 @@
+openConnection: connect: No such file or directory
+cannot connect to brltty at :0
+upstart: update-notifier-crash (/var/crash/_usr_share_apport_apport-gtk.1001.crash) main process (1890) terminated with status 1
+upstart: update-notifier-crash (/var/crash/_usr_share_code_code.1001.crash) main process (1891) terminated with status 1
+upstart: unity7 main process ended, respawning
+upstart: bamfdaemon main process (1929) terminated with status 1
+upstart: unity-panel-service main process (1976) terminated with status 1
+upstart: indicator-keyboard main process (2027) terminated with status 1
+upstart: indicator-printers main process (2029) terminated with status 1
+upstart: hud main process (1943) killed by HUP signal
+upstart: unity-settings-daemon main process (1945) terminated with status 1
+upstart: at-spi2-registryd main process (1964) killed by HUP signal
+upstart: gnome-session (Unity) main process (1965) killed by HUP signal
+upstart: indicator-bluetooth main process (2021) killed by TERM signal
+upstart: indicator-power main process (2022) killed by TERM signal
+upstart: indicator-datetime main process (2026) killed by TERM signal
+upstart: indicator-sound main process (2028) killed by TERM signal
+upstart: indicator-session main process (2032) killed by TERM signal
+upstart: indicator-application main process (2056) killed by TERM signal
+upstart: unity7 pre-start process (21307) killed by TERM signal
+upstart: indicator-application pre-stop process (21334) killed by TERM signal
+upstart: gnome-session (Unity) pre-stop process (21335) killed by TERM signal
+upstart: gpg-agent post-stop process (21352) killed by TERM signal
+upstart: Disconnected from notified D-Bus bus

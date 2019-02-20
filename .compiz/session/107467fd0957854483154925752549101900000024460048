@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<compiz_session id="107467fd0957854483154925752549101900000024460048">
+  <window id="107467fd095785448315492575757928300000024460049" title="Question #27840 : Questions : Ubuntu - Mozilla Firefox" class="Firefox" name="Navigator" role="browser" command="firefox">
+    <geometry x="65" y="24" width="1160" height="510"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+  <window id="107467fd095785448315492575757928300000024460049" title="Quit and close tabs?" class="Firefox" name="Prompt" role="confirmEx" command="firefox">
+    <geometry x="451" y="328" width="528" height="136"/>
+    <workspace index="0"/>
+  </window>
+</compiz_session>

@@ -1,0 +1,1990 @@
+#cssmenu {    position: relative;    height: 35px;    width: auto;    z-index: 11 !important;}
+#cssmenu ul {    list-style: none;    padding: 0;    margin: 0;    line-height: 1;}
+#cssmenu > ul {    position: relative;    display: block;    background: #333333;   ;  width: 100%;    z-index: 500;}
+#cssmenu > ul > li {    display: block;    position: relative;    float: left;    margin: 0;    padding: 0;}
+#cssmenu > ul > #menu-button {    display: none;}
+#cssmenu ul li a {    display: block;    font-family: Open Sans;    text-decoration: none;}
+#cssmenu > ul > li > a {    font-size: 13px;    font-weight: 550;    padding: 10px 20px;    color: #f6f6f6;
+                            -webkit-transition: color 0.25s ease-out;    -moz-transition: color 0.25s ease-out;    -o-transition: color 0.25s ease-out;
+                            transition: color 0.25s ease-out;}
+#cssmenu > ul > li.has-sub > a {    padding-right: 32px;}
+#cssmenu > ul > li:hover > a {    color: #ffffff;    background-color: #646062;}
+#cssmenu li.has-sub::after {    display: block;    content: '';    position: absolute;    width: 0;    height: 0;}
+#cssmenu > ul > li.has-sub::after {    right: 10px;    top: 20px;    border: 5px solid transparent;    border-top-color: #7a8189;}
+#cssmenu > ul > li:hover::after {    border-top-color: #ffffff;}
+#indicatorContainer {    position: absolute;    height: 12px;    width: 100%;    bottom: 0px;    overflow: hidden;    z-index: -1;}
+#cssmenu ul ul {    position: absolute;    left: -9999px;    top: 70px;    opacity: 0;
+                    -webkit-transition: opacity .3s ease, top .25s ease;
+                    -moz-transition: opacity .3s ease, top .25s ease;
+                    -ms-transition: opacity .3s ease, top .25s ease;
+                    -o-transition: opacity .3s ease, top .25s ease;
+                    transition: opacity .3s ease, top .25s ease;
+                    z-index: 1000;}
+#cssmenu ul ul ul {    top: 37px;    padding-left: 5px;}
+#cssmenu ul ul li {    position: relative;}
+#cssmenu > ul > li:hover > ul {    left: auto;    top: 44px;    opacity: 1;}
+#cssmenu ul ul li:hover > ul {    left: 170px;    top: 0;    opacity: 1;}
+#cssmenu ul ul li a {    width: 130px;    border-bottom: 1px solid #eee;    padding: 10px 20px;    font-size: 12px;
+                         color: #9ea2a5;    background: #fff;    -webkit-transition: all .35s ease;    -moz-transition: all .35s ease;
+                         -ms-transition: all .35s ease;    -o-transition: all .35s ease;    transition: all .35s ease;}
+#cssmenu ul ul li:hover > a {    background: #f6f6f6;    color: #8c9195;}
+#cssmenu ul ul li:last-child > a,#cssmenu ul ul li.last > a {    border-bottom: 0;}
+.submenuArrow {    border: 6px solid transparent;    width: 0;    height: 0;    border-bottom-color: #fff;    position: absolute;    top: -12px;}
+#cssmenu ul ul li.has-sub::after {    border: 4px solid transparent;   border-left-color: #9ea2a5;   right: 10px;    top: 12px;    -moz-transition: all .2s ease;
+                                      -ms-transition: all .2s ease;
+                                      -o-transition: all .2s ease;
+                                      transition: all .2s ease;
+                                      -webkit-transition: -webkit-transform 0.2s ease, right 0.2s ease;
+}
+#cssmenu ul ul li.has-sub:hover::after {
+    border-left-color: #fff;
+    right: -5px;
+    -webkit-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}
+.totalWidthSRMRegistration{width:95%!important;}
+.registrationAlignment{margin: 10px 0px 10px 0px !important;}
+
+label.gdright{display:inline-block;}
+@media all and (max-width: 800px), only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min--moz-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 1024px), only screen and (min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min-resolution: 192dpi) and (max-width: 1024px), only screen and (min-resolution: 2dppx) and (max-width: 1024px) {
+    #cssmenu {        width: auto;        z-index: 1;    }
+    #cssmenu ul {        width: auto;    }
+    #cssmenu .submenuArrow,
+    #cssmenu #indicatorContainer {        display: none;    }
+    #cssmenu > ul {        height: auto;        display: block;    }
+    #cssmenu > ul > li {        float: none;    }
+    #cssmenu li,    #cssmenu > ul > li {        display: none;    }
+    #cssmenu ul ul,
+    #cssmenu ul ul ul,
+    #cssmenu ul > li:hover > ul,
+    #cssmenu ul ul > li:hover > ul {        position: relative;        left: auto;        top: auto; opacity: 1; padding-left: 0;}
+    #cssmenu ul .has-sub::after {        display: none;    }
+    #cssmenu ul li a {        padding: 12px 20px;    }
+    #cssmenu ul ul li a {        border: 0;        background: none;        width: auto;        padding: 8px 35px;    }
+    #cssmenu ul ul li:hover > a {        background: none;        color: #8c9195;    }
+    #cssmenu ul ul ul a {        padding: 8px 50px;    }
+    #cssmenu ul ul ul ul a {        padding: 8px 65px;    }
+    #cssmenu ul ul ul ul ul a {        padding: 8px 80px;    }
+    #cssmenu ul ul ul ul ul ul a {        padding: 8px 95px;    }
+    #cssmenu > ul > #menu-button {        display: block;        cursor: pointer;    }
+    #cssmenu #menu-button > a {        padding: 14px 20px;    }
+    #cssmenu ul.open li,    #cssmenu > ul.open > li {        display: block;   }
+    #cssmenu > ul.open > li#menu-button > a {        color: #fff;        border-bottom: 1px solid rgba(150, 150, 150, 0.1);
+    }
+    #cssmenu ul .has-sub::after {
+        display: none;
+    }
+    #cssmenu ul li a {
+        padding: 12px 20px;
+    }
+    #cssmenu ul ul li a {
+        border: 0;
+        background: none;
+        width: auto;
+        padding: 8px 35px;
+    }
+    #cssmenu ul ul li:hover > a {
+        background: none;
+        color: #8c9195;
+    }
+    #cssmenu ul ul ul a {
+        padding: 8px 50px;
+    }
+    #cssmenu ul ul ul ul a {
+        padding: 8px 65px;
+    }
+    #cssmenu ul ul ul ul ul a {
+        padding: 8px 80px;
+    }
+    #cssmenu ul ul ul ul ul ul a {
+        padding: 8px 95px;
+    }
+    #cssmenu > ul > #menu-button {
+        display: block;
+        cursor: pointer;
+    }
+    #cssmenu #menu-button > a {
+        padding: 14px 20px;
+    }
+    #cssmenu ul.open li,
+    #cssmenu > ul.open > li {
+        display: block;
+    }
+    #cssmenu > ul.open > li#menu-button > a {
+        color: #fff;
+        border-bottom: 1px solid rgba(150, 150, 150, 0.1);
+    }
+    #cssmenu #menu-button::after {
+        display: block;        content: '';        position: absolute;        height: 3px;        width: 22px;        border-top: 2px solid #7a8189;
+        border-bottom: 2px solid #7a8189;        right: 20px;        top: 15px;    }
+    #cssmenu #menu-button::before {        display: block;        content: '';        position: absolute;        height: 3px;
+                                           width: 22px;        border-top: 2px solid #7a8189;        right: 20px;        top: 25px;    }
+    #cssmenu ul.open #menu-button::after,
+    #cssmenu ul.open #menu-button::before {        border-color: #fff;    }
+}
+#indicatorContainer {    position: absolute;    height: 12px;    width: 100%;    bottom: 0px;    overflow: hidden;    z-index: -1;}
+
+/*on off buttons for switch*/
+.nv-toggle {    color: #ff6501;    font-weight: 600;    font-size: 11px;    text-align: center;    line-height: 100%;
+                display: inline-block;    border: 1px solid #cccccc;    border-radius:20px;    overflow: hidden;    padding: 0.1em;
+                margin: 0em;    cursor: pointer;    background-image: -webkit-gradient(linear, 0% 0%, 0% 50%, from(#fff), to(#eee));
+                background-image: -moz-linear-gradient(top, #fff, #fff);    -webkit-user-select:none;    -moz-user-select:none;    -webkit-tap-highlight-color:rgba(0,0,0,0);    padding-right:4px;
+}
+.nv-pane {
+    -webkit-transition: all 120ms ease-in-out;
+    -moz-transition: all 120ms ease-in-out;
+}
+.nv-pane div {
+    width: 2.0em;
+    display: inline-block;
+    border-radius: 10px;
+}
+.nv-pane .nv-handle {
+    width: 2.0em;
+}
+.nv-on, .nv-off {
+
+    padding: .2em 0em;
+    font-size: 13px;
+    color: #ff6501;
+}
+.nv-on {
+    color: #0B2161;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 50%, from(#fff), to(#fff));
+    background-image: -moz-linear-gradient(top, #fff, #fff);
+    font-size: 13px;
+}
+.nv-on-state {    margin: 0em -2.5em 0em 0em;}
+.nv-off-state {    margin: 0em 0em 0em -2.5em;}
+.forforms{    margin-right:10px;}
+.labelbutton{    margin: 10px auto;}
+
+/*jquery calender coding start*/
+/*jquery calender coding*/
+/* Default styling for jQuery Datepicker v5.0.0. */
+.datepick {    background-color: #fff;    color: #000;    border-radius: 0.25em;    -moz-border-radius: 0.25em;    -webkit-border-radius: 0.25em;
+               font-family: Arial,Helvetica,Sans-serif;    font-size: 90%;}
+.datepick-rtl {    direction: rtl;}
+.datepick-popup {    z-index: 1000;}
+.datepick-disable {    position: absolute;    z-index: 100;    background-color: white;    opacity: 0.5;    filter: alpha(opacity=50);}
+.datepick a {    color: #fff;    text-decoration: none;}
+.datepick a.datepick-disabled {    color: #888;    cursor: auto;}
+.datepick button {    margin: 0.25em;    padding: 0.125em 0em;    background-color: #fcc;    border: none;
+                      border-radius: 0.25em;    -moz-border-radius: 0.25em;    -webkit-border-radius: 0.25em;    font-weight: bold;}
+.datepick-nav, .datepick-ctrl {    float: left;    width: 100%;    background-color: #ff6501;    color: #fff;    font-size: 90%;
+                                   font-weight: bold;}
+.datepick-ctrl {    background-color: #FF6501;}
+.datepick-cmd {    width: 30%;}
+.datepick-cmd:hover {    background-color: #777;}
+.datepick-ctrl .datepick-cmd:hover {    background-color: #f08080;}
+.datepick-cmd-prevJump, .datepick-cmd-nextJump {    width: 8%;}
+a.datepick-cmd {    height: 1.5em;}
+button.datepick-cmd {    text-align: center;}
+.datepick-cmd-prev, .datepick-cmd-prevJump, .datepick-cmd-clear {    float: left;    padding-left: 2%;}
+.datepick-cmd-current, .datepick-cmd-today {   float: left;    width: 35%;    text-align: center;}
+.datepick-cmd-next, .datepick-cmd-nextJump, .datepick-cmd-close {    float: right;    padding-right: 2%;    text-align: right;}
+.datepick-rtl .datepick-cmd-prev, .datepick-rtl .datepick-cmd-prevJump,
+.datepick-rtl .datepick-cmd-clear {    float: right;    padding-left: 0%;    padding-right: 2%;    text-align: right;}
+.datepick-rtl .datepick-cmd-current, .datepick-rtl .datepick-cmd-today {    float: right;}
+.datepick-rtl .datepick-cmd-next, .datepick-rtl .datepick-cmd-nextJump,
+.datepick-rtl .datepick-cmd-close {    float: left;    padding-left: 2%;    padding-right: 0%;    text-align: left;}
+.datepick-month-nav {    float: left;    background-color: #777;    text-align: center;}
+.datepick-month-nav div {    float: left;    width: 12.5%;    margin: 1%;   padding: 1%;}
+.datepick-month-nav span {    color: #888;}
+.datepick-month-row {    clear: left;}
+.datepick-month {    float: left;    width: 15em;    border: 1px solid #ff6501;    text-align: center;}
+.datepick-month-header, .datepick-month-header select, .datepick-month-header input {
+    height: 1.5em;    background-color: #f2f2f2;    color: #000;    font-weight: bold;}
+.datepick-month-header select, .datepick-month-header input {
+    height: 1.4em;    margin: 0em;    padding: 0em;    border: none;    font-size: 100%;}
+.datepick-month-header input {    position: absolute;    display: none;}
+.datepick-month table {    width: 100%;    border-collapse: collapse;}
+.datepick-month thead {    border-bottom: 1px solid #aaa;}
+.datepick-month th, .datepick-month td {    margin: 0em;    padding: 0em;    font-weight: normal;    text-align: center;}
+.datepick-month th {    border: 1px solid #777;}
+.datepick-month th, .datepick-month th a {    background-color: #777;    color: #fff;}
+.datepick-month td {    background-color: #eee;    border: 1px solid #aaa;}
+.datepick-month td.datepick-week {    border: 1px solid #777;}
+.datepick-month td.datepick-week * {    background-color: #777;    color: #fff;    border: none;}
+.datepick-month a {    display: block;    width: 100%;    padding: 0.125em 0em;    background-color: #eee;    color: #000;    text-decoration: none;}
+.datepick-month span {    display: block;    width: 100%;    padding: 0.125em 0em;}
+.datepick-month td span {    color: #888;}
+.datepick-month td .datepick-other-month {    background-color: #fff;}
+.datepick-month td .datepick-weekend {    background-color: #ddd;}
+.datepick-month td .datepick-today {    background-color: #f0c0c0;}
+.datepick-month td .datepick-highlight {    background-color: #f08080;}
+.datepick-month td .datepick-selected {    background-color: #777;    color: #fff;}
+.datepick-month th.datepick-week {    background-color: #777;    color: #fff;}
+.datepick-status {    clear: both;    background-color: #ddd;    text-align: center;}
+.datepick-clear-fix {    clear: both;}
+.datewidth{    width:100% !important        padding:0px;    margin:0px;}
+.calender{    background: url(../images/test/calener.png) no-repeat;    width:20px;    height:20px;}
+.datewidth{    width:100% !important        padding:0px;    margin:0px;}
+/*jquery calender coding end*/
+/* Nic editor css start*/
+.nicEdit-panel{    display: none;}
+.nicEdit-main {    padding: 5px;    min-height: 92px !important;    background-color: #FAFAFA !important;    overflow: auto !important;}
+#toolBar{    display: none;}
+.nicEdit-selected {    min-height: 89px !important;    outline: none !important;    color: #000 !important;    border-color: #FF5000 !important;    border: 1px solid #FF5000 !important;    border-radius: 4px;    opacity:0.8;}
+/* Nic editor css end*/
+/* table sorter start */
+
+.tbl-offer .table thead th:after {
+    background: url(../image/arrow.png) no-repeat !important;
+    display: inline-block;
+    width: 15px !important;
+    height: 16px !important;
+    content: no-close-quote;
+    opacity: 0.8;
+    position: relative;
+    top:5px;
+    left:5px;
+}
+
+.tbl-offer th.sorted.ascending:after {
+    height: 14px !important;
+    content: no-close-quote !important;
+    background: url(../image/downarrow.png) no-repeat !important;
+    /* margin: 0.5em 0em -0.5em 0.3em; */
+    display: inline-block;
+    width: 15px !important;
+    height: 16px !important;
+    content: no-close-quote;
+    opacity: 0.8;
+    /*    margin: 5px;
+        position: absolute;*/
+    position:relative;
+    top:5px;
+    left:5px;
+}
+
+.tbl-offer th.sorted.descending:after {
+    height: 14px !important;
+    content: no-close-quote !important;
+    background: url(../image/uparrow.png) no-repeat !important;
+    /* margin: 0.5em 0em -0.5em 0.3em; */
+    display: inline-block;
+    width: 15px !important;
+    height: 16px !important;
+    content: no-close-quote;
+    opacity: 0.8;
+    /*    margin: 5px;
+        position: absolute;*/
+    position:relative;
+    top:5px;
+    left:5px;
+}
+
+
+th.sorted.ascending:after {
+    height: 14px !important;
+    content: no-close-quote !important;
+    background: url("https://campusinteraction.com/Campus/ci-website/tableup.jpg") no-repeat !important;
+    margin: 0.5em 0em -0.5em 0.3em;;
+}
+
+th.sorted.descending:after {
+    height: 14px !important;
+    content: no-close-quote !important;
+    background: url("https://campusinteraction.com/Campus/ci-website/tabledown.jpg") no-repeat !important;
+    margin: 0.5em 0em -0.5em 0.3em;;
+}
+
+.checkBoxInTable{
+    cursor: auto;
+    text-align: left;
+    color: rgba(0, 0, 0, 0.8);
+    padding: 0.5em 1.7em;
+    vertical-align: middle;
+}
+
+.checkBoxBackGround{
+    background-color: #F8F8FF;
+    border-radius: 10px 0 0 0 !important;
+}
+
+.ui.form input[type="checkbox"] {
+    vertical-align: 0;
+}
+/* table sorter end */
+.tableresponse
+{
+    width:100% !important;
+    overflow:auto;
+    position: relative;
+    background-color: #FFFFFF;
+    -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius:10px;
+}
+.labelleftforonline
+{
+    width:20%;
+    float:left
+}
+.profilelabelleft
+{
+    width:30%;
+    float:left;
+}
+.yaser
+{
+    width:73.5%;
+    float:left;
+    word-wrap: break-word;
+    float:left;
+    margin-left:0.5%;
+    margin-top: 0.5%;
+}
+.yaserar
+{
+    width:25%;
+    float:right;
+    word-wrap: break-word;
+    margin-top: 0.5%;
+}
+.profiledetailright
+{
+    width:80%;
+    float:right;
+    margin-bottom:-5px;
+}
+.eightleft
+{
+    width:80%;
+    float:left;
+}
+.detailforonline
+{
+    width:70%;
+    float: right;
+}
+.projectdetail
+{
+    width:70%;
+    float: left;
+}
+.msgboardremainder
+{
+    width:70%;
+    float: left;
+    word-break: break-word;
+}
+.fiftyright
+{
+    width:42%;
+    float:right;
+    margin-bottom: -8px !important;
+}
+.seventyleft{    width:70%;float:left;;}
+.interview{    width:71%;float:left;}
+.seventyfiveright
+{
+    width:75%;
+    float:right;
+}
+.nintyleft{
+    width:96%; float:left;
+}
+.profileleft
+{
+    width: 74%;
+    float:left;
+}
+.atten{width: 100%;overflow: hidden;}
+.attendanceleft {width: 17%;float: left;}
+.jobprofileleft
+{
+    width:26%;
+    float:left;
+    padding:0px 6px;
+    background:#e6e6e6;border:1px solid #ccc;
+}
+.jobprofileright
+{
+    width:70%;
+    float:right;
+}
+.onlinelist
+{
+    width:60%;
+    float:left;
+    text-align:left;
+    margin-left : 2%;
+}
+.profileright
+{
+    width:25%;
+    float:right;
+}
+.editProject
+{
+    right : 8px;
+    position:absolute;
+}
+.fullcover
+{
+    padding: 10px 15px;
+    overflow: hidden;    
+}
+.profilewidth
+{
+    width: 100%;
+    overflow: hidden;
+    background-color: #fafafa;
+    margin-top: 5px !important;
+    padding:5px;
+}
+.profileimage
+{
+    width:15%;
+    float:left;
+    padding-bottom:15px;
+}
+.thirtyfiveright{
+    width:40%;
+    float:right;
+    line-height:25px;
+}
+.fontfooter
+{
+    font-size:18px;
+    color:#000;
+    font-family: 'lora';
+}
+.contestright{
+    float:right;
+    width:19%;
+}
+.sublabel
+{
+    color:#A4A4A4;
+    text-align: left;
+}
+.marginleftauto{margin-left: -5px !important; color:#000}
+.actionMessage{list-style: none !important;color:#ffffff;font-size:14px;padding : 0px !important;width:100% !important;padding:3px 0 5px 0 !important; }
+.errorMessage{list-style: none !important;color:#ffffff;font-size:14px;padding : 0px !important;width:100% !important;padding:3px 0 5px 0 !important; }
+/*Style for table height*/
+.videoheight{height:221px; overflow:hidden;}
+.boxheight{height:221px; overflow:hidden;line-height: 24px;}
+.videoheights{min-height:320px;}
+.overhidden{height:90px; overflow:hidden;}
+.labelSectionLeft{    width: 20%;    float:left;    font-weight: 700;    word-wrap: break-word;}
+.labelSectionRight{    width: 77%;    float:right;    text-align: left;    word-wrap: break-word;}
+.textareafield{     width: 98%;    /* float: left; */    margin-right: 1%;    margin-left: 1%;}
+.textboxfield{    width: 48%;    float: left;    margin-right: 1%;    margin-left: 1%;}
+.textboxfieldright{    width:48%;    float: right;    margin-right: 1%;    margin-left: 1%;}
+.messageright{    float:right;    width:91%;}
+.informdata{float:left;width:49%;}
+.applydate{    width:49%;    float: right;}
+.profileimageupload{width:100% !important; margin-left:80px;}
+.chartDesign{    border:1px solid #348781;width: 100%; min-height: 400px;}
+ol{line-height: 25px;}
+.minimumheight{ min-height: 450px;}
+.minimumheightforfh{ min-height: 425px;}
+.taligncenter{text-align: center;}
+.bgcolor{ background-color:#ffffff;}
+.bgcolorblack{ background-color:#454545 !important; color:#fff !important}
+.appbg{background: url(../images/left-tab.png) repeat-x;padding: 6px 0;}
+.eighttop{margin-top:8px !important}
+.fivetopbottom{margin-top:5px !important; margin-bottom:5px !important;}
+.twotopbottom{margin-top:2px !important; margin-bottom:4px !important;}
+.tenleft{margin-left:10px !important;}
+.smswidth{width:50% #important;height:25px #important;}
+.otcbgcolor{ background-color:#fcfcfc;}
+.hallticket{height: 19px;}
+.onlineTestBox{height: 38px; overflow:hidden;}
+.thirtypercent{    width:40%;    float:right;}
+.thirtyLeft{    width:30%;    float:left;}
+.seventyRight{    width:70%;    float:right;}
+.fourtyleft{    width:40%;    float:left;}
+.fiftyNineRight{    width:59%;    float:right;}
+.seventypercent{    width:60%;    float:left;}
+.aboutpercent{    width:57%;    float:left;}
+.fourheight{height:40px}
+.eightypercent{    width:84%;   float:left;}
+.autoleft{    float: left;    width:auto;}
+.msgboardimage{    float: left;    width:54px;    padding-right: 5px;}
+.remainderimage{    width:100%;overflow:hidden;font-size:12px;margin-bottom:10px;}
+.verticalline{    width:1px;    background-color:#cccccc;    height:10px;    float: left;    margin-right:22px;    margin-top: 5px;}
+.ui.inverted.orange.header {
+    background-color: #ff6800 !important;
+    color: #FFFFFF !important;
+    padding:1em;
+    margin: 0px !important;
+}
+.listforresult{    float: left;    padding-right:16px;    width:auto;}
+.jobinformation{    float: left;    padding-right:16px;    width:auto;}
+.teststatus{    float: left;    padding-right:8px;    width:auto;}
+.mandatory{color:#ff6501}
+.tableimage{    float: left;    width:90px;}
+.tablecompanyname{float:left;width:160px;}
+.msgboardtexts{    float: left;    padding-right:8px;    width:auto;}
+.facebookresult{    float: left;    width:auto;    padding-right:8px;}
+.facebookcommands{    width:91%;    float:left;    text-align:left;    margin-left : 2%;}
+.verticalline{    width:1px;    background-color:#cccccc;    height:10px;    float: left;    margin-right:12px;    margin-top: 3px;}
+.correctAnswer{    background-color: #cbfbbc;    color: #000;}
+.wrongAnswer{    background-color: #fdd1d1;    color: #000;}
+.leftfieldjob{    width:47%;    float: left;}
+.marginleftforprofile{    margin-left:10px !important;}
+.heightforprofile{    min-height:30px;}
+.heightforprofile1{    height:18px;    text-align:center;}
+.margininvertop{    margin-top:-10px !important;}
+.niceditorboxwidth{width:99%}
+.paddingview{    margin-top:-10px !important;    padding-top:5px;}
+.editphoto{margin-left:30px !important;}
+.profileview{    margin-top:-13px !important;    padding-top:5px;}
+.inversmarginreply{    margin-top:-16px !important;}
+.lineheightul{    line-height:25px;}
+.lineheightultop{    line-height:30px;}
+.groupsleft{    float:left;    width:20%;    margin-right:24px !important;    margin-left:24px !important;   margin-bottom:20px;}
+.tworight{    float: right;    width:25%;}
+.eightyfour{    width:84%;    float:left;}
+.collegelogo{float:left;}
+.jobname{margin-top:6px;}
+.jobprofileimage{width:130px;float:left;min-height:115px}
+.blackcolor{color:#000;}
+.blackcolor:hover{color:#3B579D;}
+.tablecolorchange{color:#333 !important;font-weight:700}
+.tablecolorchange:hover{color:#3B579D !important;font-weight:700}
+.msgcolorchange{font-weight:700}
+.msgcolorchange:hover{color:#333;font-weight:700}
+.linkbold{font-weight:700;}
+.linkbold:hover{font-weight:700}
+.linklite{color:#000 !important}
+.linklite:hover{color:#3B579D !important}
+.loginover:hover{color:#fff;cursor:pointer}
+.forgotover{color:#000;font-weight:700;}
+.forgotover:hover{color:#4a90e2;font-weight:700;text-decoration: underline;}
+.orangecolor{color: #335b88 !important;}
+.orangecolorconstant{color:#3B579D !important;}
+.rightpanelchangegreen{color:#245a3c}
+.rightpanelchangegreen:hover{color:#ff6501;text-decoration: underline}
+.rightpanelchangeblack{color:#333;}
+.rightpanelchangeblack:hover{color:#ff6501;text-decoration: underline}
+.lightfont{    color:#BDBDBD;}
+.adtable{width: 120px;word-break: break-all}
+.admail{width:200px;word-break:break-all}
+.jobdate{width:240px;word-break:break-all}
+.retablebox{width:70px;word-break: break-all}
+.onmark{width:72px;word-break: break-all}
+.cimarketleft{ float:left;width:175px;    margin-right:2% !important;    margin-left:2% !important;    margin-bottom:20px;}
+.imghover{    width:131px;    height:155px;    margin:0px auto;}
+.navigationtext{ margin-left: -25px !important;}
+.hoverimg {width:134px;height:149px;margin:0px auto;opacity:0;display:none; position:absolute;top:11px;left:20px}
+.imghover:hover .hoverimg{
+    cursor:pointer;
+    width:134px;
+    height:149px;
+    margin:0px auto;
+    opacity:1;
+    display:block;
+}
+.starright{width:2%; float:right;}
+.fiftypercent{width: 50%;margin: 0px auto;}
+.foutypercent{width: 40%;margin: 0px auto;}
+.bgcolor
+{
+    background-color:#ffffff !important;
+}
+.bgcolorgrey
+{
+    background-color:#f2f2f2 !important;
+}
+.bgcolorlightblue{background-color:#F8F8FF !important;}
+.bgcolorforinterview{background-color:#F8F8FF !important;}
+.ui.table tr{border-radius:10px !important}
+.eightyfive{    float:left;    width:85%;}
+.msgrightboard{    float:right;    width:94%;}
+.msgreplyboard{    float:left;    width:88%;}
+.tablefive{    width:5%;}
+.messageright{    float:right;    width:88%;    margin-top: -2px;}
+.replyright{    float:right;    width:90%;    margin-top: -5px;}
+.liststyle{    line-height:25px;}
+.rightfile{width:20%; float:right}
+.postjobmargin{margin-top:16px !important;}
+.tablecenter
+{
+    width:100%; margin:0px auto;
+    margin-left:28px;
+    margin-top:20px !important;
+}
+.bbb{background-color: #000;}
+.seventyfive{float:right;width:77%;}
+.twentyright
+{
+    width:28%; float:right;
+}
+.joblistleft
+{
+    width:48%;
+    float:left;
+}
+.applydatebox{margin-right:4px !important;margin-top: 3px !important;}
+.beforedate{margin:3px 6px 0px 15px !important;width:16% !important}
+.six.fields{  margin: 0 1px;    width: 100%;}
+.joblistright
+{
+    width:50%;
+    float:left;
+}
+.autoright{
+    width: auto;
+    float: right;
+}
+.jobprofilebuttonright{width: auto;float:right}
+.headerright{
+    width: auto;
+    float: right;
+    margin: 32px 0 0;
+}
+.twentyFloatLeft
+{
+    width:20%;
+    float:left;
+}
+.seventyFiveFloatRight
+{
+    width:75%;
+    float:right;
+}
+.fourtyNineLeft
+{
+    width:49%;
+    float:left;
+}
+.fourtyNineRight
+{
+    width:49%;
+    float:right;
+}
+.eightyFloatLeft
+{
+    width:80%;
+    float:left;
+}
+.emailreportleft{width:48%;float:left;}
+.emailreportright{width:50%;float:right}
+.barchart{margin-top:-12px;}
+.chartlist{width:30%;float:left;padding-bottom:10px}
+.reportemailtextleft{width:40%;float:left}
+.reportemailtextright{width:50%;float:left}
+.excelheight{height:27px;}
+.uploadonlinetest{margin-top:22px !important}
+.viewreport{margin-top:7% !important}
+.twentyFiveFloatRight
+{
+    width:25%;
+    float:right;
+}
+.registerright{    width: auto;position: absolute;right: 13px;    top: 15px;}
+.beforeregisterright {    float: right; width:auto;   margin: 23px 5px 0;}
+.otcleft{
+    float:left;
+    width: 72%
+}
+.jobdescrptionheight{height: 115px !important}
+.descript{height:90px;}
+.cloudboxleft{width:63%;min-height:400px;float: left;margin-right: 0.5%;}
+.cloudinput{width:100%;min-height:400px;border:1px solid #ccc}
+.cloudoutput{width:100%;}
+.cloudboxright{width:36%;min-height:430px;float: right;border:1px solid #cdcdcd;background:#fff;word-break: break-all}
+.cloudhead{background: #333333;width: 100%;height: 25px;padding:2px 0px;border: 1px solid #ccc;border-left-style: none;}
+.cloudrop{margin-top: 2px !important;float: left;font-size: 13px;margin-left: 10px !important;color:#fff}
+.cloudresult{margin: 3px 0px 0px 8px;color:#fff}
+.cloudbox{width:100%;min-height:110px;margin-top:15px !important;}
+.cloudinputbox{height:100px}
+.joblistdrop{margin-top: 6px !important;float: left;font-size: 13px;padding-right: 10px !important;}
+.syntaxerror{margin-top:14%;}
+.printimagebill
+{
+    width:auto;
+    float:right;
+}
+.studentalpha{display:table}
+.alphabetbutton{width: 50px;margin-bottom: 10px;float: left;}
+.otcright{
+    float: right;
+    position: relative;
+}
+.buttonright{
+    width: auto;
+    float: right;
+}
+.twentyeightright {
+    width: 28%;
+    float: right;
+}
+.squareprofile {
+    width: 101px;
+    height: 111px;
+    margin:0px 35px;
+}
+.normalcss{
+    display:none;
+}
+.loginprofile {
+    width: 35px;
+    height: 45px;
+    margin-right:12px;
+    float:left;
+}
+.padd{padding-top:8px}
+.profilelefttext{float: left;margin-top: 0px !important;}
+.profilelefttextlogout{float: left;padding:0px 1px 5px 8px;}
+.imgwithhight
+{
+    height:108px;
+    width:109px;
+    margin:0px auto;
+}
+.boxshadow{ box-shadow: 3px 3px 3px #888888 !important;}
+.profilecolor{background:inherit}
+.profilecolor:hover{background:#fafafa;}
+.ui.black.buttons .button, .ui.black.button:hover{color: #fff !important;text-shadow: 1px 1px #000;}
+.ui.orange.buttons .button, .ui.orange.button:hover{color: #fff !important;text-shadow: 1px 1px #000;}
+.ui.facebook.buttons .button, .ui.facebook.button:hover{color: #fff !important;text-shadow: 1px 1px #000;}
+.redcolor
+{
+    color:red;
+}
+.footercontact{overflow:hidden;width:100%;padding-top:10px;padding-bottom:10px;}
+.contactname{width: 48%;    float:left;    margin-right: 1%;    margin-left: 1%;}
+.contactbox{width: 48%;    float:right;   margin-right: 1%;    margin-left: 1%;}
+.fieldright{
+    margin-left: 2px  !important;width: 98%  !important;
+}
+.fieldleft{
+    margin-left: 11px  !important;
+    width: 98% !important;
+}
+.loaderpixel{
+    margin : 0px auto;
+}
+.numberalignment{font-family: helvetica;font-size: 16px;font-weight: 700;margin: 8px 77px;width: 50px;}
+.loadprogress{margin-top:4.5%;margin-left:-2.5%}
+.onlyfourthree{display:none !important;}
+.headertable{display:table;width:100%}
+.blackheader{background-color: #424242;color: #fff;padding: 8px;font-size:15px;}
+.switchpanel{width:85%}
+/*styles for messageboard*/
+.innerview{width: 97.5%;margin: 0px;padding: 1% 1% 1% 1%;}
+.messageboardview{width:100%;display:table;border-right:1px #b5b5b6 solid;}
+.msgmenubar{width:173px; display:table-cell; vertical-align:top;font-size:13px;padding-top: 8px;border-bottom: 1px solid #d5d5d5;
+            word-break: break-word;background:#f2f2f2;border-left: 1px #d5d5d5 solid;border-right: 1px #b5b5b6 solid;}
+.msgboardbox{width:585px;display:table-cell; vertical-align:top;font-size:14px;word-break: break-word;background:#f2f2f2;}
+.msgboardprofile{width:239px;display:table-cell; vertical-align:top;font-size:13px;word-break: break-word;
+                 border-left: 1px #b5b5b6 solid;}
+.msgboardreply{width: 97%;overflow: hidden;background-color: #F2F2F2;padding: 8px 8px 8px 5px; word-break: break-word;border: 1px #e7e7e7 solid;
+               border-bottom: 1px #ccc solid;border-radius: 5px;border-top: 1px #fff solid;}
+.viewmorecomments{padding: 4px 8px 4px 0px;font-weight: 600;}
+.headernav{width:100%; margin:0px auto; background: url(https://campusinteraction.com/Campus/ci-website/navbg.png) repeat-x;}
+.activemenus{width:1000px;margin:0px auto;}
+.logoheader{width:1000px; margin:0px auto;}
+.profilephoto{width: 75px;margin: 0px auto;}
+.replyphoto{width: 35px;height: 35px;float: left;border-radius: 50%;border: 1px solid #cdcdcd !important;}
+.replyform{float:left;width:84%}
+.postmessage {color: #333;font-family: Helvetica;font-size: 13px;font-weight: lighter;margin: 4px 0 0 4px;outline: none;padding: 0px 3px;width: 571px;}
+.padborder{box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.1) !important;border-radius: 4px;border-bottom: 1px solid #f2f2f2;
+           padding-bottom: 0.5em !important;padding-top: 0.1em !important;padding-right:0.4em !important;}
+.challengequestion{background-color:#ecf0f1;padding: 1% 1% 1% 1%;width: 98%;}
+.challengeborder{border: 1px #eee solid;padding:5px;}
+ul.ulfont{margin-left: -12px;font-weight: 700;font-size: 12px;color: #ff6501;font-family: helvitica;display:table;list-style-type: disk}
+ul.ulfont{list-style-type: square;width:150px;}
+.blackcoloronly{color:#333;width:135px}
+.footercolor{color:#333;font-family: 'lora'}
+.ulimg{float:right;margin-top:8px}
+/*end*/
+.heightul{font-size:14px; list-style-type:circle;}
+.marginul{margin-top:15px !important;}
+.minimumwidth{width:auto}
+.twentythreeleft{float:left;width:35%;}
+.inmarginleft{margin-left:20px;}
+.brandcolor{color:#ff6501;}
+.jobdivider{margin-top: 100px;}
+.errormsg{color:red; position:absolute;}
+.abtpassword{color:green; position:absolute;}
+.available-username{color:green !important;}
+.abtpasswords{color:red; position:absolute;}
+.autoheight{height:30px; overflow:auto;}
+.segmentheight{height:0px; overflow:auto;}
+.downloadheight{padding-top: 0px;height: 27px !important;}
+.tabledividerline {
+    margin: 0rem 0rem;
+    border-top: 1px solid #E6E6E6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+    line-height: 1;
+    height: 0em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.marginmodal{margin-bottom:auto}
+.companyDropDown{height:30px}
+.marginleftmsg{margin-left:8px}
+.buttonlineheight{line-height: 2.2 !important}
+.textareaheight{height: 105px !important}
+.multipleheight{height: 105px !important}
+.advancetop{margin-top:18px !important;}
+.emailsmsbar{height: 90px !important}
+.onlinetestlist
+{
+    float: left;
+    width: 20%;
+    margin-right: 2.5% !important;
+    margin-left: 0.5% !important;
+    margin-bottom: 20px;
+}
+#list
+{   
+    list-style: lower-latin; 
+    font-size: 15px; 
+    line-height: 25px;
+    font-size: 18px;
+    margin:0px;
+}
+#list ul li
+{  
+    list-style: url('/images/footer/less' ) no repeat;
+}
+.loaderformsg{position: absolute;right: 27%;}
+.whitecolor
+{
+    color:#ffffff !important;
+}
+.showmoremsg
+{ 
+    height: 20px;
+    border-radius: 0px !important;
+    border: 1px solid #ccc !important;
+    padding-top: 10px !important;
+}
+.marginauto{margin-top:0px;}
+.heightforcompanyedit{height:135px !important}
+.sharetop{margin-top:0px !important;}
+.niceditorpop{width:98%; margin-top:5px;}
+.marginleftfortext{margin-left:15px !important}
+.popupwidth{width:1000px !important;}
+.panelwidth{width:90%}
+.compaign{margin-right: 10px !important}
+.experenceinjob{width: 49%;float: left;margin-left: 1%;}
+.responsiveheight{height:30px;}
+.orheight{height:45px;}
+.heightforregister{height:auto;}
+.selectheightdrop{height:30px !important}
+.selectheight{height:150px;}
+.margininverleft{margin-left:-10px !important;}
+img{border:none !important;}
+.msgmargininvertop{margin-top:-25px !important;}
+.loginform{float: left;padding-right:16px; width:auto;}
+.fotgotpwd{float: left;padding-right:16px; width:auto;}
+.loginmargin{margin-right:10px !important}
+.slashleft{margin-left:8px !important;margin-right:3px !important;}
+.optionwidth{width:96%;margin:0px auto;word-wrap: break-word;}
+.optionhover{min-height:25px;width: 100%;padding-top: 4px;padding-bottom: 4px;overflow: hidden;}
+.questionname{padding: 12px;background-color: lightgray;width:96%}
+.questionnamegame{padding: 12px;background-color: #ffffff;width:97.5%;font-size: 18px;}
+.optionspace{margin-right: 10px;float:left;}
+.afterbutton{float: left;width: 16px;background-color: #00FF40;padding: 2px 5px 8px 5px;color: #000 !important;margin-right: 10px;
+             text-align: center;height: 14px;margin-bottom: 10px;border: 2px solid #2EFE2E;}
+.beforebutton{float: left;width: 16px;padding:2px 5px 8px 5px;color:#000;margin-right: 10px;text-align: center;height: 14px;
+              margin-bottom: 10px;border:2px solid #3B579D}
+.heightbutton{width: 100%;padding: 0.6em;}
+.onlineTestName{float:left;font-size:18px;font-weight:700;}
+.onlineTestTime{float:right;font-size:18px;font-weight:700;}
+.circleprofile{width: 100px;height: 100px;background: red;-moz-border-radius: 50px;-webkit-border-radius: 50px;	border-radius: 50px;
+               margin-left: 23%;margin-top: 5%;}
+.weightfont{font-weight: 600;}
+.deletemsgbox{position: absolute;right: 0em;top: 0em;z-index: -1;width: 0em;height: 0em;border-top: 0em solid transparent;border-right: 3em solid transparent;
+              border-left: 0em solid transparent;border-right-color: inherit;-webkit-transition: border-color 0.2s ease;
+              transition: border-color 0.2s ease;}
+.onlinevideos{margin-top:-5px !important; margin-bottom:0px !important}
+.downicon{height: 8px;width: 14px;margin-top: 2px !important;}
+.uploadedImage{float:left;margin-right:5px}
+.homeheader{margin: 0px auto;background-color: #fff !important;height: 60px;}
+.h{color: #ff6501;font-family: Oswald;font-size: 14px;font-weight: 700;letter-spacing: 0;margin: 0;
+   text-transform: uppercase;}
+.menuh{color: #333;font-family: Oswald;font-size: 14px;font-weight: 700;letter-spacing: 0;margin: 0;padding-right: 5px;
+       text-transform: uppercase;}
+.homemenu{color: #333;font-family: Oswald;font-size: 14px;font-weight: 700;letter-spacing: 0;margin: 0;padding-top: 20px !important;
+          text-transform: uppercase; text-shadow: 1px 1px #fff;width:63px;}
+.homemenu:hover{color:#ff6501}
+.seperator{float:left;margin-right: 11px;}
+.seperator:hover{color:#ff6501}
+.rightmenu{float: right;padding-top: 5px;}
+
+.eventhead{width:30px;float:left;margin-top:5px;margin-right:8px;}
+.downright{float:right;width:auto}
+.greencolor{color:#245a3c}
+.cilogo{float: left;width: auto;padding-right: 16px;}
+.cilogonew{float:left; padding:8px 0 8px 30px;}
+.searchimage{height: 15px;position: absolute;top: 8px;right: 6px;}
+.blog{    height: 20px;    margin-top: 3px;    width: 16px;}
+.staffhead{    height: 20px;    margin-top: 3px;    width: 19px;}
+.searchimage{height: 15px;position: absolute;top: 8px;right: 6px;}
+.msgboardphoto{width: 35px;height: 35px;border-radius: 50%;border: 1px solid #cdcdcd !important;}
+.excelstyle{font-weight:600;font-size:16px;margin-top:1px !important;float:right;width:auto;}
+.heightforstudentyear{width: 100%; display: table;}
+.filterstudent{margin: 10px 5px;width: 472px;}
+.subheader{font-weight: 600;font-size: 16px;margin-top: 0px !important;color:#333 !important}
+.totalheader{font-weight: 600;font-size: 16px;margin-top: 5px !important;}
+.chartDesignReport{
+    width: 100%; min-height: 400px;
+}
+.graphtitle{background: #eee;padding: 8px;text-align: left;}
+#reports{text-align: center}
+.reportImage{position: absolute;bottom: 40%;left: 30%;}
+.floatright{float:right}
+.responsivemargin{font-family: helvetica;font-size: 12px;font-weight: 700;list-style: none;}
+.attachmentleft{width:50%;float:left;}.attach{float:left}
+.fileattach{float:left;margin-top:3px;width:auto;color:#000;}
+.fileattach:hover{color:#ff6501;}
+.innermsgboard{margin: 0px 0 0 4px;padding: 0px 4px;width:570px;}
+.tabcss{background-color: #fff;border-bottom: solid 1px #CCC;border-left: solid 1px #CCC;border-radius: 4px;
+        border-right: solid 1px #999;border-top: solid 1px #999;clear: both;margin-top:-12px;}
+.inactives{background-color: #f2f2f2;border-bottom: solid 1px #999;border-left: solid 1px #CCC;border-radius: 4px 4px 0 0;border-right: solid 1px #999;
+           border-top: solid 1px #999;color: #333;cursor: pointer;}
+.tabactive{background-color: #fff;border-bottom-style: none;border-left: solid 1px #CCC;border-radius: 4px 4px 0 0;border-right: solid 1px #999;
+           border-top: solid 1px #999;color: #333;cursor: pointer;}
+.border{margin-top:-5px !important;}
+.searchbox{height:30px;margin-right:20px !important;}
+.orangebold{color: #335b88 !important; font-weight: 700 !important;}
+.orangeboldfont{color:#ff6501 !important; font-weight: 700 !important;font-size: 18px;}
+.advancesms{float:right;width:50%;}
+.thcolor{background-color: rgba(0, 0, 0, 0.05);}
+.sixlogo{display:none} .normallogo{display:block}
+.jobheight{margin-bottom: 0px !important;}
+.fourmenu{display:none;}
+.adminpanelbutton{margin:17px 0px !important;}
+.salary{width:49% !important;}
+.fbloginbutton{margin-bottom:10px;} 
+.buttonwidth{width:100%;overflow:hidden;}
+.campustime{height:30px !important;}
+.righttime{margin-right:6px}
+.marketjob{height:30px !important;}
+.attendance{width: 27%;float: left;margin: 0px 0px 17px 61px;text-align: left;}
+.minheightforjob{min-height:425px !important;}
+.fourthreesix{margin-top: 0px !important; min-height:420px;}
+.javatutorial{margin-top:0px !important; margin-left:10px !important}
+.fbprofile{width:150px;}
+.public{margin-top:-1%}
+.addressright{float:right;min-height:20%;width:69%;line-height:16px;}
+.tabbedul{margin-left:15px}
+.addparentsdetail{font-size:15px;}
+.indexwrapper {width:1000px;margin:5px auto;min-height:450px;padding:2% 0px 0px 0px !important}
+.onlinetestwrapper{width: 1000px;margin-left: 20%;min-height:100vh;height:100%;}
+.indexfooter{position: absolute;width: 100%;bottom: 0px;}
+.searchAuto{position: absolute;top: 50px;background: #fafafb;width: 18.9%;padding: 0px 0 0 1.5%;}
+.srcimg{width: 42px;height: 42px;border-radius: 50%;float: left;margin-right: 10px;background: #fff;}
+.searchimageauto{width: 40px;height: 40px;border-radius: 50%;float: left;margin: 1px;}
+
+@media only screen and (max-width: 980px){
+    .postmessage{width:100%}.msgboardbox{margin-left:0% !important;}
+    .msgboardbox{width:582px;}
+    .twentyright{width:30%;margin-right:1%;}
+    .headernav, .wrapper, .activemenus{width: 100% !important; margin:0px auto;}
+    .innermsgboard{margin: 0px 0 0 4px;padding: 0px 4px;width:100% !important;}
+    .msgboardphoto {width: 45px;height: 45px;}
+    .logoheader{width:98% !important; margin:0px auto;}
+    .profileleft{width:72%;float:left;}
+    .otcleft{width:72%;float:left;}
+    .otcright{width: 25%;float: right;}
+    .onlinetestlist{float: left;width: 30%; margin-right: 1% !important; margin-left: 2% !important;margin-bottom: 2%;}
+    .testCompleteImg{width:100%;height:100%}
+    .jobprofileleft{width:35%;float:left;}
+    .jobprofileright{width:64%;float:right;}
+    .twentythreeleft {width:30% !important;float: left;}
+    .facebookcommands{width:88%;float:left;text-align:left; margin-left : 2%;}
+    .printimagebill{    width:auto;    float:right;    margin-top: -12px;}
+    .msgboardimage{float:left; width:54px;}
+    .msgboardremainder{width:60%;float: left;}
+    .marginauto{margin-top:0px;}
+    .profileimage{width:15%;float:left;padding-bottom:15px;}
+    .onlinelist{ width:60%;float:left;text-align:left;margin-left : 2%;}
+    .textboxfield{float:left; width:50%; margin-left:0%; margin-right:0%;}
+    .textboxfieldright{width:49%; float: right;}
+    .applydate{width:49%; float: right;}
+    .thirtyfiveright{width:25%}
+    .msgmenubar{width:165px; float:left; vertical-align:top;font-size:13px; margin-right:0.1%;word-break: break-word}
+    .msgboardbox{width:585px;margin-left: 0.2% !important;float:left; vertical-align:top; padding-right:15px;font-size:13px;word-break: break-word}
+    .msgboardprofile{width:208px;float:right; vertical-align:top;font-size:13px;word-break: break-word;margin-top: -2px;}
+    .yaser{width:60%; float:left;}
+    .yaserar{width:38%;float:right}
+    .experenceinjob{width: 49%;float: left;margin-left: 1%;}
+    .responsiveheight{height:30px;}
+    .orheight{height:35px;}
+    .heightforregister{height:30px;}
+    .seventyleft{width:68%;float:left;}
+    .loginform{float: left;padding-right:16px; width:auto;}
+    .fotgotpwd{float: left;padding-right:16px; width:auto;}
+    .loginmargin{margin-right:10px !important}
+    .slashleft{margin-left:12px !important;margin-right:12px !important;}
+    .heightbutton {padding: 1em;}
+    .onlineTestTime{margin-top:10px;font-size:18px;font-weight:700;}
+    .heightbutton{width: 100%;padding: 0.6em;}
+    .reportImage{position: absolute;bottom: 40%;left: 30%;}
+    .headerright{    width: auto;    float: right;    margin: 32px 0 0;}
+    .activemenus{width:98%;}.seventypercent{width:66%}
+
+}
+@media (max-width: 960px){
+    .msgmenubar{width:170px; float:left; vertical-align:top;font-size:13px;padding-top: 8px; margin-right:0%;word-break: break-word}
+    .msgboardbox{width:528px;float:left; vertical-align:top; padding-right:15px;font-size:14px;padding-top: 8px;word-break: break-word}
+    .msgboardprofile{width:240px;float:right; vertical-align:top;font-size:13px;padding-top: 8px;word-break: break-word}
+    .msgboardreply{width: 96%;overflow: hidden;background-color: #F2F2F2;padding: 8px; word-break: break-word;margin-top: 2px;} 
+    .squareprofile { margin-left: 20%;    width: 90px}
+    .excelstyle{font-weight:600;font-size:16px;margin-top:5px !important;float:right;width:auto;}
+    .reportImage{position: absolute;bottom: 40%;left: 30%;}
+    .postmessage, .headernav.wrapper{width:100%}
+    .activemenus {    margin: 0 auto;    width: 100%;}
+    .innermsgboard {    margin: 0 0 0 4px;    padding: 0 4px;    width: 100%;}
+}
+@media (max-width: 800px){
+    .indexwrapper{width:100%;margin:0px}
+    .beforebutton{width: 14px;}
+    .innerview{padding: 2% 0% 0% 1%;width: 98%;}
+    .editphoto{margin-bottom:10px}
+    .viewreport{margin-top:10% !important;}
+    .javatutorial{margin-top:15px !important; margin-left:10px !important}
+    .checkmark{margin-left:-8px;}
+    .eighthundred{margin:-1px 0px 5px 0px}
+    .fourthreesix{margin-top: 0px !important;min-height: 0px !important}
+    .marketjob{height:60px !important;}
+    .beforedate{margin:2px 2px 0 10px !important;width:16% !important}
+    .wrapper{width: 95% !important;margin-left: 5%;}
+    .foutypercent{width:65%;}
+    .noColon{display: none;}
+    .tablefive, .seventyfiveright {width:100% !important;}
+    .hallticket{min-height: 36px;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .breakword{word-wrap:break-word;}
+    .videoheight, videoheights{ height:auto;}
+    .marginleftforprofile{margin-left: 0px !important;}
+    .profileimageupload{ margin-left:0px !important;}
+    .heightforprofile{min-height:30px; text-align:center;}   
+    .labelSectionRight, .labelSectionLeft, .eightypercent, .activemenus, .adtable, .admail, .retablebox, .jobdate, .aboutpercent
+    {
+        width: 100% ;
+    }
+    .fiftyright{width:61%;margin-bottom:-12px !important;}
+    .msgmenubar, .msgboardbox, .msgboardprofile{width:100%;display:block;padding-right:0px;padding-left:0px;word-break: break-word}
+    .labelSectionRight, .labelSectionLeft, .contestright, .twentyright, .seventyleft, .applydate,
+    .leftfieldjob, .twentyeightright, .joblistleft, .joblistright, .autoright, 
+    .textboxfield,.textboxfieldright
+    {
+        width: 100%;
+    }
+    .afterseven{width:100%;margin-bottom: 2px !important;}
+    .noColon{display: none;}
+    .buttonlineheight{line-height: 2 !important};
+    .thirtyfiveright{width:25%}   
+    .twentythreeleft {width:30% !important;float: left;}
+    .hallticket{min-height: 36px;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .listforresult{width:100% !important; margin-top: 5px; margin-bottom: 8px;padding-right:0px;}
+    .breakword{word-break: break-word !important;}
+    .videoheight, videoheights{ height:auto;}
+    .jobdivider{margin-top: 60px; padding-bottom:90px;}
+    .segmentheight{height:0px;}
+    .inmarginleft{margin-left:0px;}
+    .fieldright,.fieldleft{width : 100% !important;margin-left:0px !important}
+    .errormsg{color:red;position:relative; min-height:10px;}
+    .heightforstudentyear{width: 100%; display: table}
+    .minimumwidth{min-width: 50px;}
+    .tabledividerline{display:none;}
+    .marginmodal{margin-bottom:10px !important;}
+    .companyDropDown{height:90px;}
+    .loaderformsg{margin: 0.5% 42%; position:relative}
+    .onlinetestlist{float: left;width: 30%; margin-right: 1% !important; margin-left: 2% !important;margin-bottom: 2%;}
+    .otcleft{width:60%;float:left;}
+    .otcright{width: 25%;float: right;}
+    .jobprofileleft{width:35%;float:left;}
+    .jobprofileright{width:62%;float:right;}
+    .facebookcommands{width:88%;float:left;text-align:left; margin-left : 2%;}
+    .seventyfive{width:77%;float:right}
+    .profileimage{width:15%;float:left;padding-bottom:15px;}
+    .onlinelist{ width:60%;float:left;text-align:left;margin-left : 2%;}
+    .printimagebill{    width:auto;    float:right;    margin-top: 0px;}
+    .msgboardimage{float:left; width:54px;}
+    .msgboardremainder{width:75%;float: left;}
+    .marginauto{margin-top:15px;}
+    .tworight{width:100%; margin-left:0px !important; margin-right: 0px !important;}
+    .noColon{display: none;}
+    .hallticket{min-height: 36px;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .breakword{word-break: break-word !important;}
+    .videoheight, videoheights{ height:auto;}
+    .editProject    {right : 0px;position:absolute;}
+    .boxheight{height:auto;}
+    .tableresponse
+    {
+        width:100% !important;
+        overflow:hidden;
+        position: relative;
+        background-color: #FFFFFF;
+        -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+        margin: 1em 0em;
+        border-radius: 5px 5px 5px 5px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+    }.profileimage, .labelleftforonline, .thirtypercent, .detailforonline, .projectdetail .profileright, .profiledetailright, .profilelabelleft,
+    .onlinelist, .eightleft, .experenceinjob{width:100% !important;margin-bottom: 0px;}
+    .seventypercent {    float: left;    width: 60%;}
+    .marginleftauto{margin-left: 0px !important;}
+    .sharetop{margin-top:-10px !important;}
+    .heightforcompanyedit{height:140px !important}
+    .niceditorpop{width: 99%;margin-left: 0.5%;}
+    .marginleftfortext{margin-left:-4px !important}
+    .headernav, .interview{width:100% !important; margin:0px auto;}
+    .logoheader{width:100% !important; margin:0px auto;}
+    .yaser{width:60%; float:left;}
+    .yaserar{width:38%;float:right}
+    popupwidth{width:450px !important;}
+    .responsiveheight{height:45px;}
+    .orheight{height:35px;}
+    .heightforregister{height:45px;}
+    .switchpanel{width:75%}
+    .selectheight{min-height:240px;}
+    .marginulfor{margin-left: -45px;}
+    .margininverleft{margin-left:0px !important;}
+    .ui.table tr > td {
+        width: 100% !important;
+        display: block;
+        border: none !important;
+        padding: 0.25em 0.75em;
+        -webkit-box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.05) !important;
+    }.ui.table thead th{display:none;}
+    .testbutton{width:100% !important;}
+    .loginform{float: left;padding-right:16px; width:auto;}
+    .fotgotpwd{float: left;padding-right:16px; width:auto;}
+    .loginmargin{margin-right:10px !important}
+    .slashleft{margin-left:5px !important;margin-right:12px !important;}
+    .groupsleft{    float:left;    width:48%;    margin-right:1% !important;    margin-left:1% !important;    margin-bottom:20px;}
+    .heightbutton {padding: 1em;}
+    .onlineTestTime{margin-top:0px;font-size:18px;font-weight:700;}
+    .heightbutton{width: 100%;padding: 0.6em;}
+    .messageright{float:right;width:90%;margin-top: -2px;}
+    .replyright{float:right;width:91%;margin-top: -5px;}
+    .imgmenu{width:5%;float:left}
+    .squareprofile {width: 75px; background: red;margin-left:45%;}
+    .ui.menu a.item.menucolor{background-color: #fff;border-bottom: 1px solid #ccc;font-size: 12px;border-right: 1px solid #ccc;
+                              width:25%; padding-right:5px;float:left;margin-bottom:1px}
+    .imgmenu{width:13%;float:left}
+    .responsivemargin{margin-top: 8px;margin-left:5px;}
+    .excelstyle{width:40%;float:right;}
+    .reportImage{position: absolute;bottom: 40%;left: 35%;}
+    .headernav{width:100%; margin:0px auto; background: url(../images/sevenhead.png) repeat-x;border-bottom: 1px solid #cbcbcb;}
+    .homemenu{padding: 12px 8px 0px 8px !important;}.sevensize{height:48px}
+    .rightmenu {float: right;width: 35% !important;padding-top:0px}
+    .postmessage{width:90%;margin:0px auto;}
+    .innermsgboard{margin: 0px 0 0 4px;padding: 0px 0px;width:99% !important;}
+    .sixfourty{display:none;}.normalcss{display:block;}
+    .profilelefttext{float: left;margin-top: 16px !important;}
+    .ui.dropdown{width: 100% !important;}
+    .headerright {width: 21%;float: right;margin: 18px 0 0;}
+    .brandcolor {    color: #ff6501;    margin-bottom: 10px !important;}
+    .jobheight{margin-bottom: 10px !important;}
+    .ui.actionMessage.segment {    background-color: #6ecff5 !important;     margin: 0px 0px 1% 0px !important;}
+    .ui.errorMessage.segment{background-color: #ff7038; margin: 0px 7px !important;}
+    .colon{display:none;}
+    .loadprogress{margin-top:8.5%;margin-left:-2%}
+    .campustime{height:30px !important;}
+    .righttime{margin-right:4px !important}
+    .marketjob{height:60px !important;}
+    .subheader{margin-top: 16px !important;}
+    .padd{padding-top:10px !important}
+    .exel{margin-bottom:10px !important;}
+    .popstar {    color: red;    margin-left: 121px !important;    margin-top: -28px;}
+    .ui.modal{top:0%}
+}
+@media (max-width: 768px){
+    .editphoto{margin-bottom:10px}
+    .navigationtext{margin-left:0px !important;}
+    .viewreport{margin-top:10% !important;}
+    .javatutorial{margin-top:15px !important; margin-left:10px !important}
+    .checkmark{margin-left:-8px;}
+    .eighthundred{margin:-1px 0px 5px 0px}
+    .fourthreesix{margin-top: 0px !important;min-height: 0px !important}
+    .marketjob{height:60px !important;}
+    .beforedate{margin:2px 2px 0 10px !important;width:16% !important}
+    .wrapper, .aboutpercent{width: 91% !important;margin-left: 7%;}
+    .foutypercent{width:65%;}
+    .noColon{display: none;}
+    .tablefive, .seventyfiveright {width:100% !important;}
+    .hallticket{min-height: 36px;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .breakword{word-wrap:break-word;}
+    .videoheight, videoheights{ height:auto;}
+    .marginleftforprofile{margin-left: 0px !important;}
+    .profileimageupload{ margin-left:0px !important;}
+    .heightforprofile{min-height:30px; text-align:center;}   
+    .labelSectionRight, .labelSectionLeft, .eightypercent, .activemenus, .adtable, .admail, .retablebox, .jobdate
+    {
+        width: 100% ;
+    }
+    .fiftyright{width:61%;margin-bottom:-12px !important;}
+    .msgmenubar, .msgboardbox, .msgboardprofile{width:100%;display:block;padding-right:0px;padding-left:0px;word-break: break-word}
+    .labelSectionRight, .labelSectionLeft, .contestright, .twentyright, .seventyleft, .applydate,
+    .leftfieldjob, .twentyeightright, .joblistleft, .joblistright, .autoright, 
+    .textboxfield,.textboxfieldright
+    {
+        width: 100%;
+    }
+    .afterseven{width:100%;margin-bottom: 2px !important;}
+    .noColon{display: none;}
+    .buttonlineheight{line-height: 2 !important};
+    .thirtyfiveright{width:25%}   
+    .twentythreeleft {width:30% !important;float: left;}
+    .hallticket{min-height: 36px;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .listforresult{width:100% !important; margin-top: 5px; margin-bottom: 8px;padding-right:0px;}
+    .breakword{word-break: break-word !important;}
+    .videoheight, videoheights{ height:auto;}
+    .jobdivider{margin-top: 60px; padding-bottom:90px;}
+    .segmentheight{height:0px;}
+    .inmarginleft{margin-left:0px;}
+    .fieldright,.fieldleft{width : 100% !important;margin-left:0px !important}
+    .errormsg{color:red;position:relative; min-height:10px;}
+    .heightforstudentyear{width: 100%; display: table}
+    .minimumwidth{min-width: 50px;}
+    .tabledividerline{display:none;}
+    .marginmodal{margin-bottom:10px !important;}
+    .companyDropDown{height:90px;}
+    .loaderformsg{margin: 0.5% 42%; position:relative}
+    .onlinetestlist{float: left;width: 30%; margin-right: 1% !important; margin-left: 2% !important;margin-bottom: 2%;}
+    .otcleft{width:60%;float:left;}
+    .otcright{width: 25%;float: right;}
+    .jobprofileleft{width:35%;float:left;}
+    .jobprofileright{width:62%;float:right;}
+    .facebookcommands{width:88%;float:left;text-align:left; margin-left : 2%;}
+    .seventyfive{width:77%;float:right}
+    .profileimage{width:15%;float:left;padding-bottom:15px;}
+    .onlinelist{ width:60%;float:left;text-align:left;margin-left : 2%;}
+    .printimagebill{    width:auto;    float:right;    margin-top: 0px;}
+    .msgboardimage{float:left; width:54px;}
+    .msgboardremainder{width:75%;float: left;}
+    .marginauto{margin-top:15px;}
+    .tworight{width:100%; margin-left:0px !important; margin-right: 0px !important;}
+    .noColon{display: none;}
+    .hallticket{min-height: 36px;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .breakword{word-break: break-word !important;}
+    .videoheight, videoheights{ height:auto;}
+    .editProject    {right : 0px;position:absolute;}
+    .boxheight{height:auto;}
+    .tableresponse
+    {
+        width:100% !important;
+        overflow:hidden;
+        position: relative;
+        background-color: #FFFFFF;
+        -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+        margin: 1em 0em;
+        border-radius: 5px 5px 5px 5px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+    }.profileimage, .labelleftforonline, .thirtypercent, .detailforonline, .projectdetail .profileright, .profiledetailright, .profilelabelleft,
+    .onlinelist, .eightleft, .experenceinjob{width:100% !important;margin-bottom: 0px;}
+    .seventypercent {    float: left;    width: 60%;}
+    .marginleftauto{margin-left: 0px !important;}
+    .sharetop{margin-top:-10px !important;}
+    .heightforcompanyedit{height:140px !important}
+    .niceditorpop{width: 99%;margin-left: 0.5%;}
+    .marginleftfortext{margin-left:-4px !important}
+    .headernav, .interview{width:100% !important; margin:0px auto;}
+    .logoheader{width:100% !important; margin:0px auto;}
+    .yaser{width:60%; float:left;}
+    .yaserar{width:38%;float:right}
+    popupwidth{width:450px !important;}
+    .responsiveheight{height:45px;}
+    .orheight{height:35px;}
+    .heightforregister{height:45px;}
+    .switchpanel{width:75%}
+    .selectheight{min-height:240px;}
+    .marginulfor{margin-left: -45px;}
+    .margininverleft{margin-left:0px !important;}
+    .ui.table tr > td {
+        width: 100% !important;
+        display: block;
+        border: none !important;
+        padding: 0.25em 0.75em;
+        -webkit-box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.05) !important;
+    }.ui.table thead th{display:none;}
+    .testbutton{width:100% !important;}
+    .loginform{float: left;padding-right:16px; width:auto;}
+    .fotgotpwd{float: left;padding-right:16px; width:auto;}
+    .loginmargin{margin-right:10px !important}
+    .slashleft{margin-left:5px !important;margin-right:12px !important;}
+    .groupsleft{    float:left;    width:48%;    margin-right:1% !important;    margin-left:1% !important;    margin-bottom:20px;}
+    .heightbutton {padding: 1em;}
+    .onlineTestTime{margin-top:0px;font-size:18px;font-weight:700;}
+    .heightbutton{width: 100%;padding: 0.6em;}
+    .messageright{float:right;width:90%;margin-top: -2px;}
+    .replyright{float:right;width:91%;margin-top: -5px;}
+    .imgmenu{width:5%;float:left}
+    .squareprofile {width: 75px; background: red;margin-left:45%;}
+    .ui.menu a.item.menucolor{background-color: #fff;border-bottom: 1px solid #ccc;font-size: 12px;border-right: 1px solid #ccc;
+                              width:25%; padding-right:5px;float:left;margin-bottom:1px}
+    .imgmenu{width:13%;float:left}
+    .responsivemargin{margin-top: 8px;margin-left:5px;}
+    .excelstyle{width:40%;float:right;}
+    .reportImage{position: absolute;bottom: 40%;left: 35%;}
+    .headernav{width:100%; margin:0px auto; background: url(../images/sevenhead.png) repeat-x;border-bottom: 1px solid #cbcbcb;}
+    .homemenu{padding: 12px 8px 0px 8px !important;}.sevensize{height:48px}
+    .rightmenu {float: right;width: 35% !important;padding-top:0px}
+    .postmessage{width:90%;margin:0px auto;}
+    .innermsgboard{margin: 0px 0 0 4px;padding: 0px 0px;width:99% !important;}
+    .sixfourty{display:none;}.normalcss{display:block;}
+    .profilelefttext{float: left;margin-top: 16px !important;}
+    .ui.dropdown{width: 100% !important;}
+    .headerright {width: 21%;float: right;margin: 18px 0 0;}
+    .brandcolor {    color: #ff6501;    margin-bottom: 10px !important;}
+    .jobheight{margin-bottom: 10px !important;}
+    .ui.actionMessage.segment {    background-color: #6ecff5 !important; margin: 4px auto !important;}
+    .ui.errorMessage.segment{background-color: #ff7038; margin: 0px 7px !important;}
+    .colon{display:none;}
+    .loadprogress{margin-top:8.5%;margin-left:-2%}
+    .campustime{height:30px !important;}
+    .righttime{margin-right:4px !important}
+    .marketjob{height:60px !important;}
+    .subheader{margin-top: 16px !important;}
+    .padd{padding-top:10px !important}
+    .exel{margin-bottom:10px !important;}
+    .popstar {    color: red;    margin-left: 121px !important;    margin-top: -28px;}
+    .ui.modal{top:0%}
+}
+@media (max-width: 720px){
+    .editphoto{margin-bottom:10px}
+    .navigationtext{margin-left:0px !important;height:40px}
+    .addressright{width:100%;}
+    .cloudboxleft, .cloudboxright{width:98%;margin:0px auto;min-height:300px}
+    .public{margin-top:-6%}
+    .exel{margin-bottom:10px !important;}
+    .seventwentyport{height:20px}
+    .viewreport{margin-top:0% !important;}
+    .javatutorial{margin-top:15px !important; margin-left:10px !important}
+    .postcompany{height:20px !important}
+    .checkmark{margin-left:-8px;}
+    .eighthundred{margin:-13px 0 5px 0px}
+    .padd{padding-top:10px}
+    .subheader{margin-top: 16px !important;}
+    .fourthreesix{margin-top: 0px !important;min-height: 0px !important}
+    .marketjob{height:60px !important;}
+    .registerright {    right: 10px;    top: 4px;}
+    .beforeregisterright {    float: right;  margin: 18px 5px 0;}
+    .colon{display:none;}
+    .brandcolor {color: #ff6501;margin-bottom: 10px !important;}
+    .foutypercent{width:65%;}
+    .noColon{display: none;}
+    .tablefive, .seventyfiveright, .interview{width:100% !important;}
+    .hallticket{min-height: 36px;}
+    .afterseven{width:100%;margin-bottom: 2px !important;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .breakword{word-wrap:break-word;}
+    .videoheight, videoheights{ height:auto;}
+    .marginleftforprofile{margin-left: 0px !important;}
+    .profileimageupload{ margin-left:0px !important;}
+    .heightforprofile{min-height:30px; text-align:center;}   
+    .labelSectionRight, .labelSectionLeft, .eightypercent, .activemenus, .aboutpercent, .adtable, .admail, .retablebox, .jobdate
+    {
+        width: 100% ;
+    }
+    .msgmenubar, .msgboardbox, .msgboardprofile{width:100%;display:block;padding-right:0px;padding-left:0px;word-break: break-word}
+    .labelSectionRight, .labelSectionLeft, .contestright, .twentyright, .seventyleft, .applydate,
+    .leftfieldjob, .twentyeightright, .joblistleft, .joblistright, .autoright, 
+    .textboxfield ,.textboxfieldright, .informdata
+    {
+        width: 100%;
+    }
+    .noColon{display: none;}
+    .buttonlineheight{line-height: 2 !important};
+    .thirtyfiveright{width:25%}   
+    .twentythreeleft {width:30% !important;float: left;}
+    .hallticket{min-height: 36px;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .listforresult{width:100% !important; margin-top: 5px; margin-bottom: 8px;padding-right:0px;}
+    .breakword{word-break: break-word !important;}
+    .videoheight, videoheights{ height:auto;}
+    .jobdivider{margin-top: 60px; padding-bottom:90px;}
+    .segmentheight{height:0px;}
+    .inmarginleft{margin-left:0px;}
+    .fieldright,.fieldleft{width : 100% !important;margin-left:0px !important}
+    .errormsg{color:red;position:relative; min-height:10px;}
+    .heightforstudentyear{width: 99%; display: table}
+    .minimumwidth{min-width: 50px;}
+    .tabledividerline{display:none;}
+    .marginmodal{margin-bottom:10px !important;}
+    .companyDropDown{height:90px;}
+    .loaderformsg{margin: 0.5% 42%; position:relative}
+    .emailsmsbar{height: 190px !important}
+    .onlinetestlist{float: left;width: 30%; margin-right: 1% !important; margin-left: 2% !important;margin-bottom: 2%;}
+    .otcleft{width:60%;float:left;}
+    .otcright{width: 25%;float: right;}
+    .jobprofileright{width:100%}.jobprofileleft{width:95%;}
+    .facebookcommands{width:88%;float:left;text-align:left; margin-left : 2%;}
+    .seventyfive{width:77%;float:right}
+    .profileimage{width:15%;float:left;padding-bottom:15px;}
+    .onlinelist{ width:60%;float:left;text-align:left;margin-left : 2%;}
+    .printimagebill{    width:auto;    float:right;    margin-top: 0px;}
+    .msgboardimage{float:left; width:54px;}
+    .msgboardremainder{width:75%;float: left;}
+    .marginauto{margin-top:15px;}
+    .tworight{width:100%; margin-left:0px !important; margin-right: 0px !important;}
+    .noColon{display: none;}
+    .hallticket{min-height: 36px;}
+    .testCompleteImg{width:100%;height:100%}
+    .verticalline{display:none;}
+    .breakword{word-break: break-word !important;}
+    .videoheight, videoheights{ height:auto;}
+    .editProject    {right : 0px;position:absolute;}
+    .boxheight{height:auto;}
+    .tableresponse
+    {
+        width:100% !important;
+        overflow:hidden;
+        position: relative;
+        background-color: #FFFFFF;
+        -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+        margin: 1em 0em;
+        border-radius: 5px 5px 5px 5px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+    }.profileimage, .labelleftforonline, .thirtypercent, .profileright, .profileleft, .profiledetailright, .profilelabelleft,
+    .onlinelist, .eightleft, .experenceinjob{width:100% !important;}
+    .seventypercent {width:60% !important;margin-top: 10px !important;}
+    .marginleftauto{margin-left: 0px !important;}
+    .sharetop{margin-top:-10px !important;}
+    .heightforcompanyedit{height:140px !important}
+    .niceditorpop{width: 99%;margin-left: 0.5%;}
+    .marginleftfortext{margin-left:-4px !important}
+    .headernav{width:100% !important; margin:0px auto;}
+    .logoheader{width:100% !important; margin:0px auto;}
+    .yaser{width:60%; float:left;}
+    .yaserar{width:38%;float:right}
+    popupwidth{width:450px !important;}
+    .responsiveheight{height:45px;}
+    .orheight{height:35px;}
+    .heightforregister{height:45px;}
+    .switchpanel{width:75%}
+    .selectheight{min-height:240px;}
+    .marginulfor{margin-left: -45px;}
+    .margininverleft{margin-left:0px !important;}
+    .ui.table tr > td {
+        width: 100% !important;
+        display: block;
+        border: none !important;
+        padding: 0.25em 0.75em;
+        -webkit-box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.05) !important;
+    }
+    .testbutton{width:100% !important;}
+    .loginform{float: left;padding-right:16px; width:auto;}
+    .fotgotpwd{float: left;padding-right:16px; width:auto;}
+    .loginmargin{margin-right:10px !important}
+    .slashleft{margin-left:5px !important;margin-right:12px !important;}
+    .groupsleft{    float:left;    width:48%;    margin-right:1% !important;    margin-left:1% !important;    margin-bottom:20px;}
+    .heightbutton {padding: 1em;}
+    .onlineTestTime{margin-top:0px;font-size:18px;font-weight:700;}
+    .heightbutton{width: 100%;padding: 0.6em;}
+    .messageright{float:right;width:90%;margin-top: -2px;}
+    .replyright{float:right;width:91%;margin-top: -5px;}
+    .imgmenu{width:5%;float:left}
+    .squareprofile {width: 75px; background: red;margin-left:45%;}
+    .ui.menu a.item.menucolor{background-color: #fff;border-bottom: 1px solid #ccc;font-size: 12px;border-right: 1px solid #ccc;
+                              width:25%; padding-right:5px;float:left;margin-bottom:1px}
+    .imgmenu{width:13%;float:left}
+    .responsivemargin{margin-top: 8px;margin-left:5px;}
+    .excelstyle{width:40%;float:right;}
+    .reportImage{position: absolute;bottom: 40%;left: 35%;}
+    .headernav{width:100%; margin:0px auto; background: url(../images/sevenhead.png) repeat-x;border-bottom: 1px solid #cbcbcb;}
+    .homemenu{padding: 12px 8px 0px 8px !important;}.sevensize{height:48px}
+    .rightmenu {float: right;width: 36% !important;padding-top:0px}
+    .postmessage{width:90%;margin:0px auto;}
+    .innermsgboard{margin: 0px 0 0 3px;padding: 0px 0px;width:98% !important;}
+    .sixfourty{display:none;}.normalcss{display:block;}
+    .profilelefttext{float: left;margin-top: 16px !important;}
+    .ui.dropdown{width: 100% !important;}
+    .headerright {width: 22%;float: right;margin: 18px 0 0;}
+    .fiftyright{width:97%;margin-bottom:0px !important;}
+    .searchbox {height: 30px;margin-right: 10px !important;margin-top: 10px !important;}
+    .fourtyleft {width: 38%;float: left;}
+    .ui.actionMessage.segment {    background-color: #6ecff5 !important;    margin: 4px auto !important;}
+    .ui.errorMessage.segment{background-color: #ff7038; margin: 0px 7px !important;}
+    .beforedate{width:100% !important;margin:0px 0px 30px !important;}
+    .minheightforjob {    min-height: 375px !important;}
+    .popstar {color: red;margin-left: 121px !important;margin-top: -28px;}
+}
+@media (max-width: 640px){
+    .indexwrapper{padding-top: 60px !important;}
+    .editphoto{margin-bottom:10px}
+    .navigationtext{margin-left:0px !important;}
+    .fbprofile{width:100%; padding-bottom:32px;}
+    .selectheightdrop{height:40px !important}
+    .javatutorial{margin-top:15px !important; margin-left:10px !important}
+    .responsivebutton{margin-top:-15px;}
+    .eighthundred{margin:-5px 0 5px 0px}
+    .registerright { width: 20%; top:3px}
+    .beforeregisterright {    float: right; width:20%;   margin: 18px 5px 0;}
+    .questionname{padding: 12px;background-color: lightgray;width:95%}
+    .padd{padding-top:10px;}
+    .brandcolor {    color: #ff6501;    margin-bottom: 0px !important;}
+    .fiftyright{width:97%;margin-bottom:6px !important;}
+    .image{width:85%;margin:0 auto;}
+    .onlinetestlist{ float: left;  width: 48%; margin-right: 1% !important; margin-left: 1% !important;margin-bottom: 2%;}
+    .otcleft{width:72%;float:left;}
+    .otcright{width: 25%;float: right;}
+    .jobprofileright, .jobProfileLabel, .jobProfileDetail {width:100% !important;}
+    .jobprofileleft{width:95% !important;}
+    .twentythreeleft {width:40% !important;float: left;}
+    .facebookcommands{width:85%;float:left;text-align:left; margin-left : 2%;}
+    .printimagebill{    width:auto;    float:right;    margin-top: 0px;}
+    .msgboardimage{float:left; width:54px;}
+    .msgboardremainder{width:75%;float: left;}
+    .marginauto{margin-top:15px;}
+    .seventyfive, .yaser, .yaserar, .advancesms{width:100%}
+    .profileimage{width:15%;float:left;padding-bottom:15px;}
+    .onlinelist{ width:60%;float:left;text-align:left;margin-left : 2%;}
+    .thirtyfiveright{width:45%; float:right}    
+    .niceditorpop{width: 98%;margin-left: -0.5%;}
+    .experenceinjob, .jobprofilebuttonright{width:100% !important;}
+    .responsiveheight{height:40px;}
+    .orheight{height:35px;}
+    .button {width:48% !important; float:left;margin-left:1% !important; margin-right:1% !important}
+    .ui.four.column.grid > .row > .column, .ui.four.column.grid > .column, .ui.grid > .four.column.row > .column{width:100% !important;margin-bottom:10px}
+    .testbutton{width:98% !important; margin:0px auto;}
+    .loginform{float: left;padding-right: 0px;width: 32%;}
+    .fotgotpwd{float: left;padding-right:16px; width:60%;}
+    .loginmargin{margin-right:0px !important}
+    .slashleft{margin-left:5px !important;margin-right:12px !important;}
+    .groupsleft{    float:left;    width:48%;    margin-right:1% !important;    margin-left:1% !important;    margin-bottom:20px;}
+    .heightbutton {padding: 1em;}
+    .onlineTestTime{margin-top:0px;font-size:18px;font-weight:700;}
+    .afterbutton{float: left;width: 14px;background-color: #00FF40;padding: 5px;color: #000 !important;margin-right: 10px;
+                 text-align: center;height: 14px;margin-bottom: 10px;border: 2px solid #2EFE2E;}
+    .beforebutton{float: left;width: 14px;padding: 5px;color:#000;margin-right: 10px;text-align: center;height: 14px;
+                  margin-bottom: 10px;border:2px solid #ff6501}
+    .heightbutton{width: 100%;padding: 3em 1em;}
+    .replyright{float:right;width:90%;margin-top: -5px;}
+    .msgresponsebutton{width:18% !important; margin-top: -14px !important;}
+    .replyform{float:left;width:80%;}
+    .squareprofile {width: 75px; background: red;margin-left:43%;}
+    .ui.menu a.item.menucolor{background-color: #fff;border-bottom: 1px solid #ccc;font-size: 13px;border-right: 1px solid #ccc;width:33%;
+                              float:left;margin-bottom:1px}
+    .imgmenu{width:13%;float:left}
+    .ui.dropdown, .adtable, .admail, .retablebox, .jobdate{width:100% !important;}
+    .reportImage{position: absolute;bottom: 40%;left: 35%;}
+    .headerright{margin: 18px 0 0;width: 25%;}
+    .sixres{width:90%}
+    .rightmenu {float: right;width: 34% !important;padding-top: 3px;}
+    .paddingcircle{padding:7px 2px !important;}
+    .searchbox {height: 30px;margin-right: 10px !important;margin-top: 10px !important;}
+    .fourtyleft{width:39%; margin-bottom: 3px; float:left;}
+    .buttonright {width: 18%;float: right;margin-right: -47px;margin-top:-4px;}
+    .messageright {float: right;width: 88%;margin-top: -2px;}
+    .sixfourty{display:none;}.normalcss{display:block;}
+    .profilelefttext{float: left;margin-top: 16px !important;}
+    .sixlogo{display:block}
+    .normallogo, .heightbutton{display:none}
+    .seventypercent {    margin-top: 10px !important;    width: 60% !important;}
+    .responsivemargin {margin-top: 8px;margin-left: 10px;}
+    .ui.actionMessage.segment {    background-color: #6ecff5 !important;    margin: 4px  0px !important;}
+    .ui.errorMessage.segment{background-color: #ff7038; margin: 0px auto !important;}
+    .responsivedivider{margin-top:40px !important;}
+    .ui.dropdown .menu {    left: -5px;}
+    .loadprogress{margin-top:10%;margin-left:-2%}
+    .fourheight{height:40px;}
+    .beforedate{width:100% !important;margin:0px 0px 30px !important;}
+    .minheightforjob{min-height:390px !important;}
+    .responsivejobmargin{margin-left:-8px;}
+    .emailreportleft, .emailreportright{width:100%}
+    .popstar {    color: red;    margin-left: 121px !important;    margin-top: -28px;}
+    .onlinetestresult{width:46%;margin-top:0px}
+}
+@media (max-width: 480px){
+    .wrapper{width:94% !important;}
+    .onlinetestresult{width:38%;margin-top:-10px}
+    .navigationtext{margin-left:0px !important;}
+    .public{margin-top:-10%}
+    .questionname{padding: 8px;background-color: lightgray;width:95%}
+    .registerright {    top: 13px;     width: 50%;   }
+    .beforeregisterright {    float: right; width:37%;   margin: 18px 5px 0;}
+    .videoheights{height: auto !important; min-height: 0px;}
+    .minheightforjob{min-height:405px !important;}
+    .ui.dropdown .menu {    left: 0px;}
+    .sharetop {    margin-top: 0 !important;}
+    .ui.errorMessage.segment {    background-color: #ff7038;    margin: 8px auto 7px !important;}
+    .threheight{margin-bottom:0px !important; width: 96% !important;}
+    .onlyfourthree{display:block !important;}   
+    .jobprofileleft{width:95% !important;}
+    .brandcolor {    color: #ff6501;    margin-bottom: 10px !important;}
+    .onlinetestlist{ float: left;  width: 48%; margin-right: 1% !important; margin-left: 1% !important;margin-bottom: 2%;}
+    .otcleft, .otcright, .jobprofileright, .jobProfileLabel, .jobProfileDetail{width:100% !important;}
+    .facebookcommands{width:80%;float:left;text-align:left; margin-left : 2%;}
+    .printimagebill{    width:auto;    float:right;    margin-top: 0px;}
+    .msgboardimage{float:left; width:54px;}
+    .msgboardremainder{width:70%;float: left;}
+    .marginauto{margin-top:15px;}
+    .seventyfive, .profileimage,  .onlinelist, .applydate{width:100%}
+    .thirtyfiveright, .textboxfield, .textboxfieldright{width:100%;}
+    .seventyfive, .profileimage,  .onlinelist, .yaser, .yaserar{width:99%}
+    .thirtyfiveright, .textboxfield, .textboxfieldright, .niceditorpop{width:100%;}
+    .dropdowntext{width: 87%}
+    .campustime{height:30px !important}
+    .compaign{margin-right: 5% !important}
+    .experenceinjob{width:100% !important;}
+    .responsiveheight{height:40px;}
+    .orheight{height:35px;}
+    .cicon{display:none !important;}
+    .heightforregister{height:50px;}
+    .button {width:48% !important; float:left; margin-left:1% !important; margin-right:1% !important}
+    .ui.four.column.grid > .row > .column, .ui.four.column.grid > .column, .ui.grid > .four.column.row > .column{width:100% !important;margin-bottom:10px}
+    .testbutton{margin: 0 auto !important;    width: 99% !important;}
+    .loginform, .fotgotpwd, .groupsleft{width:100%}
+    .slashleft{margin-left:5px !important;margin-right:12px !important;}
+    .loginmargin{margin-right:0px !important}
+    .heightbutton {padding: 2.5em 1em;}
+    .onlineTestTime{margin-top:0px;font-size:18px;font-weight:700;}
+    .messageright{float:right;width:85%; margin-top: -5px;}
+    .replyright{float:right;width:100%;margin-top: 0px;}
+    .foureightyresponse{width:98% !important;margin-top:25px !important}
+    .replyform{width:100%;}
+    .imgmenu{width:7%;float:left}
+    .squareprofile {width: 75px; background: red;margin-left:40%;}
+    .ui.menu a.item.menucolor{background-color: #fff;border-bottom: 1px solid #ccc;font-size: 13px;
+                              border-right: 1px solid #cccpx;float:left; width:50%;margin-bottom:0px;}
+    .responsivemargin{margin-top: 0px;margin-left:5px}
+    .fourtyleft{width: 64%; margin-bottom: 3px; float:left;}
+    .ui.dropdown{width:100% !important;float:right;}
+    .twentythreeleft {width:55% !important;float: right;}
+    .reportImage{position: absolute;bottom: 40%;left: 30%;}
+    .headerright{width: 33%;margin: 10px auto;}
+    .rightmenu {float: right;width: 46% !important;padding-top: 3px;}
+    .buttonright {width: 24%;float: right;}
+    .msgresponsebutton{width:18% !important; margin-top: 0px !important;}
+    .homeheader {margin: 0px auto;height: 65px;}
+    .blogview, .colon, .fourmsg, .normalmsg{display:none;}.seperator{margin-right:0px}
+    .fourmenu{display:block;}
+    .fourthreesix{margin-top: -16px !important;min-height:0px}
+    .textareaheight{height: 105px !important}
+    .seventypercent {    margin-top: 10px !important;    width: 100% !important;margin-bottom: 10px;}
+    .loadprogress{margin-top:14%;margin-left:0%}
+    .beforedate{width:100% !important;margin:0px 0px 20px !important;}
+    .responsivejobmargin{margin-left:-8px;}
+}
+@media (max-width: 360px){
+    .wrapper{width:94% !important;}
+    .threesixty{margin-top:11px !important;}
+    .onlinetestresult{width:38%;margin-top:-10px}
+    .challengeshare{float:left;width:49%}
+    .registerright { width: 50%;   top: 14px;}
+    .beforeregisterright {    float: right; width:57%;   margin: 8px 5px 0;}
+    .buttonwidth{width:98%; margin:0px auto;overflow:hidden;}
+    .fiftyright {    margin: 8px auto !important;    width: 97%;float:none}
+    .onlyfourthree{display:block !important;}
+    .brandcolor {    color: #ff6501;    margin-bottom: 0px !important;}
+    .image{width:75%;margin:0 auto;}
+    .onlinetestlist{  width: 100%; margin-right: 0% !important; margin-left: 0% !important;margin-bottom: 2%;}
+    .otcleft, .otcright, .jobprofileleft, .jobprofileright, .thirtyfiveright,.textboxfieldright{width:100%}
+    .textboxfield{width:98%}
+    .facebookcommands{width:80%;float:left;text-align:left; margin-left : 2%;}
+    .printimagebill{    width:auto;    float:right;    margin-top: 0px;}
+    .msgboardimage{float:left; width:54px;}
+    .msgboardremainder{width:65%;float: left;}
+    .marginauto{margin-top:15px;}
+    .seventyfive, .profileimage,  .onlinelist, .applydate{width:100%}
+    .multipleheight{height: 90px !important}
+    .ui.textarea, .ui.form textarea{height:70px !important}
+    .dropdowntext{width: 87%}
+    .campustime{height:30px !important}
+    .compaign{margin-right: 55% !important}
+    .excelstyle{width:100% !important;margin-bottom:10px !important;}
+    .seventyfive, .profileimage,  .onlinelist, .yaser, .yaserar, .niceditorpop, .jobProfileLabel, .jobProfileDetail{width:100% !important;}
+    .responsiveheight{height:40px;}
+    .experenceinjob{width:100% !important;}
+    .orheight{height:35px;}   
+    .heightforregister{height:66px;}
+    .button{width:100% !important;margin-left:0% !important; margin-right:0% !important}
+    .buttonNew{width: 48% !important;margin-left: 1% !important;}
+    .marginTop8Percent{margin-top:8% !important;}
+    .ui.four.column.grid > .row > .column, .ui.four.column.grid > .column, .ui.grid > .four.column.row > .column{width:100% !important;margin-bottom:10px}
+    .testbutton{width:100% !important;}
+    .loginform, .fotgotpwd, .groupsleft{ width:100%;}
+    .slashleft{margin-left:5px !important;margin-right:12px !important;}
+    .loginmargin{margin-right:0px !important}
+    .heightbutton {padding: 2.5em 1em;}
+    .onlineTestTime{margin-top:0px;font-size:18px;font-weight:700;}
+    .imgmenu{width:10%;float:left}
+    .messageright{width:100%; margin-top: 2px;}
+    .msgboardreply{width: 94%;overflow: hidden;background-color: #F2F2F2;padding: 8px; word-break: break-word;margin-top: 2px;} 
+    .squareprofile {width: 75px; background: red;margin-left:35%;}
+    .ui.menu a.item.menucolor{background-color: #fff;border-bottom: 1px solid #ccc;font-size: 12px;border-right: 1px solid #ccc;font-size: 13px;border-right: 0px;float:none;width:100%}
+    .fourtyleft {width: 95%;margin: 3px 6px;}
+    .ui.dropdown{width:100% !important;}
+    .twentythreeleft {width:55% !important;float: left;}
+    .reportImage{position: absolute;bottom: 40%;left: 16%;}
+    .headerright {width: 44%;margin: 12px auto;}
+    .rightmenu {width: 60% !important;padding-top: 3px;}
+    .buttonright {width: 100%;margin-right: 0px;margin-top: 0px;}
+    .msgrightboard {float: right;width: 90%;}
+    .searchbox {height: 30px;margin-right: 10px !important;margin-top: -3px !important;}
+    .cilogo {float: left;width: 40%;padding-right: 16px;}
+    .tabcss{border-right:1px solid #ccc;}
+    .msgresponsebutton{margin-right:6px !important;}
+    .textareaheight{height: 80px !important}.starhide{display:none;}
+    .ui.actionMessage.segment {    background-color: #6ecff5 !important;    margin: 4px 0px !important;}
+    .ui.errorMessage.segment{background-color: #ff7038; margin: 0px auto !important;}
+    .applydatebox{width:100% !important;}
+    .six.fields{width:100%; margin:0px auto;}
+    .beforedate{width:100% !important;margin:20px auto !important;}
+    .ui.form .field {    clear: both;    margin: 0 0 30px;}
+    .loadprogress{margin-top:20%;margin-left:0%}
+    .responsivejobmargin{margin-left:0px;}
+    .wrapper{width: 91% !important;margin-left: 7%;}
+}
+
+@media (max-width: 320px){
+    .wrapper{width:94% !important;}
+    .threeeghty{display:none;}
+    .ui.modal > .content{padding:0.5em !important}
+    .registerright {    top:15px;width:50%}
+    .beforeregisterright {    float: right; width:60%;   margin: 8px 5px 0;}
+    .responsivejobmargin{margin-left:0px;}
+    .buttonwidth{width:98%; margin:0px auto;overflow:hidden;}
+    .onlyfourthree{display:block !important;}
+    .brandcolor {    color: #ff6501;    margin-bottom: 0px !important;}
+    .image{width:75%;margin:0 auto;}
+    .onlinetestlist{  width: 100%; margin-right: 0% !important; margin-left: 0% !important;margin-bottom: 2%;}
+    .otcleft, .otcright, .jobprofileleft, .jobprofileright, .thirtyfiveright,.textboxfieldright{width:100%}
+    .textboxfield{width:98%}
+    .facebookcommands{width:80%;float:left;text-align:left; margin-left : 2%;}
+    .printimagebill{    width:auto;    float:right;    margin-top: 0px;}
+    .msgboardimage{float:left; width:54px;}
+    .msgboardremainder{width:65%;float: left;}
+    .marginauto{margin-top:15px;}
+    .seventyfive, .profileimage,  .onlinelist, .applydate{width:100%}
+    .multipleheight{height: 100px !important}
+    .dropdowntext{width: 87%}
+    .compaign{margin-right: 55% !important}
+    .seventyfive, .profileimage,  .onlinelist, .yaser, .yaserar, .niceditorpop, .jobProfileLabel, .jobProfileDetail{width:100% !important;}
+    .responsiveheight{height:40px;}
+    .experenceinjob{width:100% !important;}
+    .orheight{height:35px;}   
+    .heightforregister{height:35px;}
+    .button{width:100% !important;margin-left:0% !important; margin-right:0% !important}
+    .buttonNew{width: 48% !important;margin-left: 1% !important;}
+    .marginTop8Percent{margin-top:8% !important;}
+    .ui.four.column.grid > .row > .column, .ui.four.column.grid > .column, .ui.grid > .four.column.row > .column{width:100% !important;margin-bottom:10px}
+    .testbutton{width:99% !important;margin:0px auto !important;}
+    .loginform, .fotgotpwd, .groupsleft{ width:100%;}
+    .slashleft{margin-left:5px !important;margin-right:12px !important;}
+    .loginmargin{margin-right:0px !important}
+    .heightbutton {padding: 2.5em 1em;}
+    .onlineTestTime{margin-top:10px;font-size:18px;font-weight:700;}
+    .imgmenu{width:10%;float:left}
+    .messageright{width:100%; margin-top: 2px;}
+    .msgboardreply{width: 94%;overflow: hidden;background-color: #F2F2F2;padding: 8px; word-break: break-word;margin-top: 2px;} 
+    .squareprofile {width: 75px; background: red;margin-left:35%;}
+    .ui.menu a.item.menucolor{background-color: #fff;border-bottom: 1px solid #ccc;font-size: 12px;border-right: 1px solid #ccc;font-size: 13px;border-right: 0px;float:none;width:100%}
+    .fourtyleft {width: 95%;margin: 3px 6px;}
+    .ui.dropdown{width:100% !important;}
+    .twentythreeleft {width:50% !important;float: left;}
+    .reportImage{position: absolute;bottom: 40%;left: 16%;}
+    .headerright {width: 49%;margin: 12px auto;}
+    .rightmenu {    padding-top: 3px;    width: 66% !important;}
+    .buttonright {width: 100%;margin-right: 0px;margin-top: 0px;}
+    .msgrightboard {float: right;width: 90%;}
+    .searchbox {height: 30px;margin-right: 10px !important;margin-top: -3px !important;}
+    .cilogo {float: left;width: 25%;padding-right: 16px;}
+    .tabcss{border-right:1px solid #ccc;}
+    .msgresponsebutton{margin-right:6px !important;}
+
+}
+
+/* Eguru Section */
+
+.eguru-wrap{
+    float:left;
+    display:block;
+    margin:0 10px;
+}
+
+.egurubtn{
+    background-color: #FF7B26;
+    color: #FFFFFF;    
+    font-size: 12px !important;
+    color: #FFFFFF; 
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    min-height: 1em;
+    outline: none;    
+    margin: 0em;
+    padding: 0.8em 1.5em;   
+    text-transform: capitalize;
+    line-height: 1;
+    font-weight: bold;
+    font-style: normal;
+    text-align: center;
+    text-decoration: none;
+    border:none;
+    border-radius:3px;
+    width:100%;
+}
+
+.eguru-modal {
+    display: none; 
+    position: fixed; 
+    z-index: 100; 
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    border-radius:10px;
+}
+
+.eguru-modalcontent {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 21px;
+    font-weight: bold;
+    background: transparent;
+    border: 0;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.eguru-modalheader{
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.feedback-title{
+    font-size:18px;
+    margin:0!important;
+}
+
+.eguru-modalbody{
+    padding:15px;
+}
+
+.feedback-date{
+    font-size:16px;
+    margin:0;
+    color: #FF7B26;
+}
+
+.feedback-section{
+    padding: 10px 0px 15px;
+    border-bottom: 1px solid #efefef;
+}
+
+.tbl-feedback {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    font-size:14px;
+}
+
+.tbl-feedback td, th {
+    text-align: left;
+    padding: 8px;
+    word-break:normal;
+}
+
+.tbl-feedback tr:nth-child(even){background-color: #f2f2f2;}
+
+.feedback-content h6{
+    font-size:16px;
+    margin:10px 0 5px 0;
+    color: #5d5d5d;
+}
+
+.feedback-content p{
+    font-size:14px;
+    margin:5px 0;
+}
+
+@media(max-width:767px){
+    .btn-fb{
+        width:100%!important;
+    }
+    .eguru-wrap{
+        float:none;
+        margin:0;
+    }
+}
+
+@media (max-width:991px){
+    .eguru-modalcontent{
+        width:80%;
+        padding:10px;
+    }
+}nù6ç     ¡\l„[\l„[@8/\l¸   1    :https://www.campusinteraction.com/css/styles.css strongly-framed 1 security-info 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 request-method GET response-head HTTP/1.1 200 OK
+Accept-Ranges: bytes
+ETag: W/"90798-1542971560000"
+Last-Modified: Fri, 23 Nov 2018 11:12:40 GMT
+Content-Type: text/css;charset=ISO-8859-1
+Content-Language: en-US
+Content-Length: 90798
+Date: Wed, 13 Feb 2019 07:04:47 GMT
+Server: Apache-Coyote/1.1
+ original-response-headers Date: Wed, 09 Jan 2019 11:59:47 GMT
+Server: Apache-Coyote/1.1
+Accept-Ranges: bytes
+ETag: W/"90798-1542971560000"
+Last-Modified: Fri, 23 Nov 2018 11:12:40 GMT
+Content-Type: text/css;charset=ISO-8859-1
+Content-Language: en-US
+Content-Length: 90798
+Connection: close
+ uncompressed-len 0 net-response-time-onstart 317 net-response-time-onstop 536 necko:classified 1  bÆ

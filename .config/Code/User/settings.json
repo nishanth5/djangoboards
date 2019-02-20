@@ -1,0 +1,9 @@
+{
+    "code-runner.runInTerminal": true,
+    "python.jediEnabled": false,
+    "workbench.sideBar.location": "left",
+    "editor.renderControlCharacters": false,
+    "editor.renderWhitespace": "none",
+    "editor.minimap.enabled": true,
+    "git.enableSmartCommit": true
+}

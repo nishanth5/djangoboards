@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Divum_Ship>
+      <version>0.1.0</version>
+    </Divum_Ship>
+  </modules>
+  <global>
+    <helpers>
+      <ship>
+        <class>Divum_Ship_Helper</class>
+      </ship>
+    </helpers>
+	<models>
+	  <ship>
+		<class>Divum_Ship_Model</class>
+		<resourceModel>ship_mysql4</resourceModel>
+	  </ship>
+	</models>
+  </global>    
+	<default>
+        <carriers>
+            <ship>
+                <active>1</active>
+                <model>ship/carrier_ship</model>
+                <name>new shipment</name>
+                <title>ship</title>
+                <description>new shipment method</description>
+                <sort_order>0</sort_order>
+            </ship>
+        </carriers>
+    </default>
+</config> 

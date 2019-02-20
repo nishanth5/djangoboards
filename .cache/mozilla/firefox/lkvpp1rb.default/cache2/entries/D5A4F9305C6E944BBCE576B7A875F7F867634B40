@@ -1,0 +1,1490 @@
+<!DOCTYPE HTML>
+<html lang=en>
+    
+    
+    
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <link rel="short icon"  href="https://campusinteraction.com/Campus/ci-website//cap.png" type="image/png">
+        
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Open+Sans:300italic,400,300,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+        
+        <link href="/css/semantic.css" type="text/css" rel="stylesheet">
+        
+        <link href="/css/mobileViewStyles.css" type="text/css" rel="stylesheet">
+        <link href="/css/styles.css" type="text/css" rel="stylesheet">
+        <link href="/css/new.css" type="text/css" rel="stylesheet">
+        <script type="text/javascript" src="/js/semantic.js"></script>
+        <script type="text/javascript" src="/js/jquery-ui-1.10.3.js"></script>
+        <!--<script type="text/javascript" src="/js/jquery-2.0.2.js"></script>-->
+        <link href="/css/home.css" type="text/css" rel="stylesheet">
+        
+        <script type='text/javascript'>
+//here '$s' is replaced in place of '$', because of conflict between js. By change the variable, this script never conflict with others.
+            $(function ($s) {
+                $s('.ui.accordion')
+                        .accordion()
+                        ;
+                $s('.ui.dropdown')
+                        .dropdown()
+                        ;
+                $s('.ui.radio.checkbox')
+                        .checkbox()
+                        ;
+
+                // Logout Dropdonw
+                $('.profilelefttextlogout').click(function () {
+                    $('#logoutdrp').slideToggle(300);
+                });
+                $(document).on('click', function (event) {
+                    if ($('.profilelefttextlogout').has(event.target).length == 0) {
+                        $('#logoutdrp').slideUp(300);
+                    }
+                });
+                // Logout Dropdonw
+            });
+        </script>
+    </head>
+    
+    
+
+    
+    <script type="text/javascript">
+        /***********************************************
+         * Dynamic Ajax Content- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+         * This notice MUST stay intact for legal use
+         * Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+         ***********************************************/
+        var bustcachevar = 1 //bust potential caching of external pages after initial request? (1=yes, 0=no)
+        var loadedobjects = ""
+        var rootdomain = "http://" + window.location.hostname
+        var bustcacheparameter = ""
+
+        function ajaxSearchMemberpage(url) {
+            var page_request = false
+            //if (window.XMLHttpRequest) // if Mozilla, Safari etc
+            if (window.XMLHttpRequest && !document.all)
+                page_request = new XMLHttpRequest()
+            else if (window.ActiveXObject) { // if IE
+                try {
+                    page_request = new ActiveXObject("Msxml2.XMLHTTP")
+                } catch (e) {
+                    try {
+                        page_request = new ActiveXObject("Microsoft.XMLHTTP")
+                    } catch (e) {
+                    }
+                }
+            }
+            if (bustcachevar) //if bust caching of external page
+                bustcacheparameter = (url.indexOf("?") != -1) ? "&" + new Date().getTime() : "?" + new Date().getTime()
+            page_request.open('GET', url + bustcacheparameter, true)
+            page_request.send(null)
+            page_request.onreadystatechange = function () {
+                loadpageHeader(page_request)
+            }
+        }
+
+        function loadpageHeader(page_request) {
+            if (page_request.readyState == 4 && (page_request.status == 200 || window.location.href.indexOf("http") == -1)) {
+                document.getElementById("showSearchList").style.display = 'block';
+                document.getElementById("showSearchList").innerHTML = page_request.responseText;
+            }
+        }
+        $('html').click(function () {
+            $("#showSearchList").hide();
+        });
+        $('#searchValueByUser').click(function (event) {
+            event.stopPropagation();
+        });
+        $(document).on('keydown', function (e) {
+            if (e.keyCode === 27) { // ESC
+                $("#showSearchList").hide();
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        var bustcachevar = 1 //bust potential caching of external pages after initial request? (1=yes, 0=no)
+        var loadedobjects = ""
+        var rootdomain;
+        if (window.location.hostname == 'localhost') {
+            rootdomain = window.location.protocol + "//" + window.location.host;
+            // It gives rootdomain = http://localhost:8080
+        } else {
+            rootdomain = window.location.protocol + "//" + window.location.hostname;
+            // It gives rootdomain = http://localhost
+        }
+        var bustcacheparameter = ""
+        function  ajaxSeeAllResultspage(url) {
+            var page_request = false
+            //if (window.XMLHttpRequest) // if Mozilla, Safari etc
+            if (window.XMLHttpRequest && !document.all)
+                page_request = new XMLHttpRequest()
+            else if (window.ActiveXObject) { // if IE
+                try {
+                    page_request = new ActiveXObject("Msxml2.XMLHTTP")
+                } catch (e) {
+                    try {
+                        page_request = new ActiveXObject("Microsoft.XMLHTTP")
+                    } catch (e) {
+                    }
+                }
+            }
+            if (bustcachevar) //if bust caching of external page
+                bustcacheparameter = (url.indexOf("?") != -1) ? "&" + new Date().getTime() : "?" + new Date().getTime()
+            page_request.open('GET', url + bustcacheparameter, true)
+            page_request.send(null)
+            page_request.onreadystatechange = function () {
+                loadViewpageHeader(page_request)
+            }
+        }
+
+        function loadViewpageHeader(page_request) {
+            if (page_request.readyState == 4 && (page_request.status == 200 || window.location.href.indexOf("http") == -1)) {
+                document.getElementById("textAreaMessage").style.display = 'none';
+                document.getElementById("divShowMessageBoard").style.display = 'none';
+                document.getElementById("SeeMoreResults").style.display = 'block';
+                document.getElementById("SeeMoreResults").innerHTML = page_request.responseText;
+            }
+        }
+        function viewAllSearchResults(value) {
+            document.logoutForm.action = "/doMemberSearchResult.action?searchValueByUser=" + value;
+            document.logoutForm.submit();
+            return true;
+        }
+        function viewAllSearch() {
+            var value = document.getElementById("searchValueByUser").value;
+            document.logoutForm.action = "/doMemberSearchResult.action?searchValueByUser=" + value;
+            document.logoutForm.submit();
+            return true;
+        }
+    </script>
+    <script>
+        function callSearchMethod(searchValue, keyCode) {
+            searchValue = searchValue.toLowerCase();
+            searchValue = searchValue.replace(/[%\"!`$%'+@,-_{}()^~*?:\#< >()|]/g, " ");
+            if (!(keyCode == 37 || keyCode == 39 || keyCode == 27))
+            {
+                if (searchValue != null && searchValue != '') {
+                    if (searchValue.length > 100) {
+                        alert("Only " + 100 + " characters are allowed");
+                    }
+                    ajaxSearchMemberpage(rootdomain + "/doMemberSearchList.action?searchValueByUser=" + searchValue + "&requestFromAjax=true")
+                } else {
+                    document.getElementById("showSearchList").style.display = 'none';
+                    return false;
+                }
+            }
+        }
+
+        function showSearchResult() {
+            var value = document.getElementById("searchValueByUser").value;
+            value = value.toLowerCase();
+            value = value.replace(/[%\"!`$%'+@,-_{}()^~*?:\#< >()|]/g, " ");
+            if (value != null && value != '') {
+                ajaxSeeAllResultspage(rootdomain + "/doMemberSearchResult.action?searchValueByUser=" + value);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+
+    
+
+    <script type="text/javascript">
+        function dologout() {
+            delete_Cookie('cookuser', '/', '');
+            document.logoutForm.action = "/doLogOut.action";
+            document.logoutForm.submit();
+        }
+
+        function delete_Cookie(name, path, domain) {
+            set_Cookie('cookuser', '', 'Thu, 01-Jan-1970 00:00:01 GMT', '/', '', '');
+            set_Cookie('cookpass', '', 'Thu, 01-Jan-1970 00:00:01 GMT', '/', '', '')
+        }
+
+        function set_Cookie(name, value, expires, path, domain, secure)
+        {
+            // set time, it's in milliseconds
+            var today = new Date();
+            today.setTime(today.getTime());
+            if (expires)
+            {
+                expires = expires * 1000 * 60 * 60 * 24;
+            }
+            var expires_date = new Date(today.getTime() + (expires));
+
+            document.cookie = name + "=" + escape(value) +
+                    ((expires) ? ";expires=" + expires_date.toGMTString() : "");
+            ((path) ? ";path=" + path : "") +
+                    ((domain) ? ";domain=" + domain : "") +
+                    ((secure) ? ";secure" : "");
+        }
+    </script>
+
+    
+
+    <script type='text/javascript'>
+        /* Script to Close the left menu onclick of the menu Icon */
+        var clicks = 0;
+        $(window).load(function () {
+
+            $(".myButton").click(function () {
+
+                // Set the effect type
+                var effect = 'slide';
+
+                // Set the options for the effect type chosen
+                var options = {direction: 'up'};
+
+                // Set the duration (default: 400 milliseconds)
+                var duration = 'slow';
+
+                $('.myDiv').toggle(effect, options, duration);
+
+                if (clicks == 0) {
+                    clicks++;
+                    $('.dashboarddisplay').css({'height': $('.leftpanel').height()});
+                    //Script lines to reduce its height to 500px 
+                    //           var leftpanelHeight=$('.leftpanel').height()+'px'.toString();
+                    //            $('.dashboarddisplay').css('height',leftpanelHeight);
+                    //            alert(leftpanelHeight);
+                    //Script lines for reduced height but unable to reduce html body height 
+                    //$('.leftpanel').css({'height':  $( window ).height()});
+                    //$('.dashboarddisplay').css({'height':  $( window ).height()});
+                    //alert($( window ).height());
+                    //alert($('.dashboarddisplay').height());
+                    $("html, body").animate({scrollTop: 0}, 600);
+                } else {
+                    $('.dashboarddisplay').css({'height': 'auto'});
+                    clicks--;
+                }
+            });
+        });
+    </script>
+</head>
+<body class="dash">
+    <form id="logoutForm" name="logoutForm" action="/showJobDetails.action" method="post">
+        <div class="headerdash">
+            <div class="dashcover">
+                <div class="dashlogo mobileView">
+                    
+                        <a class="mobileView" href="/studentDashboard.action"><img src="/image/cilogo.png" class="img-responsive" alt="logo"></a> 
+                      
+                    
+                </div>
+                
+                    <div class="headerdashprofile">
+                        <p class="profdividers">|</p>
+                        <p>VIT University</p>
+                    </div> 
+                
+                <div class="dashlogo" style="margin-top:0px;">
+                    <div class="shorticon mobileViewiconBar" id="slow">
+                        <p  class="myButton"><img class="careerlabelimage" src="https://campusinteraction.com/Campus/pdf-for-onlinetestreport/MenuIcon.png" alt="Menu Icon"></p>
+                    </div>
+                </div>
+                <!--                <div class="dashsearch">
+                                    <a href="#"><img src="https://campusinteraction.com/Campus/ci-website//advancedsearchLabel.png"></a>
+                                </div>-->
+                <div class="searchautotext">
+                    <input type="text" maxlength="50" autocomplete="off"  name="searchValueByUser" id="searchValueByUser" placeholder="Search Candidates" maxlength="100" onkeyup="callSearchMethod(this.value, event.keyCode);" onmouseover="callSearchMethod(this.value, event.keyCode);" onpaste="return false;" autocomplete="off" class="searchbox" style=""/>
+                </div>
+                <div id="searchautotext">
+                    <a class="searchimg" href="javascript:void(0);" onclick="viewAllSearch();"><img  style=" " src="https://campusinteraction.com/Campus/ci-website//advancedsearchLabel.png" title="Search Candidates" /></a>
+                </div>
+            </div>               
+            
+            
+            
+                
+                <div class="dashalarm">
+                    <div class="logoutmenu">
+                        <div class="logout-box">
+                            <div id="ProfilPict" class="profilelefttextlogout">
+                                <a href="##">
+                                    
+                                    
+                                        <img style="width:38px;height:38px;margin:0px auto;border-radius:50%;" src="https://campusinteraction.com/Campus/ci-website//profiles.png">
+                                    
+                                </a>
+                            </div>
+                            <div id="ProfilePictArow" class="profilelefttextlogout" style="padding: 0px 6px;"><i><img  style="width:12px; height:8px; margin:16px 4px auto;" src='https://campusinteraction.com/Campus/ci-website//logouticon.png'></i></div>
+                            <div id="logoutdrp" class="logoutitem">
+                                <a id="logoutmenu" class="logout-color" href="#" onclick="dologout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Logout Menu -->
+            
+
+        </div>
+        <div class="fixedpanel"></div>
+
+    </form>
+
+
+
+    
+    
+
+<title>College Job List</title>
+<meta name="keywords" content="campus interview, campus placements, campus recruitment, campus jobs, off campus, on campus, career resource, online test, questions, Video tutorial, Profile, Experience"/>
+<meta name="description" content="Campus Interaction is a revolutionary product connecting students, staff and organisations across the world. It provides many features including communication portal, online mock tests, career resources, jobs, interview experience, online training videos on various topics and many more functionality."/>
+<script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-43918102-1', 'campusinteraction.com');
+    ga('send', 'pageview');
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var currentDate = new Date();
+        var closingDate = document.getElementById('closingDate').value;
+        var closingTime = document.getElementById('closingTime').value;
+        if (closingTime != null && closingTime != "") {
+            var delimit = ":";
+            closingTimeArray = closingTime.split(delimit);
+            for (var i = 0; i < closingTimeArray.length; i++) {
+            }
+            if (closingTimeArray[1] == "00") {
+                var time = ((Number(closingTimeArray[0])) * 1000 * 60 * 60);
+            } else if (closingTimeArray[1] == "15") {
+                var time = (Number(closingTimeArray[0]) + Number(0.25)) * 1000 * 60 * 60;
+            } else if (closingTimeArray[1] == "30") {
+                var time = (Number(closingTimeArray[0]) + Number(0.5)) * 1000 * 60 * 60;
+            } else if (closingTimeArray[1] == "45") {
+                var time = (Number(closingTimeArray[0]) + Number(0.75)) * 1000 * 60 * 60;
+            }
+        }
+        else {
+            var time = 0;
+
+        }
+
+        if (closingDate != null && closingDate != "") {
+            var delimiter = "-";
+            campusOnTimeArray = closingDate.split(delimiter);
+            for (var i = 0; i < campusOnTimeArray.length; i++) {
+            }
+            var modifyDate = campusOnTimeArray[1] + "/" + campusOnTimeArray[0] + "/" + campusOnTimeArray[2];
+            var closeDate = new Date(modifyDate);
+            var closeDate = new Date(closeDate.getTime() + time);
+            if (closeDate >= currentDate) {
+                document.getElementById('dateExpired').style.display = 'block';
+            }
+            else {
+                document.getElementById('dateExpired').style.display = 'none';
+            }
+        }
+        else {
+            document.getElementById('dateExpired').style.display = 'block';
+        }
+    });
+</script>
+<script type="text/javascript" src="/js/menu/menu_jquery.js"></script>
+<div class="dashboarddisplay">
+    <div class="rightpanelresponsive">
+        
+    </div>
+    <div class="myDiv">
+        <div class="leftpanel">
+            
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+
+
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+<div id="fb-root"></div>
+<script src="https://connect.facebook.net/en_US/all.js"></script>
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({apiKey: 464581230288443});            // set your appid here
+    };
+</script>
+<style>
+    /* style for More Less link arrows First added these style to new.css but it does not get applied so here I have added*/
+    .arrow{height: 6px !important;width: 7px !important;background: url('https://campusinteraction.com/Campus/pdf-for-onlinetestreport/arrow_down.png') no-repeat 0 1px !important;vertical-align: middle !important;font-size: 0 !important;margin-left: 26px !important;margin-top: -14px !important;}
+    .arrow1{height: 6px !important;width: 7px !important;background: url('https://campusinteraction.com/Campus/pdf-for-onlinetestreport/arrow_up.png') no-repeat 0 1px !important;vertical-align: middle !important;font-size: 0 !important;margin-left: 26px !important;margin-top: -14px !important;}
+    .loader {position: fixed;left: 0px;top: 5%;width: 100%;height: 100%;z-index: 9999;background: url('https://campusinteraction.com/Campus/ci-website/job-loader.gif') 50% 50% no-repeat ;}
+</style>
+<script type="text/javascript">
+    var bustcachevar = 1
+    var loadedobjects = ""
+    var rootdomain;
+    if (window.location.hostname == 'localhost') {
+        rootdomain = window.location.protocol + "//" + window.location.host;
+        // It gives rootdomain = http://localhost:8080
+    } else {
+        rootdomain = window.location.protocol + "//" + window.location.hostname;
+        // It gives rootdomain = http://localhost
+    }
+    var bustcacheparameter = ""
+
+    function loginInToFBForPlayEnglishGame() {
+        ajaxpageEntryInAuditLogin(rootdomain + "/auditForGame.action")
+
+        FB.getLoginStatus(function (response) {
+            if (response.status === "connected") {
+                document.logoutForm.action = "/getQuestionsForOnlineTestGame.action?type=English";
+                document.logoutForm.submit();
+                return true;
+            } else {
+                document.logoutForm.action = "/gameInstrution.action";
+                document.logoutForm.submit();
+                return true;
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function ajaxpageEntryInAuditLogin(url) {
+        var page_request = false
+        if (window.XMLHttpRequest && !document.all)
+            page_request = new XMLHttpRequest()
+        else if (window.ActiveXObject) {
+            try {
+                page_request = new ActiveXObject("Msxml2.XMLHTTP")
+            } catch (e) {
+                try {
+                    page_request = new ActiveXObject("Microsoft.XMLHTTP")
+                } catch (e) {
+                }
+            }
+        }
+        page_request.onreadystatechange = function () {
+            loadpageEntryInAuditLogin(page_request)
+        }
+        if (bustcachevar)
+            bustcacheparameter = (url.indexOf("?") != -1) ? "&" + new Date().getTime() : "?" + new Date().getTime()
+        page_request.open('GET', url + bustcacheparameter, true)
+        page_request.send(null)
+    }
+
+    function loadpageEntryInAuditLogin(page_request) {
+        if (page_request.readyState == 4 && (page_request.status == 200 || window.location.href.indexOf("http") == -1))
+            var pageResponse = page_request.responseText.trim();
+        if (pageResponse == 'InvalidSessin') {
+            window.open("http://www.campusinteraction.com/", "_self")
+        } else {
+
+        }
+    }
+</script>    
+<script type="text/javascript">
+    /* Script to close the left menu in mobile view */
+    $(window).load(function () {
+        $('.closemenu').click(function () {
+            $('.dashboarddisplay').css({'height': 'auto'});
+            alert(" close button height change " + $('.dashboarddisplay').innerHeight());
+        });
+    });
+    }
+</script>
+<style>
+    /* Styles for left menu in mobile view */
+    .vertical {background: #979797;width:100% !important;float: left;margin-right: 13px;}
+    .verticalMenuBg {background-color: transparent !important;}
+</style>
+
+<div class="ui left  vertical inverted  menu verticalMenuBg">
+    <div id="mi-slider" class="mi-slider">
+        <div id="slow" class="myButton closemenu"><img src="https://campusinteraction.com/Campus/ci-website/close.png" alt="closebutton"></div>
+           
+        <div class="mobileView"> <!-- hide the div in mobile view -->            
+            
+            
+             <a href="/studentDashboard.action" class="sidenav-link">
+                <i class="menuimg"><img src="/image/dashicon.png"></i>
+                <span class="menutxt">Dashboard</span>
+            </a>   
+            
+            
+            
+            
+        </div>
+        <div class="sidebar-panel">
+            
+            
+
+             
+                    
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/showStudentProfile.action" class="sidenav-link">
+                            <i class="menuimg"><img src="/image/profileicon.png"></i>
+                            <span class="menutxt">Your Profile</span>
+                        </a>
+                            
+                        
+                    
+                    
+               
+            
+        </div>
+        <div class="mobileView"> <!-- hide the div in mobile view -->                    
+            <div class="sidebar-panel">
+                 <a href="/showChangePassword.action" class="sidenav-link">
+                    <i class="menuimg"><img src="/image/seticon.png"></i>
+                    <span class="menutxt">Settings</span>
+                </a>
+                
+            </div>
+        </div>
+        <div class="fullcover">
+            
+            
+                <div class="favour">STUDENT APPS</div>
+            
+            
+        </div>
+        <div class="favourline" style="width:100%;"></div>
+        <div class="sidebar-panel">
+            
+            
+              
+                
+                    
+                    
+                                     
+                            
+                    
+                    
+                    
+                        
+                        
+                                                      
+                                <a href="/showStudentJobList.action" class="sidenav-link" onclick="hideOnClick();">
+                                    <i class="menuimg"><img src="/image/jobicon.png"></i>
+                                    <span class="menutxt">Jobs</span>
+                                </a>
+                                
+                            
+                            
+                        
+                        
+                        
+                             <a href="/showCategory.action" class="sidenav-link">
+                                    <i class="menuimg"><img src="/image/testicon.png"></i>
+                                    <span class="menutxt">Online Test</span>
+                                </a>
+                            
+                        
+
+                        <div class="mobileView"> <!-- hide the app in mobile view start -->
+                            <a href="/show360Category.action" class="sidenav-link" onclick="hideOnClick();">
+                                    <i class="menuimg"><img src="/image/trainicon.png"></i>
+                                    <span class="menutxt">360Training</span>
+                                </a>
+                            
+
+                            
+                                
+                                   
+
+                            
+                                
+                                
+                                
+                            
+                            
+                                <div> 
+                                                       
+                                   
+                                <a target="_blank" href="/viewCareerResourse.action" class="sidenav-link">
+                                    <i class="menuimg"><img src="/image/careericon.png"></i>
+                                    <span class="menutxt">Career Resource</span>
+                                </a>
+                                <a href="/viewOnlineTraining.action" class="sidenav-link">
+                                    <i class="menuimg"><img src="/image/onlineicon.png"></i>
+                                    <span class="menutxt">Online Training</span>
+                                </a>
+                              
+                                <a target="_blank" href="https://www.youtube.com/channel/UCV2IyJLQf18WKItHDAqbTUQ" class="sidenav-link">
+                                    <i class="menuimg"><img src="/image/interviewicon.png"></i>
+                                    <span class="menutxt">Interview Experience</span>
+                                </a>
+                                    
+                               
+
+
+
+                                
+                                 
+                                
+
+                                
+                                  
+                                
+
+                                
+                                    
+                               
+
+
+                                <!-- Employability Test App Starts-->
+                                
+                                <!-- Employability Test App Ends-->
+
+
+                                
+                                </div>
+                            
+                        </div>  <!-- hide the app in mobile view end -->
+                    
+
+                
+                
+            
+            <div class="mobileView"> <!-- hide the app in mobile view start -->
+              
+            </div>  <!-- hide the app in mobile view end -->
+        </div>
+    </div>
+    <!-- Footer Content Starts Here -->            
+    
+</div>
+<!-- Footer Content Ends Here -->
+
+<script>
+    hideFirst();
+    function hideFirst() {
+        var docs = document.getElementById('moreStudentApps');
+        if (docs === null) {
+            hideElement('moreAdminApps');
+        } else {
+            hideElement('moreStudentApps');
+        }
+    }
+    function hideElement(element) {
+        var apps1 = document.getElementById(element);
+        apps1.style.display = 'none';
+        document.getElementById(element + 'Image').innerHTML = '<em>More</em><span ><div class="arrow"></div></span>';    // altered by Manjula          
+
+    }
+
+    function showMoreJobs(element) {
+        var apps = document.getElementById(element);
+        var displaySetting = apps.style.display;
+        if (displaySetting === 'block') {
+            hideElement(element);
+        } else {
+            apps.style.display = 'block';
+            apps.style.marginTop = "5%";
+            document.getElementById(element + 'Image').innerHTML = '<em>Less</em><span ><div class="arrow1"></div></span>';  // altered by Manjula          
+        }
+    }
+</script>
+
+<script>
+    function hideOnClick() {
+    
+        document.body.innerHTML = '<div class="loader"></div>' + document.body.innerHTML;
+    
+    }
+</script>
+
+            
+        </div>
+    </div>
+    <div class="wrapper">
+        
+
+
+
+
+
+
+    
+    
+    
+    
+        <div class="ui inverted menu mobileView">
+            <div id='cssmenu'>
+                <ul>
+                    
+                        
+                            
+                            <li class='last'><a href="/showStudentJobList.action"><span>Jobs From Your College</span></a></li>
+                            
+                            
+                        
+                        
+                </ul>
+            </div>
+        </div>
+    
+
+
+
+
+        <div class="innerview">
+            <form id="frm1" name="frm1" action="showSearchCandidate.action" method="post">
+                <div class="segment ui">
+                    <div class="jobprofileleft marginbottom responsivejobmargin">
+                        <div class="carimage">
+                            <div class="jobprofileimage">
+                                
+                                    <img class="rounded ui small margintopbottom" style="box-shadow: 6px 6px 6px #888888;" width="115" height="120" src='https://campusinteraction.com/Campus/companylogo/CompanyLogo_1_173060.jpg' alt="company image">
+                                
+                                
+                            </div>
+                            <div class="jobname">
+                                <div class="ui header aligned left margintop">
+                                    <a class="tablecolorchange" target="_blank" href="http://www.transunion.com"> TransUnion</a>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!--- Accept and Decline buttons for mobile view after company logo and hide for desktop view start--->
+                    <div class="mobileViewDisplay desktopViewHide">
+                        <div id="dateExpired"  class="jobheight">
+                            
+                                
+                                    
+                                    
+                                        <a href="##"  onclick="return acceptJob('11037', 'No');">
+                                            <div class="ui orange tiny button buttonNew" title="Accept">
+                                                Accept
+                                            </div>
+                                        </a>
+                                    
+                                    
+                                        <a href="##" onclick="return declineJob('11037');">
+                                            <div class="ui black tiny button loginover buttonNew" title="Decline">
+                                                Decline
+                                            </div>
+                                        </a>
+                                    
+                                
+                                
+                            
+                        </div>
+                    </div>
+                    <!--- Accept and Decline buttons for mobile view after company logo and hide for desktop view start--->
+                    <div class="jobprofileright marginbottom">
+                        <div class="ui header medium eighttop">Company Description:</div>
+                        <div class="margininvertop">
+                            Transunion offers total credit protection all in one place from credit score, credit report and credit alert. Check your credit score today from TransUnion
+                        </div>
+                    </div>
+                    
+                    <div class="ui clearing dividerline margintop"></div>
+                    <div class="margintop carimage">
+                        <div class="jobinformation labelbold brandcolor ui header medium">Job Information</div>
+                        <div class="jobprofilebuttonright eighthundred">
+                            <div id="dateExpired"  class="jobheight desktopView mobileView">
+                                
+                                    
+                                        
+                                        
+                                            <a href="##"  onclick="return acceptJob('11037', 'No');">
+                                                <div class="ui orange tiny button" title="Accept">
+                                                    Accept
+                                                </div>
+                                            </a>
+                                        
+                                        
+                                            <a href="##" onclick="return declineJob('11037');">
+                                                <div class="ui black tiny button loginover" title="Decline">
+                                                    Decline
+                                                </div>
+                                            </a>
+                                        
+                                    
+                                    
+                                
+                            </div>
+
+                            
+                                
+                                
+                                
+                                
+                                                                                       
+                                
+
+                                
+
+                                
+                                
+                                
+                                
+                                
+                                    
+
+                                
+                            
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="profileleft">
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Job Title</label>
+                            <label class="jobProfileDetail">Dream Offer</label>
+                        </div>
+                        <div class="carimage">
+                            
+                            
+                                <label class="jobProfileLabel labelbold">Campus Date And Time</label>
+                            
+                            <label class="jobProfileDetail">
+                                
+                                    22 February 2019
+                                    
+                                
+                                
+                            </label>
+                        </div>
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Apply Before Date And Time</label>
+                            <label class="jobProfileDetail">
+                                
+                                    14 February 2019
+                                    
+                                        - 10:00  
+                                
+                                
+                            </label>
+                        </div>
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Joining Location</label>
+                            <label class="jobProfileDetail">
+                                
+                                
+                                    N/A
+                                
+                            </label>
+                        </div>
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Salary(Per Annum)</label>
+                            <label class="jobProfileDetail">
+                                
+                                    check the Announcement
+                                
+                                
+                            </label>
+                        </div>                    
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Job Eligibilities</label>
+                            <label class="jobProfileDetail">
+                                
+                                    
+                                    <li  style="list-style: none;word-wrap: break-word;width: 435px;">
+                                        Aggregate Percentage :6.0 in pursuing degree
+                                    </li>
+                                    
+                                    <li  style="list-style: none;word-wrap: break-word;width: 435px;">
+                                        10th Percentage  :60.0 and above
+                                    </li>
+                                    
+                                    <li  style="list-style: none;word-wrap: break-word;width: 435px;">
+                                        12th Percentage :60.0 and above
+                                    </li>
+                                    
+                                    <li  style="list-style: none;word-wrap: break-word;width: 435px;">
+                                        Standing Arrear upto: 0
+                                    </li>
+                                    
+                                
+                                
+                            </label>
+                        </div>
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Eligible Department</label>
+                            <label class="jobProfileDetail">
+                                
+                                    
+                                    <li  style="list-style: none;word-wrap: break-word;width: 435px;">
+                                        B.Tech-Computer Science and Engineering
+                                    </li>
+                                    
+                                    <li  style="list-style: none;word-wrap: break-word;width: 435px;">
+                                        B.Tech-Information Technology
+                                    </li>
+                                    
+                                    <li  style="list-style: none;word-wrap: break-word;width: 435px;">
+                                        MS-M.Tech - 5 year intergrated in UG-Software Engineering
+                                    </li>
+                                    
+                                    <li  style="list-style: none;word-wrap: break-word;width: 435px;">
+                                        B.Tech-CSE with specialisation in Bioinformatics
+                                    </li>
+                                    
+                                
+                                
+                            </label>
+                        </div>
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Experience</label>
+                            <label class="jobProfileDetail">
+                                
+                                    No need
+                                
+                                
+                            </label>
+                        </div>
+
+                        <label class="jobProfileLabel labelbold">Job Type</label>
+                        <label class="jobProfileDetail">
+                            Software - Dream
+                        </label>
+
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Skill Set</label>
+                            <label class="jobProfileDetail">
+                                
+                                
+                                    N/A
+                                
+                            </label>
+                        </div>
+                        <div class="carimage">
+                            <label class="jobProfileLabel labelbold">Not Eligible List</label>
+                            
+                                <label class="jobProfileDetail"> Software - Dream,Software - Super Dream,Core - Dream,Core - Super Dream,Dream internship software  </label>
+                            
+                                                        
+                        </div>
+                        
+                        <div class="ui clearing dividerline margintop"></div>
+                        <h3>Job Description</h3>
+                        <ul style="line-height: 25px;">
+                            
+                                
+                                <li><br></li>
+                                    
+                                
+                                
+                        </ul>
+                        
+                        
+                            
+                                <div class="ui clearing dividerline margintop"></div>
+                                <h3>Campaigners</h3>
+
+                                
+
+                                
+                                
+                                    <label class="jobProfileLabel labelbold">
+                                        
+                                            Eligible Candidates
+                                        
+                                        
+                                    </label>
+                                    <label class="jobProfileDetail orangebold">
+                                        
+                                            <a href="showCandidate.action?status=F&jobId=11037">
+                                                1687</a>
+                                            
+                                            
+                                    </label>
+                                    
+                                    
+                                
+                                
+                                
+                                    <label class="jobProfileLabel labelbold">
+                                        Applied Candidates
+                                    </label>
+                                    <label class="jobProfileDetail">
+                                        
+                                            <a class="linkbold" href="showCandidate.action?status=A&jobId=11037">
+                                                20</a>
+                                            
+                                    </label>
+                                
+                                
+                                    <label class="jobProfileLabel labelbold">
+                                        Shortlisted Candidates
+                                    </label>
+                                    <label class="jobProfileDetail">
+                                        
+                                            
+                                                0
+                                            
+                                    </label>
+                                
+                                
+                                
+                                    <label class="jobProfileLabel labelbold">Declined Candidates</label>
+                                    <label  class="jobProfileDetail">
+                                        
+                                            
+                                                0
+                                            
+                                    </label>
+                                
+                                
+                                
+                                    <label class="jobProfileLabel labelbold">Selected Candidates</label>
+                                    <label  class="jobProfileDetail">
+                                        
+                                            
+                                                0
+                                            
+                                    </label>
+                                
+                                
+                                
+                            
+                        
+                        
+                                    
+                                <div class="ui clearing dividerline margintop"></div>
+                                <h3>Interview Rounds</h3>
+
+                                    <label class="jobProfileLabel labelbold">
+                                       Round 1
+                                    </label>
+                                    <label class="jobProfileDetail">
+                                        
+                                                0
+                                            
+                                    </label>
+                               
+                                    <label class="jobProfileLabel labelbold">Round 2</label>
+                                    <label  class="jobProfileDetail">
+                                        
+                                            
+                                                0
+                                            
+                                    </label>
+                                
+                                    <label class="jobProfileLabel labelbold">Round 3</label>
+                                    <label  class="jobProfileDetail">
+                                        
+                                            
+                                                0
+                                            
+                                    </label>
+                               
+                                <label class="jobProfileLabel labelbold">Round 4</label>
+                                    <label  class="jobProfileDetail">
+                                        
+                                            
+                                                0
+                                            
+                                    </label>
+                                
+                                <label class="jobProfileLabel labelbold">Round 5</label>
+                                    <label  class="jobProfileDetail">
+                                        
+                                            
+                                                0
+                                            
+                                    </label>
+                                              
+                    </div>      
+
+                    <div class="profileright">
+                        <div class="ui inverted grey segment">
+                            <div class="ui header medium ">Job Summary</div>
+                            <div class="ui clearing dividerline margininvertop"></div>
+                            <h4>Job Title</h4>
+                            <label>Dream Offer</label>
+                            <h4>Company Name</h4>
+                            <label>TransUnion</label>
+                            <h4>Location</h4>
+                            <label>
+                                
+                                
+                                    N/A
+                                
+                            </label>
+                            <h4>Salary</h4>
+                            <label>
+                                
+                                    check the Announcement
+                                
+                                
+                            </label>
+                            
+                            
+                                <h4>Campus Date</h4>
+                            
+                            <label>
+                                
+                                    22 February 2019
+                                
+                            </label>
+                            <h4>Apply Before Date</h4>
+                            <label>
+                                
+                                    14 February 2019
+                                
+                            </label>
+                        </div>
+                    </div>
+                    <!--- Accept and Decline buttons for mobile view at the bottom and hide for desktop view start--->
+                    <div class="mobileViewDisplay desktopViewHide">
+                        <div id="dateExpired1"  class="jobheight">
+                            
+                                
+                                    
+                                    
+                                        <a href="##"  onclick="return acceptJob('11037', 'No');">
+                                            <div class="ui orange tiny button buttonNew" title="Accept">
+                                                Accept
+                                            </div>
+                                        </a>
+                                    
+                                    
+                                        <a href="##" onclick="return declineJob('11037');">
+                                            <div class="ui black tiny button loginover buttonNew" title="Decline">
+                                                Decline
+                                            </div>
+                                        </a>
+                                    
+                                
+                                
+                            
+                        </div>
+                    </div>
+                    <!--- Accept and Decline buttons for mobile view after company logo and hide for desktop view start--->
+
+                </div>
+                <input type="hidden" name="companyName" value="TransUnion" id="companyName"/>
+                <input type="hidden" name="jobDescription" value="&lt;br&gt;" id="jobDescription"/>
+                <input type="hidden" name="JobTitle" value="Dream Offer" id="JobTitle"/>
+                <input type="hidden" name="JobId" value="11037" id="JobId"/>
+                <input type="hidden" name="addBranch" value="" id="addBranch"/>
+                <input type="hidden" name="dreamJob" value="" id="dreamJob"/>
+                <input type="hidden" name="companyId" value="5491" id="companyId"/>
+                <input type="hidden" name="closingDate" value="14-02-2019" id="closingDate"/>
+                <input type="hidden" name="closingTime" value="10:00" id="closingTime"/>
+                <input type="hidden" name="filteredCantidate" value="1687" id="filteredCantidate"/>
+                <input type="hidden" name="appliedCantidate" value="20" id="appliedCantidate"/>
+                <input type="hidden" name="declinedCantidate" value="0" id="declinedCantidate"/>
+                <input type="hidden" name="companyJobId" value="" id="companyJobId"/>
+                <input type="hidden" name="selectedCantidate" value="0" id="selectedCantidate"/>
+                <input type="hidden" name="studentYear" value="2019" id="studentYear"/>
+                <input type="hidden" name="pageFrom" value="" id="pageFrom"/>
+                <input type="hidden" name="status" value="" id="status"/>
+                <input type="hidden" name="pagename" id="pagename" value="jobs" />
+            </form>
+
+
+
+            <div id="fb-root"></div>
+        </div>
+    </div>
+</div>
+ 
+
+
+<body>
+<div class="footer-content">
+    <div class="footer-wrapper">
+        <div class="f-row">
+            <div class="fcol-20">
+                <ul class="footer-nav">
+                    <li><a href="/jsp/aboutus.jsp">About Us</a></li>
+                    <li><a href="/jsp/features.jsp">Features</a></li>
+                    <li><a href="/jsp/testimonial.jsp">Testimonial</a></li>
+                    <li><a href="/jsp/contactus.jsp">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="fcol-20">
+                <ul class="footer-nav">
+                    <li><a href="/jsp/readTNC.jsp">Terms & Conditions</a></li>
+                    <li><a href="/jsp/privacyPolicy.jsp">Privacy Policy</a></li>
+                    <li><a href="/jsp/refundCancel.jsp">Refund & Cancellation</a></li>
+                </ul>
+            </div>
+            <div class="fcol-60">
+                <div class="footer-smedia">
+                    <ul class="fsocial-nav">
+                        <li><a href="https://www.facebook.com/CampusInteraction" target="_blank"><img src="/image/socialfb.png"></a></li>
+                        <li><a href="https://twitter.com/campinteraction" target="_blank"><img src="/image/socialtweet.png"></a></li>
+                        <li><a href="https://plus.google.com/114952583553650718830" target="_blank"><img src="/image/socialgoogle.png"></a></li>
+                        <li><a href="https://www.linkedin.com/company/campus-interaction" target="_blank"><img src="/image/sociallinkedin.png"></a></li>
+                    </ul>
+                    <p class="fcopyright">© 2018 PreludeSys India Limited.<br/> All rights reserved Your use of this service is subject to our Terms of Use and Privacy & Cookies Policy.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        var currentDate = new Date();
+        var closingDate = document.getElementById('closingDate').value;
+        var closingTime = document.getElementById('closingTime').value;
+        if (closingTime != null && closingTime != "") {
+            var delimit = ":";
+            closingTimeArray = closingTime.split(delimit);
+            for (var i = 0; i < closingTimeArray.length; i++) {
+            }
+            if (closingTimeArray[1] == "00") {
+                var time = ((Number(closingTimeArray[0])) * 1000 * 60 * 60);
+            } else if (closingTimeArray[1] == "15") {
+                var time = (Number(closingTimeArray[0]) + Number(0.25)) * 1000 * 60 * 60;
+            } else if (closingTimeArray[1] == "30") {
+                var time = (Number(closingTimeArray[0]) + Number(0.5)) * 1000 * 60 * 60;
+            } else if (closingTimeArray[1] == "45") {
+                var time = (Number(closingTimeArray[0]) + Number(0.75)) * 1000 * 60 * 60;
+            }
+        }
+        else {
+            var time = 0;
+
+        }
+
+        if (closingDate != null && closingDate != "") {
+            var delimiter = "-";
+            campusOnTimeArray = closingDate.split(delimiter);
+            for (var i = 0; i < campusOnTimeArray.length; i++) {
+            }
+            var modifyDate = campusOnTimeArray[1] + "/" + campusOnTimeArray[0] + "/" + campusOnTimeArray[2];
+            var closeDate = new Date(modifyDate);
+            var closeDate = new Date(closeDate.getTime() + time);
+            if (closeDate >= currentDate) {
+                document.getElementById('dateExpired').style.display = 'block';
+                //Added this dateExpired1 id since included accept and decline in top and bottom of the page
+                document.getElementById('dateExpired1').style.display = 'block';
+            }
+            else {
+                document.getElementById('dateExpired').style.display = 'none';
+                //Added this dateExpired1 id since included accept and decline in top and bottom of the page
+                document.getElementById('dateExpired1').style.display = 'none';
+            }
+        }
+        else {
+            document.getElementById('dateExpired').style.display = 'block';
+            //Added this dateExpired1 id since included accept and decline in top and bottom of the page
+            document.getElementById('dateExpired1').style.display = 'block';
+        }
+    });
+
+
+    function acceptJob(action, blockedStudent)
+    {
+        if (blockedStudent == 'Yes') {
+            alert("You are not eligible to apply this job. \n Please contact the TAP CELL for any clarification.")
+            return false
+        } else {
+            document.getElementById('JobId').value = action;
+            document.frm1.action = "/applyJobAction.action";
+            document.frm1.submit();
+        }
+        return true;
+
+    }
+
+    function declineJob(action)
+    {
+        document.getElementById('JobId').value = action;
+        document.frm1.action = "/declineJobAction.action";
+        document.frm1.submit();
+        return true;
+    }
+    function alumniJob(action)
+    {
+        document.getElementById('JobId').value = action;
+        document.frm1.action = "/applyAlumniJob.action";
+        document.frm1.submit();
+        return true;
+    }
+    function filterCandidates(action)
+    {
+        document.getElementById('pageFrom').value = "selectedStudentList";
+        document.getElementById('JobId').value = action;
+        document.frm1.action = "/initialFilterStudent.action";
+        document.frm1.submit();
+        return true;
+    }
+
+    function addBranchToFilterCandidates(action)
+    {
+        document.getElementById('pageFrom').value = "updateFilterCriteria";
+        document.getElementById('JobId').value = action;
+        document.getElementById('addBranch').value = true;
+        document.frm1.action = "/initialFilterStudent.action";
+        document.frm1.submit();
+        return true;
+    }
+
+    function addCandidate(action)
+    {
+        document.getElementById('JobId').value = action;
+        document.frm1.action = "/showAddCandidate.action";
+        document.frm1.submit();
+        return true;
+    }
+
+    //This method used to View the Job details for Update using JobID
+    function viewJob(action) {
+        document.getElementById('JobId').value = action;
+        document.frm1.action = "/viewJobDetails.action";
+        document.frm1.submit();
+        return true;
+
+    }
+    //This method used to View the Compnay details for Update using JobID
+    function viewCompany(action) {
+        document.getElementById('companyId').value = action;
+        document.frm1.action = "/viewCompanyDetails.action";
+        document.frm1.submit();
+        return true;
+
+    }
+
+    function deleteJob(JobId)
+    {
+        if (confirm("Are you sure want to delete?")) {
+            document.getElementById('JobId').value = JobId;
+            document.frm1.action = "/doDeleteJob.action";
+            document.frm1.submit();
+
+        }
+    }
+
+    function uploadSelectedCandidate(action, stuYear, status)
+    {
+        document.getElementById('JobId').value = action;
+        document.getElementById('studentYear').value = stuYear;
+        document.getElementById('status').value = status;
+        document.frm1.action = "/showSelectedStudent.action";
+        document.frm1.submit();
+        return true;
+    }
+
+    function uploadShortListCandidate(action, stuYear, status)
+    {
+        document.getElementById('JobId').value = action;
+        document.getElementById('studentYear').value = stuYear;
+        document.getElementById('status').value = status;
+        document.frm1.action = "/showSelectedStudent.action";
+        document.frm1.submit();
+        return true;
+    }
+    
+    function uploadInterviewRound(action, stuYear)
+    {
+        document.getElementById('JobId').value = action;
+        document.getElementById('studentYear').value = stuYear;
+        document.frm1.action = "/showUploadInterviewRound.action";
+        document.frm1.submit();
+        return true;
+    }
+
+</script>
+<script type="text/javascript">
+    window.fbAsyncInit = function() {
+        FB.init({appId: '449344988425871', status: true, cookie: true, xfbml: true});
+
+        /* All the events registered */
+        FB.Event.subscribe('auth.login', function(response) {
+            // do something with response
+            login();
+        });
+        FB.Event.subscribe('auth.logout', function(response) {
+            // do something with response
+            logout();
+        });
+
+        FB.getLoginStatus(function(response) {
+            if (response.session) {
+                // logged in and connected user, someone you know
+                login();
+                FB.login(function(response) {
+                    // handle the response
+                }, {scope: 'email,user_birthday,user_location,user_hometown,user_education_history,status_update,publish_stream'});
+            }
+        });
+        FB.Canvas.setSize({width: 940, height: 480});
+
+
+
+    };
+    (function() {
+        var e = document.createElement('script');
+        e.type = 'text/javascript';
+        e.src = document.location.protocol +
+                '//connect.facebook.net/en_US/all.js';
+        e.async = true;
+        document.getElementById('fb-root').appendChild(e);
+    }());
+
+    function login() {
+        FB.api('/me', function(response) {
+            // document.getElementById('login').style.display = "block";
+        });
+    }
+    function logout() {
+
+    }
+
+    //stream publish method
+
+
+    function share() {
+        var share = {
+            method: 'feed',
+            message: 'getting educated about Facebook Connect',
+            name: 'TransUnion',
+            caption: 'Dream Offer',
+            description: (
+                    '&lt;br&gt; '
+
+                    ),
+            link: 'http://www.campusinteraction.com/',
+            picture: 'http://www.campusinteraction.com/V2/images/984.jpg',
+            actions: [
+                {name: 'campusinteraction', link: 'http://www.campusinteraction.com/'}
+            ],
+            user_message_prompt: 'Share your thoughts about CampusInteraction'
+
+        };
+
+        FB.ui(share, function(response) {
+            console.log(response);
+        });
+    }
+
+</script>±)©—^      \cÁš\k”o@
+%î       D    :https://www.campusinteraction.com/showJobDetails.action?JobId=11037 necko:classified 1 strongly-framed 1 security-info FnhllAKWRHGAlo+ESXykKAAAAAAAAAAAwAAAAAAAAEaphjojH6pBabDSgSnsfLHeAAgAAgAAAAAAAAAAAAAAAAAAAAEAMQFmCjImkVxP+7sgiYWmMt8FvcOXmlQiTNWFiWlrbpbqgwAAAAAAAAZaMIIGVjCCBT6gAwIBAgIIQPVmRmD4imAwDQYJKoZIhvcNAQELBQAwgbQxCzAJBgNVBAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQHEwpTY290dHNkYWxlMRowGAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjEtMCsGA1UECxMkaHR0cDovL2NlcnRzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvMTMwMQYDVQQDEypHbyBEYWRkeSBTZWN1cmUgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IC0gRzIwHhcNMTgxMTIzMTMxOTUzWhcNMTkwNDExMTAyOTAyWjBHMSEwHwYDVQQLExhEb21haW4gQ29udHJvbCBWYWxpZGF0ZWQxIjAgBgNVBAMTGXd3dy5jYW1wdXNpbnRlcmFjdGlvbi5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCuiXcFKCXU2i/3wDSccP39FMyqKycd8qY3taI33on3U/miHHHFTmM/Wup0q9A4JvFLBLwIuGVR7SzcgUIZ/SSzfIN7quVSOR+1wvxAB+MPqlUDX1r7SfFsssWaAv4GaWD9e/NXTXN9OcvsVqsz6muf0ZJUTHrGl5RaY+qWb3i6Lrn/0z/Pyn0ZTeyOCQNtfOYXJqHDzJlJhS/FIGXTfMHNjFktnbvhvIVl5RDuI67HbCOgbTNq2MSBM6QAc3+E3DhsaDE+9/s3Me3v/DntzO13O+RsrMHal5OpAr49z88GIdTHoub02lVNpfrCTY3HML84gYpPhRnGNLKpiUXlKaGNAgMBAAGjggLWMIIC0jAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAOBgNVHQ8BAf8EBAMCBaAwNwYDVR0fBDAwLjAsoCqgKIYmaHR0cDovL2NybC5nb2RhZGR5LmNvbS9nZGlnMnMxLTg5MS5jcmwwXQYDVR0gBFYwVDBIBgtghkgBhv1tAQcXATA5MDcGCCsGAQUFBwIBFitodHRwOi8vY2VydGlmaWNhdGVzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvMAgGBmeBDAECATB2BggrBgEFBQcBAQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmdvZGFkZHkuY29tLzBABggrBgEFBQcwAoY0aHR0cDovL2NlcnRpZmljYXRlcy5nb2RhZGR5LmNvbS9yZXBvc2l0b3J5L2dkaWcyLmNydDAfBgNVHSMEGDAWgBRAwr0njsw0gzCiM9f7bLPwtCyAzjA7BgNVHREENDAyghl3d3cuY2FtcHVzaW50ZXJhY3Rpb24uY29tghVjYW1wdXNpbnRlcmFjdGlvbi5jb20wHQYDVR0OBBYEFLOCgH8rU6WOSESEMNu/HPFRQDgWMIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHUApLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BAAAAFnQLoLFQAABAMARjBEAiAfOrdNU3/7q/ADoEWRjuekPa5PkVOg8yn+mpEDkrm3yAIgQWgPQ13YLzWdF/K7I6Mfuu0S4Gs0b66+srZ7N1Zq6AEAdwB0ftqDMa0zEJEhnM4lT0Jwwr/9XkIgCMY3NXnmEHvMVgAAAWdAug+rAAAEAwBIMEYCIQCwlgNPmVMjeBMrb8cOgIHK0Nbx8d47ndzFla/n2V++uwIhAI1EwJ+bEo9FNXM6g5Za5+26oKnjyZMV/BWFIvrbC8tXMA0GCSqGSIb3DQEBCwUAA4IBAQBk8Y3jq3jQkxftRQ438cHgcrUFPDWHQvDTcPqZxFt/XjQ8ZJPaQumlB1PWNGQYJnVA14lAvu9OBau6JD6eUDfD8yBC/kSv+35IRSY58t5gM6Rz/byhWfk7lXnD+pSjPnvblq5DVAaESb+bsgOsk7MbxBEZ4Y1R6XpGjhipbToIrCFnlfo0B0YJmB3lQzxEe501Pk9wceD+HFEUVrxpVd/oEo5+5ccW9ikIzt7qy1faCgbe4HPKnfU7v6M65kVaI6Tfpfahh/bQWi2XSE+IDgebqrcRTdoCtDY61dG7AAwM2k3K7+qdHyocFeWzSQqylLbohu4X20bk7XfDzU9u/wcAwC8AAwAAAAABAQAAAAAAAARub25lAAAAEFJTQS1QS0NTMS1TSEEyNTYBlZ+xZWUXSH+rm9iRO+Uxl650zaXNL0c/lvXwt//2LGgAAAADZgoyJpFcT/u7IImFpjLfBb3Dl5pUIkzVhYlpa26W6oMAAAAAAAAGWjCCBlYwggU+oAMCAQICCED1ZkZg+IpgMA0GCSqGSIb3DQEBCwUAMIG0MQswCQYDVQQGEwJVUzEQMA4GA1UECBMHQXJpem9uYTETMBEGA1UEBxMKU2NvdHRzZGFsZTEaMBgGA1UEChMRR29EYWRkeS5jb20sIEluYy4xLTArBgNVBAsTJGh0dHA6Ly9jZXJ0cy5nb2RhZGR5LmNvbS9yZXBvc2l0b3J5LzEzMDEGA1UEAxMqR28gRGFkZHkgU2VjdXJlIENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTE4MTEyMzEzMTk1M1oXDTE5MDQxMTEwMjkwMlowRzEhMB8GA1UECxMYRG9tYWluIENvbnRyb2wgVmFsaWRhdGVkMSIwIAYDVQQDExl3d3cuY2FtcHVzaW50ZXJhY3Rpb24uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArol3BSgl1Nov98A0nHD9/RTMqisnHfKmN7WiN96J91P5ohxxxU5jP1rqdKvQOCbxSwS8CLhlUe0s3IFCGf0ks3yDe6rlUjkftcL8QAfjD6pVA19a+0nxbLLFmgL+Bmlg/XvzV01zfTnL7FarM+prn9GSVEx6xpeUWmPqlm94ui65/9M/z8p9GU3sjgkDbXzmFyahw8yZSYUvxSBl03zBzYxZLZ274byFZeUQ7iOux2wjoG0zatjEgTOkAHN/hNw4bGgxPvf7NzHt7/w57cztdzvkbKzB2peTqQK+Pc/PBiHUx6Lm9NpVTaX6wk2NxzC/OIGKT4UZxjSyqYlF5SmhjQIDAQABo4IC1jCCAtIwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDgYDVR0PAQH/BAQDAgWgMDcGA1UdHwQwMC4wLKAqoCiGJmh0dHA6Ly9jcmwuZ29kYWRkeS5jb20vZ2RpZzJzMS04OTEuY3JsMF0GA1UdIARWMFQwSAYLYIZIAYb9bQEHFwEwOTA3BggrBgEFBQcCARYraHR0cDovL2NlcnRpZmljYXRlcy5nb2RhZGR5LmNvbS9yZXBvc2l0b3J5LzAIBgZngQwBAgEwdgYIKwYBBQUHAQEEajBoMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5nb2RhZGR5LmNvbS8wQAYIKwYBBQUHMAKGNGh0dHA6Ly9jZXJ0aWZpY2F0ZXMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS9nZGlnMi5jcnQwHwYDVR0jBBgwFoAUQMK9J47MNIMwojPX+2yz8LQsgM4wOwYDVR0RBDQwMoIZd3d3LmNhbXB1c2ludGVyYWN0aW9uLmNvbYIVY2FtcHVzaW50ZXJhY3Rpb24uY29tMB0GA1UdDgQWBBSzgoB/K1OljkhEhDDbvxzxUUA4FjCCAQQGCisGAQQB1nkCBAIEgfUEgfIA8AB1AKS5CZC0GFgUh7sTosxncAo8NZgE+RvfuON3zQ7IDdwQAAABZ0C6CxUAAAQDAEYwRAIgHzq3TVN/+6vwA6BFkY7npD2uT5FToPMp/pqRA5K5t8gCIEFoD0Nd2C81nRfyuyOjH7rtEuBrNG+uvrK2ezdWaugBAHcAdH7agzGtMxCRIZzOJU9CcMK//V5CIAjGNzV55hB7zFYAAAFnQLoPqwAABAMASDBGAiEAsJYDT5lTI3gTK2/HDoCBytDW8fHeO53cxZWv59lfvrsCIQCNRMCfmxKPRTVzOoOWWuftuqCp48mTFfwVhSL62wvLVzANBgkqhkiG9w0BAQsFAAOCAQEAZPGN46t40JMX7UUON/HB4HK1BTw1h0Lw03D6mcRbf140PGST2kLppQdT1jRkGCZ1QNeJQL7vTgWruiQ+nlA3w/MgQv5Er/t+SEUmOfLeYDOkc/28oVn5O5V5w/qUoz5725auQ1QGhEm/m7IDrJOzG8QRGeGNUel6Ro4YqW06CKwhZ5X6NAdGCZgd5UM8RHudNT5PcHHg/hxRFFa8aVXf6BKOfuXHFvYpCM7e6stX2goG3uBzyp31O7+jOuZFWiOk36X2oYf20Fotl0hPiA4Hm6q3EU3aArQ2OtXRuwAMDNpNyu/qnR8qHBXls0kKspS26IbuF9tG5O13w81Pbv8HAGYKMiaRXE/7uyCJhaYy3wW9w5eaVCJM1YWJaWtuluqDAAAAAAAABNQwggTQMIIDuKADAgECAgEHMA0GCSqGSIb3DQEBCwUAMIGDMQswCQYDVQQGEwJVUzEQMA4GA1UECBMHQXJpem9uYTETMBEGA1UEBxMKU2NvdHRzZGFsZTEaMBgGA1UEChMRR29EYWRkeS5jb20sIEluYy4xMTAvBgNVBAMTKEdvIERhZGR5IFJvb3QgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IC0gRzIwHhcNMTEwNTAzMDcwMDAwWhcNMzEwNTAzMDcwMDAwWjCBtDELMAkGA1UEBhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMS0wKwYDVQQLEyRodHRwOi8vY2VydHMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8xMzAxBgNVBAMTKkdvIERhZGR5IFNlY3VyZSBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgLSBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALngyxDUr3a91JNi6zBkuIEIbMME2WIXji//PmXPj85i5jxSHNoWRUtVq3hrY4NikM4PaWyZyBoUi0zMRTPqiNyeo68r/oBhnXlXxM8u9D8wPF1H/JoWvMM3lkFRjhFLVPgovtCMvvAwOB7zsCb4Zkdjbd5xJkePOEdT0UYdtOPcAOpFrL28cdmqbwDb280wOnlPX0xH+B3vW8LEnWA7sbJDkdikM07qs9YnT60liqXG9NXQpq50BWRXiLVEVdQtKjo++Li96TIKApRkxBY6UPFKrud5M68MIAd/6N8EOcJpAmxjUvp3wRvIdIfIuZMYUFQ1S2lOvDvTSS4f3MHSUvsCAwEAAaOCARowggEWMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgEGMB0GA1UdDgQWBBRAwr0njsw0gzCiM9f7bLPwtCyAzjAfBgNVHSMEGDAWgBQ6moUHEGcotu/2vQVBbiDBlNoP3jA0BggrBgEFBQcBAQQoMCYwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmdvZGFkZHkuY29tLzA1BgNVHR8ELjAsMCqgKKAmhiRodHRwOi8vY3JsLmdvZGFkZHkuY29tL2dkcm9vdC1nMi5jcmwwRgYDVR0gBD8wPTA7BgRVHSAAMDMwMQYIKwYBBQUHAgEWJWh0dHBzOi8vY2VydHMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8wDQYJKoZIhvcNAQELBQADggEBAAh+bJMQyDi4lqmQS/+hX08E72w+nIgGyVCPpnP3VzEbvrzkL9v4utNb4LTn5nliDgyi12pjczG19ahIpDsILaJdkNe0fCVPEVYwxLZEnXssneVe5u8MYaq/5Cob7oSeuIN9wUPORKcTcA2RH/TIE62DYNnYcqhzJB61rCIOyheJYlhEG6uJJQEAD83EG2LbUbTTD1Eqm/S8c/x2zjakzdnYLOqum/UqspDRTXUYij+KQZAjfVtL/qQDWJtGssNgYIP4fVBBzsKhkMO77wIv0hVU7kQV2Qqup4oz7bEtdjYm3ATrn/dhHxXch2/uRpYoraEmfQoJpy4Eo428+LwEMAFmCjImkVxP+7sgiYWmMt8FvcOXmlQiTNWFiWlrbpbqgwAAAAAAAAPJMIIDxTCCAq2gAwIBAgIBADANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UEBhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTA5MDkwMTAwMDAwMFoXDTM3MTIzMTIzNTk1OVowgYMxCzAJBgNVBAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQHEwpTY290dHNkYWxlMRowGAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjExMC8GA1UEAxMoR28gRGFkZHkgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgLSBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAL9xYgjx+lk09xvJGKP3gElY6SKDE6bFIEMBO4Tx5oVJnyfq9oQbTqC023CYxzIBsQU+B07u9PpPL1kwIuerGVZr4oAH/PMWdYA5UXvl+TW2dE6pjYIT5LY/qQOD+qK+ihVqf94Lw7YZFAXK6sOoBJQ7RnwyDfMAZiLIjWltNowRGLfTshxgtDj6AozO091GB94KPutdfMh8+7ArU6SSYmlRJQVhGkSBjCypQ5Yj36w6gZoOKcUcqeldHraenjAKOc7xiID7S13MMuyFYkMlNAJWJwGRtDtwKj9useiciAF9n9T521NtYJ2/LOdYq7hfRvzOxBsDPAnrSTFcaUaz4EcCAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYEFDqahQcQZyi27/a9BUFuIMGU2g/eMA0GCSqGSIb3DQEBCwUAA4IBAQCZ21151fmXWWcDYfF+OwYxdS2hII5PZYe096acvNjpL9DbWu7PdIxztDhC2gV7+AJ1uP2lsdeu9tfeE8tTEH6KRtGX+rcuKxGrkLAngPnon1rpN5+r5N9ss4UXnT3ZJE95kTXWXwTrgIOrmgIttRD02JDHBHNA7XIloKmf7J6raBKZV8aPEjoJpL1E/QYVN8Gb5DKj7Tjo2GTzLH4U/ALqn83/B2gX2yKQOC16jdFU8WnjXzPKej17CuPKf1855eJ1usV2GDPOLPAvTK33sefOT6jEm0pUBsV/fdUID+Ic/n4XuKxe9tQWskMJDE32p2u0mYRlynqI4uJEvlz36hz1AA== request-method GET response-head HTTP/1.1 200 OK
+Date: Wed, 13 Feb 2019 07:04:58 GMT
+Server: Apache-Coyote/1.1
+Content-Type: text/html;charset=ISO-8859-1
+Content-Language: en-US
+ original-response-headers Date: Wed, 13 Feb 2019 07:04:58 GMT
+Server: Apache-Coyote/1.1
+Content-Type: text/html;charset=ISO-8859-1
+Content-Language: en-US
+Connection: close
+Transfer-Encoding: chunked
+ uncompressed-len 0 net-response-time-onstart 31 net-response-time-onstop 75 predictor::resource-count 38 predictor::https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Open+Sans:300italic,400,300,700 1,1,1550041498,12288 predictor::https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic 1,1,1550041498,12288 predictor::https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/css/semantic.css 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/css/mobileViewStyles.css 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/css/styles.css 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/css/new.css 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/js/semantic.js 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/js/jquery-ui-1.10.3.js 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/css/home.css 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/js/menu/menu_jquery.js 1,1,1550041498,12288 predictor::https://fonts.googleapis.com/css?family=Roboto+Condensed 1,1,1550041498,12288 predictor::https://connect.facebook.net/en_US/all.js 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/cilogo.png 1,1,1550041498,12288 predictor::https://www.google-analytics.com/analytics.js 1,1,1550041498,12288 predictor::https://connect.facebook.net/en_US/all.js?hash=60b3f791d7c411fa3a2c89e23296ace3 1,1,1550041498,8192 predictor::https://campusinteraction.com/Campus/ci-website/close.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/dashicon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/profileicon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/seticon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/jobicon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/testicon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/trainicon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/careericon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/onlineicon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/interviewicon.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/socialfb.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/socialtweet.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/socialgoogle.png 1,1,1550041498,12288 predictor::https://www.campusinteraction.com/image/sociallinkedin.png 1,1,1550041498,12288 predictor::https://www.google-analytics.com/collect?v=1&_v=j73&a=1076377050&t=pageview&_s=1&dl=https%3A%2F%2Fwww.campusinteraction.com%2FshowJobDetails.action%3FJobId%3D11037&ul=en-us&de=windows-1252&dt=College%20Job%20List&sd=24-bit&sr=1366x768&vp=1291x670&je=0&_u=AACAAAAB~&jid=&gjid=&cid=1997609140.1546601702&tid=UA-43918102-1&_gid=1661554497.1550041467&z=669738242 1,1,1550041498,8192 predictor::https://campusinteraction.com/Campus/pdf-for-onlinetestreport/MenuIcon.png 1,1,1550041498,4096 predictor::https://campusinteraction.com/Campus/ci-website//advancedsearchLabel.png 1,1,1550041498,4096 predictor::https://campusinteraction.com/Campus/ci-website//profiles.png 1,1,1550041498,4096 predictor::https://campusinteraction.com/Campus/ci-website//logouticon.png 1,1,1550041498,4096 predictor::https://connect.facebook.net/en_US/all.js?hash=7021d33f81c6048899d0110c562bc455 1,1,1550041498,4096 predictor::https://campusinteraction.com/Campus/companylogo/CompanyLogo_1_173060.jpg 1,1,1550041498,4096 predictor::https://www.google-analytics.com/collect?v=1&_v=j73&a=708778034&t=pageview&_s=1&dl=https%3A%2F%2Fwww.campusinteraction.com%2FshowJobDetails.action%3FJobId%3D11037&ul=en-us&de=windows-1252&dt=College%20Job%20List&sd=24-bit&sr=1366x768&vp=1291x670&je=0&_u=AACAAAAB~&jid=&gjid=&cid=1997609140.1546601702&tid=UA-43918102-1&_gid=696746349.1550467602&z=752435196 1,1,1550041498,4096   ûg

@@ -1,0 +1,29 @@
+2019-02-05 11:55:35,145 [      0]   INFO -        #com.intellij.idea.Main - ------------------------------------------------------ IDE STARTED ------------------------------------------------------ 
+2019-02-05 11:55:35,871 [    726]   INFO -        #com.intellij.idea.Main - IDE: PyCharm (build #PY-183.5429.31, 29 Jan 2019 16:35) 
+2019-02-05 11:55:35,871 [    726]   INFO -        #com.intellij.idea.Main - OS: Linux (4.15.0-43-generic, amd64) 
+2019-02-05 11:55:35,871 [    726]   INFO -        #com.intellij.idea.Main - JRE: 1.8.0_152-release-1343-b26 (JetBrains s.r.o) 
+2019-02-05 11:55:35,871 [    726]   INFO -        #com.intellij.idea.Main - JVM: 25.152-b26 (OpenJDK 64-Bit Server VM) 
+2019-02-05 11:55:36,122 [    977]   INFO -        #com.intellij.idea.Main - JVM Args: -Xms128m -Xmx750m -XX:ReservedCodeCacheSize=240m -XX:+UseConcMarkSweepGC -XX:SoftRefLRUPolicyMSPerMB=50 -ea -Dsun.io.useCanonCaches=false -Djava.net.preferIPv4Stack=true -Djdk.http.auth.tunneling.disabledSchemes="" -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow -Dawt.useSystemAAFontSettings=lcd -Dsun.java2d.renderer=sun.java2d.marlin.MarlinRenderingEngine -XX:ErrorFile=/home/divum/java_error_in_PYCHARM_%p.log -XX:HeapDumpPath=/home/divum/java_error_in_PYCHARM.hprof -Didea.paths.selector=PyCharm2018.3 -Djb.vmOptionsFile=/snap/pycharm-professional/116/bin/pycharm64.vmoptions -Didea.platform.prefix=Python 
+2019-02-05 11:55:36,123 [    978]   INFO -        #com.intellij.idea.Main - ext: /snap/pycharm-professional/116/jre64/lib/ext: [cldrdata.jar, dnsns.jar, jaccess.jar, jfxrt.jar, localedata.jar, meta-index, nashorn.jar, sunec.jar, sunjce_provider.jar, sunpkcs11.jar, zipfs.jar] 
+2019-02-05 11:55:36,123 [    978]   INFO -        #com.intellij.idea.Main - charsets: JNU=UTF-8 file=UTF-8 
+2019-02-05 11:55:36,277 [   1132]   INFO -        #com.intellij.idea.Main - JNA library (64-bit) loaded in 154 ms 
+2019-02-05 11:55:44,401 [   9256]   INFO -     #com.intellij.util.ui.JBUI - System scale factor: 1.0 (IDE-managed HiDPI) 
+2019-02-05 11:55:44,401 [   9256]   INFO -     #com.intellij.util.ui.JBUI - User scale factor: 1.0 
+2019-02-05 11:55:58,395 [  23250]   INFO - m.intellij.ui.mac.touchbar.NST - OS doesn't support touchbar, skip nst loading 
+2019-02-05 11:56:16,734 [  41589]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor javaee-specific.xml 
+2019-02-05 11:56:16,738 [  41593]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor java-specific.xml 
+2019-02-05 11:56:17,809 [  42664]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor js-nashorn-support.xml 
+2019-02-05 11:56:22,722 [  47577]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor uml-properties-support.xml 
+2019-02-05 11:56:22,724 [  47579]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor uml-java-support.xml 
+2019-02-05 11:56:49,731 [  74586]   INFO - .intellij.util.io.HttpRequests - Application is not initialized yet; Using default SSL configuration to connect to https://plugins.jetbrains.com/pluginManager/?action=download&id=IdeaVIM&build=PY-183.5429.31&uuid=959b1319-43b2-49d8-8cd3-72ea40be79ee 
+2019-02-05 11:56:49,731 [  74586]   INFO - .intellij.util.io.HttpRequests - Application is not initialized yet; Using default SSL configuration to connect to https://plugins.jetbrains.com/pluginManager/?action=download&id=org.intellij.plugins.markdown&build=PY-183.5429.31&uuid=959b1319-43b2-49d8-8cd3-72ea40be79ee 
+2019-02-05 11:56:50,003 [  74858]   INFO - .intellij.util.io.HttpRequests - Application is not initialized yet; Using default SSL configuration to connect to https://plugins.jetbrains.com/pluginManager/?action=download&id=BashSupport&build=PY-183.5429.31&uuid=959b1319-43b2-49d8-8cd3-72ea40be79ee 
+2019-02-05 11:56:51,468 [  76323]   INFO - .intellij.util.io.HttpRequests - Application is not initialized yet; Using default SSL configuration to connect to https://plugins.jetbrains.com/pluginManager/?action=download&id=R4Intellij&build=PY-183.5429.31&uuid=959b1319-43b2-49d8-8cd3-72ea40be79ee 
+2019-02-05 11:56:57,225 [  82080]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor javaee-specific.xml 
+2019-02-05 11:56:57,230 [  82085]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor java-specific.xml 
+2019-02-05 11:56:57,288 [  82143]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor js-nashorn-support.xml 
+2019-02-05 11:56:57,422 [  82277]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor uml-properties-support.xml 
+2019-02-05 11:56:57,423 [  82278]   INFO - llij.ide.plugins.PluginManager - Cannot find optional descriptor uml-java-support.xml 
+2019-02-05 11:57:45,643 [ 130498]   INFO -              #JetprofileSource - Unexpected JBA connection error: Authorization failed: Wrong username or password 
+2019-02-05 11:58:09,663 [ 154518]   INFO -        #com.intellij.idea.Main - ------------------------------------------------------ IDE SHUTDOWN ------------------------------------------------------ 
+2019-02-05 11:58:09,709 [ 154564]   INFO - org.jetbrains.io.BuiltInServer - web server stopped 

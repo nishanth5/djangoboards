@@ -1,0 +1,150 @@
+<application>
+  <component name="RecentDirectoryProjectsManager">
+    <option name="recentPaths">
+      <list>
+        <option value="/tmp/models.py" />
+        <option value="/tmp/views.py" />
+        <option value="/tmp/manage.py" />
+        <option value="/tmp/urls.py" />
+        <option value="/tmp/test_view_password_reset.py" />
+        <option value="/tmp/form_tags.py" />
+        <option value="/tmp/tests.py" />
+        <option value="/tmp/settings.py" />
+        <option value="$USER_HOME$/PycharmProjects/mysite" />
+      </list>
+    </option>
+    <option name="openPaths">
+      <list>
+        <option value="/tmp/models.py" />
+      </list>
+    </option>
+    <option name="lastPath" value="/tmp/models.py" />
+    <option name="pid" value="" />
+    <option name="additionalInfo">
+      <map>
+        <entry key="$USER_HOME$/PycharmProjects/Project1">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1549372449519" />
+              <option name="buildTimestamp" value="1548763387263" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/PycharmProjects/mysite">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550151361473" />
+              <option name="buildTimestamp" value="1548763380218" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/mysite">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550124344912" />
+              <option name="buildTimestamp" value="1548763423069" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/form_tags.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550567096607" />
+              <option name="buildTimestamp" value="1548763407287" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/manage.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550571874191" />
+              <option name="buildTimestamp" value="1548763393032" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/models.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550641960927" />
+              <option name="buildTimestamp" value="1548763393703" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/settings.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550215031344" />
+              <option name="buildTimestamp" value="1548763416712" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/test_view_password_reset.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550567674191" />
+              <option name="buildTimestamp" value="1548763398200" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/tests.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550561931848" />
+              <option name="buildTimestamp" value="1548763406872" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/urls.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550568057200" />
+              <option name="buildTimestamp" value="1548763400356" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/views.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-183.5429.31" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550582221009" />
+              <option name="buildTimestamp" value="1548763424380" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="lastProjectLocation" value="$USER_HOME$/PycharmProjects" />
+  </component>
+</application>

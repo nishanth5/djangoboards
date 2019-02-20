@@ -1,0 +1,1454 @@
+if(typeof jQuery==='undefined'){throw new Error('Bootstrap\'s JavaScript requires jQuery')}+function($){'use strict';function transitionEnd(){var el=document.createElement('bootstrap')
+var transEndEventNames={WebkitTransition:'webkitTransitionEnd',MozTransition:'transitionend',OTransition:'oTransitionEnd otransitionend',transition:'transitionend'}
+for(var name in transEndEventNames){if(el.style[name]!==undefined){return{end:transEndEventNames[name]}}}return false}$.fn.emulateTransitionEnd=function(duration){var called=false
+var $el=this
+$(this).one('bsTransitionEnd',function(){called=true})
+var callback=function(){if(!called)$($el).trigger($.support.transition.end)}
+setTimeout(callback,duration)
+return this}
+$(function(){$.support.transition=transitionEnd()
+if(!$.support.transition)return
+$.event.special.bsTransitionEnd={bindType:$.support.transition.end,delegateType:$.support.transition.end,handle:function(e){if($(e.target).is(this))return e.handleObj.handler.apply(this,arguments)}}})}(jQuery);+function($){'use strict';var dismiss='[data-dismiss="alert"]'
+var Alert=function(el){$(el).on('click',dismiss,this.close)}
+Alert.VERSION='3.2.0'
+Alert.prototype.close=function(e){var $this=$(this)
+var selector=$this.attr('data-target')
+if(!selector){selector=$this.attr('href')
+selector=selector&&selector.replace(/.*(?=#[^\s]*$)/,'')}var $parent=$(selector)
+if(e)e.preventDefault()
+if(!$parent.length){$parent=$this.hasClass('alert')?$this:$this.parent()}$parent.trigger(e=$.Event('close.bs.alert'))
+if(e.isDefaultPrevented())return
+$parent.removeClass('in')
+function removeElement(){$parent.detach().trigger('closed.bs.alert').remove()}$.support.transition&&$parent.hasClass('fade')?$parent.one('bsTransitionEnd',removeElement).emulateTransitionEnd(150):removeElement()}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.alert')
+if(!data)$this.data('bs.alert',(data=new Alert(this)))
+if(typeof option=='string')data[option].call($this)})}var old=$.fn.alert
+$.fn.alert=Plugin
+$.fn.alert.Constructor=Alert
+$.fn.alert.noConflict=function(){$.fn.alert=old
+return this}
+$(document).on('click.bs.alert.data-api',dismiss,Alert.prototype.close)}(jQuery);+function($){'use strict';var Button=function(element,options){this.$element=$(element)
+this.options=$.extend({},Button.DEFAULTS,options)
+this.isLoading=false}
+Button.VERSION='3.2.0'
+Button.DEFAULTS={loadingText:'loading...'}
+Button.prototype.setState=function(state){var d='disabled'
+var $el=this.$element
+var val=$el.is('input')?'val':'html'
+var data=$el.data()
+state=state+'Text'
+if(data.resetText==null)$el.data('resetText',$el[val]())
+$el[val](data[state]==null?this.options[state]:data[state])
+setTimeout($.proxy(function(){if(state=='loadingText'){this.isLoading=true
+$el.addClass(d).attr(d,d)}else if(this.isLoading){this.isLoading=false
+$el.removeClass(d).removeAttr(d)}},this),0)}
+Button.prototype.toggle=function(){var changed=true
+var $parent=this.$element.closest('[data-toggle="buttons"]')
+if($parent.length){var $input=this.$element.find('input')
+if($input.prop('type')=='radio'){if($input.prop('checked')&&this.$element.hasClass('active'))changed=false
+else $parent.find('.active').removeClass('active')}if(changed)$input.prop('checked',!this.$element.hasClass('active')).trigger('change')}if(changed)this.$element.toggleClass('active')}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.button')
+var options=typeof option=='object'&&option
+if(!data)$this.data('bs.button',(data=new Button(this,options)))
+if(option=='toggle')data.toggle()
+else if(option)data.setState(option)})}var old=$.fn.button
+$.fn.button=Plugin
+$.fn.button.Constructor=Button
+$.fn.button.noConflict=function(){$.fn.button=old
+return this}
+$(document).on('click.bs.button.data-api','[data-toggle^="button"]',function(e){var $btn=$(e.target)
+if(!$btn.hasClass('btn'))$btn=$btn.closest('.btn')
+Plugin.call($btn,'toggle')
+e.preventDefault()})}(jQuery);+function($){'use strict';var Carousel=function(element,options){this.$element=$(element).on('keydown.bs.carousel',$.proxy(this.keydown,this))
+this.$indicators=this.$element.find('.carousel-indicators')
+this.options=options
+this.paused=this.sliding=this.interval=this.$active=this.$items=null
+this.options.pause=='hover'&&this.$element.on('mouseenter.bs.carousel',$.proxy(this.pause,this)).on('mouseleave.bs.carousel',$.proxy(this.cycle,this))}
+Carousel.VERSION='3.2.0'
+Carousel.DEFAULTS={interval:5000,pause:'hover',wrap:true}
+Carousel.prototype.keydown=function(e){switch(e.which){case 37:this.prev();break
+case 39:this.next();break
+default:return}e.preventDefault()}
+Carousel.prototype.cycle=function(e){e||(this.paused=false)
+this.interval&&clearInterval(this.interval)
+this.options.interval&&!this.paused&&(this.interval=setInterval($.proxy(this.next,this),this.options.interval))
+return this}
+Carousel.prototype.getItemIndex=function(item){this.$items=item.parent().children('.item')
+return this.$items.index(item||this.$active)}
+Carousel.prototype.to=function(pos){var that=this
+var activeIndex=this.getItemIndex(this.$active=this.$element.find('.item.active'))
+if(pos>(this.$items.length-1)||pos<0)return
+if(this.sliding)return this.$element.one('slid.bs.carousel',function(){that.to(pos)})
+if(activeIndex==pos)return this.pause().cycle()
+return this.slide(pos>activeIndex?'next':'prev',$(this.$items[pos]))}
+Carousel.prototype.pause=function(e){e||(this.paused=true)
+if(this.$element.find('.next, .prev').length&&$.support.transition){this.$element.trigger($.support.transition.end)
+this.cycle(true)}this.interval=clearInterval(this.interval)
+return this}
+Carousel.prototype.next=function(){if(this.sliding)return
+return this.slide('next')}
+Carousel.prototype.prev=function(){if(this.sliding)return
+return this.slide('prev')}
+Carousel.prototype.slide=function(type,next){var $active=this.$element.find('.item.active')
+var $next=next||$active[type]()
+var isCycling=this.interval
+var direction=type=='next'?'left':'right'
+var fallback=type=='next'?'first':'last'
+var that=this
+if(!$next.length){if(!this.options.wrap)return
+$next=this.$element.find('.item')[fallback]()}if($next.hasClass('active'))return(this.sliding=false)
+var relatedTarget=$next[0]
+var slideEvent=$.Event('slide.bs.carousel',{relatedTarget:relatedTarget,direction:direction})
+this.$element.trigger(slideEvent)
+if(slideEvent.isDefaultPrevented())return
+this.sliding=true
+isCycling&&this.pause()
+if(this.$indicators.length){this.$indicators.find('.active').removeClass('active')
+var $nextIndicator=$(this.$indicators.children()[this.getItemIndex($next)])
+$nextIndicator&&$nextIndicator.addClass('active')}var slidEvent=$.Event('slid.bs.carousel',{relatedTarget:relatedTarget,direction:direction})
+if($.support.transition&&this.$element.hasClass('slide')){$next.addClass(type)
+$next[0].offsetWidth
+$active.addClass(direction)
+$next.addClass(direction)
+$active.one('bsTransitionEnd',function(){$next.removeClass([type,direction].join(' ')).addClass('active')
+$active.removeClass(['active',direction].join(' '))
+that.sliding=false
+setTimeout(function(){that.$element.trigger(slidEvent)},0)}).emulateTransitionEnd($active.css('transition-duration').slice(0,-1)*1000)}else{$active.removeClass('active')
+$next.addClass('active')
+this.sliding=false
+this.$element.trigger(slidEvent)}isCycling&&this.cycle()
+return this}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.carousel')
+var options=$.extend({},Carousel.DEFAULTS,$this.data(),typeof option=='object'&&option)
+var action=typeof option=='string'?option:options.slide
+if(!data)$this.data('bs.carousel',(data=new Carousel(this,options)))
+if(typeof option=='number')data.to(option)
+else if(action)data[action]()
+else if(options.interval)data.pause().cycle()})}var old=$.fn.carousel
+$.fn.carousel=Plugin
+$.fn.carousel.Constructor=Carousel
+$.fn.carousel.noConflict=function(){$.fn.carousel=old
+return this}
+$(document).on('click.bs.carousel.data-api','[data-slide], [data-slide-to]',function(e){var href
+var $this=$(this)
+var $target=$($this.attr('data-target')||(href=$this.attr('href'))&&href.replace(/.*(?=#[^\s]+$)/,''))
+if(!$target.hasClass('carousel'))return
+var options=$.extend({},$target.data(),$this.data())
+var slideIndex=$this.attr('data-slide-to')
+if(slideIndex)options.interval=false
+Plugin.call($target,options)
+if(slideIndex){$target.data('bs.carousel').to(slideIndex)}e.preventDefault()})
+$(window).on('load',function(){$('[data-ride="carousel"]').each(function(){var $carousel=$(this)
+Plugin.call($carousel,$carousel.data())})})}(jQuery);+function($){'use strict';var Collapse=function(element,options){this.$element=$(element)
+this.options=$.extend({},Collapse.DEFAULTS,options)
+this.transitioning=null
+if(this.options.parent)this.$parent=$(this.options.parent)
+if(this.options.toggle)this.toggle()}
+Collapse.VERSION='3.2.0'
+Collapse.DEFAULTS={toggle:true}
+Collapse.prototype.dimension=function(){var hasWidth=this.$element.hasClass('width')
+return hasWidth?'width':'height'}
+Collapse.prototype.show=function(){if(this.transitioning||this.$element.hasClass('in'))return
+var startEvent=$.Event('show.bs.collapse')
+this.$element.trigger(startEvent)
+if(startEvent.isDefaultPrevented())return
+var actives=this.$parent&&this.$parent.find('> .panel > .in')
+if(actives&&actives.length){var hasData=actives.data('bs.collapse')
+if(hasData&&hasData.transitioning)return
+Plugin.call(actives,'hide')
+hasData||actives.data('bs.collapse',null)}var dimension=this.dimension()
+this.$element.removeClass('collapse').addClass('collapsing')[dimension](0)
+this.transitioning=1
+var complete=function(){this.$element.removeClass('collapsing').addClass('collapse in')[dimension]('')
+this.transitioning=0
+this.$element.trigger('shown.bs.collapse')}
+if(!$.support.transition)return complete.call(this)
+var scrollSize=$.camelCase(['scroll',dimension].join('-'))
+this.$element.one('bsTransitionEnd',$.proxy(complete,this)).emulateTransitionEnd(350)[dimension](this.$element[0][scrollSize])}
+Collapse.prototype.hide=function(){if(this.transitioning||!this.$element.hasClass('in'))return
+var startEvent=$.Event('hide.bs.collapse')
+this.$element.trigger(startEvent)
+if(startEvent.isDefaultPrevented())return
+var dimension=this.dimension()
+this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+this.$element.addClass('collapsing').removeClass('collapse').removeClass('in')
+this.transitioning=1
+var complete=function(){this.transitioning=0
+this.$element.trigger('hidden.bs.collapse').removeClass('collapsing').addClass('collapse')}
+if(!$.support.transition)return complete.call(this)
+this.$element
+[dimension](0).one('bsTransitionEnd',$.proxy(complete,this)).emulateTransitionEnd(350)}
+Collapse.prototype.toggle=function(){this[this.$element.hasClass('in')?'hide':'show']()}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.collapse')
+var options=$.extend({},Collapse.DEFAULTS,$this.data(),typeof option=='object'&&option)
+if(!data&&options.toggle&&option=='show')option=!option
+if(!data)$this.data('bs.collapse',(data=new Collapse(this,options)))
+if(typeof option=='string')data[option]()})}var old=$.fn.collapse
+$.fn.collapse=Plugin
+$.fn.collapse.Constructor=Collapse
+$.fn.collapse.noConflict=function(){$.fn.collapse=old
+return this}
+$(document).on('click.bs.collapse.data-api','[data-toggle="collapse"]',function(e){var href
+var $this=$(this)
+var target=$this.attr('data-target')||e.preventDefault()||(href=$this.attr('href'))&&href.replace(/.*(?=#[^\s]+$)/,'')
+var $target=$(target)
+var data=$target.data('bs.collapse')
+var option=data?'toggle':$this.data()
+var parent=$this.attr('data-parent')
+var $parent=parent&&$(parent)
+if(!data||!data.transitioning){if($parent)$parent.find('[data-toggle="collapse"][data-parent="'+parent+'"]').not($this).addClass('collapsed')
+$this[$target.hasClass('in')?'addClass':'removeClass']('collapsed')}Plugin.call($target,option)})}(jQuery);+function($){'use strict';var backdrop='.dropdown-backdrop'
+var toggle='[data-toggle="dropdown"]'
+var Dropdown=function(element){$(element).on('click.bs.dropdown',this.toggle)}
+Dropdown.VERSION='3.2.0'
+Dropdown.prototype.toggle=function(e){var $this=$(this)
+if($this.is('.disabled, :disabled'))return
+var $parent=getParent($this)
+var isActive=$parent.hasClass('open')
+clearMenus()
+if(!isActive){if('ontouchstart'in document.documentElement&&!$parent.closest('.navbar-nav').length){$('<div class="dropdown-backdrop"/>').insertAfter($(this)).on('click',clearMenus)}var relatedTarget={relatedTarget:this}
+$parent.trigger(e=$.Event('show.bs.dropdown',relatedTarget))
+if(e.isDefaultPrevented())return
+$this.trigger('focus')
+$parent.toggleClass('open').trigger('shown.bs.dropdown',relatedTarget)}return false}
+Dropdown.prototype.keydown=function(e){if(!/(38|40|27)/.test(e.keyCode))return
+var $this=$(this)
+e.preventDefault()
+e.stopPropagation()
+if($this.is('.disabled, :disabled'))return
+var $parent=getParent($this)
+var isActive=$parent.hasClass('open')
+if(!isActive||(isActive&&e.keyCode==27)){if(e.which==27)$parent.find(toggle).trigger('focus')
+return $this.trigger('click')}var desc=' li:not(.divider):visible a'
+var $items=$parent.find('[role="menu"]'+desc+', [role="listbox"]'+desc)
+if(!$items.length)return
+var index=$items.index($items.filter(':focus'))
+if(e.keyCode==38&&index>0)index--
+if(e.keyCode==40&&index<$items.length-1)index++
+if(!~index)index=0
+$items.eq(index).trigger('focus')}
+function clearMenus(e){if(e&&e.which===3)return
+$(backdrop).remove()
+$(toggle).each(function(){var $parent=getParent($(this))
+var relatedTarget={relatedTarget:this}
+if(!$parent.hasClass('open'))return
+$parent.trigger(e=$.Event('hide.bs.dropdown',relatedTarget))
+if(e.isDefaultPrevented())return
+$parent.removeClass('open').trigger('hidden.bs.dropdown',relatedTarget)})}function getParent($this){var selector=$this.attr('data-target')
+if(!selector){selector=$this.attr('href')
+selector=selector&&/#[A-Za-z]/.test(selector)&&selector.replace(/.*(?=#[^\s]*$)/,'')}var $parent=selector&&$(selector)
+return $parent&&$parent.length?$parent:$this.parent()}function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.dropdown')
+if(!data)$this.data('bs.dropdown',(data=new Dropdown(this)))
+if(typeof option=='string')data[option].call($this)})}var old=$.fn.dropdown
+$.fn.dropdown=Plugin
+$.fn.dropdown.Constructor=Dropdown
+$.fn.dropdown.noConflict=function(){$.fn.dropdown=old
+return this}
+$(document).on('click.bs.dropdown.data-api',clearMenus).on('click.bs.dropdown.data-api','.dropdown form',function(e){e.stopPropagation()}).on('click.bs.dropdown.data-api',toggle,Dropdown.prototype.toggle).on('keydown.bs.dropdown.data-api',toggle+', [role="menu"], [role="listbox"]',Dropdown.prototype.keydown)}(jQuery);+function($){'use strict';var Modal=function(element,options){this.options=options
+this.$body=$(document.body)
+this.$element=$(element)
+this.$backdrop=this.isShown=null
+this.scrollbarWidth=0
+if(this.options.remote){this.$element.find('.modal-content').load(this.options.remote,$.proxy(function(){this.$element.trigger('loaded.bs.modal')},this))}}
+Modal.VERSION='3.2.0'
+Modal.DEFAULTS={backdrop:true,keyboard:true,show:true}
+Modal.prototype.toggle=function(_relatedTarget){return this.isShown?this.hide():this.show(_relatedTarget)}
+Modal.prototype.show=function(_relatedTarget){var that=this
+var e=$.Event('show.bs.modal',{relatedTarget:_relatedTarget})
+this.$element.trigger(e)
+if(this.isShown||e.isDefaultPrevented())return
+this.isShown=true
+this.checkScrollbar()
+this.$body.addClass('modal-open')
+this.setScrollbar()
+this.escape()
+this.$element.on('click.dismiss.bs.modal','[data-dismiss="modal"]',$.proxy(this.hide,this))
+this.backdrop(function(){var transition=$.support.transition&&that.$element.hasClass('fade')
+if(!that.$element.parent().length){that.$element.appendTo(that.$body)}that.$element.show().scrollTop(0)
+if(transition){that.$element[0].offsetWidth}that.$element.addClass('in').attr('aria-hidden',false)
+that.enforceFocus()
+var e=$.Event('shown.bs.modal',{relatedTarget:_relatedTarget})
+transition?that.$element.find('.modal-dialog').one('bsTransitionEnd',function(){that.$element.trigger('focus').trigger(e)}).emulateTransitionEnd(300):that.$element.trigger('focus').trigger(e)})}
+Modal.prototype.hide=function(e){if(e)e.preventDefault()
+e=$.Event('hide.bs.modal')
+this.$element.trigger(e)
+if(!this.isShown||e.isDefaultPrevented())return
+this.isShown=false
+this.$body.removeClass('modal-open')
+this.resetScrollbar()
+this.escape()
+$(document).off('focusin.bs.modal')
+this.$element.removeClass('in').attr('aria-hidden',true).off('click.dismiss.bs.modal')
+$.support.transition&&this.$element.hasClass('fade')?this.$element.one('bsTransitionEnd',$.proxy(this.hideModal,this)).emulateTransitionEnd(300):this.hideModal()}
+Modal.prototype.enforceFocus=function(){$(document).off('focusin.bs.modal').on('focusin.bs.modal',$.proxy(function(e){if(this.$element[0]!==e.target&&!this.$element.has(e.target).length){this.$element.trigger('focus')}},this))}
+Modal.prototype.escape=function(){if(this.isShown&&this.options.keyboard){this.$element.on('keyup.dismiss.bs.modal',$.proxy(function(e){e.which==27&&this.hide()},this))}else if(!this.isShown){this.$element.off('keyup.dismiss.bs.modal')}}
+Modal.prototype.hideModal=function(){var that=this
+this.$element.hide()
+this.backdrop(function(){that.$element.trigger('hidden.bs.modal')})}
+Modal.prototype.removeBackdrop=function(){this.$backdrop&&this.$backdrop.remove()
+this.$backdrop=null}
+Modal.prototype.backdrop=function(callback){var that=this
+var animate=this.$element.hasClass('fade')?'fade':''
+if(this.isShown&&this.options.backdrop){var doAnimate=$.support.transition&&animate
+this.$backdrop=$('<div class="modal-backdrop '+animate+'" />').appendTo(this.$body)
+this.$element.on('click.dismiss.bs.modal',$.proxy(function(e){if(e.target!==e.currentTarget)return
+this.options.backdrop=='static'?this.$element[0].focus.call(this.$element[0]):this.hide.call(this)},this))
+if(doAnimate)this.$backdrop[0].offsetWidth
+this.$backdrop.addClass('in')
+if(!callback)return
+doAnimate?this.$backdrop.one('bsTransitionEnd',callback).emulateTransitionEnd(150):callback()}else if(!this.isShown&&this.$backdrop){this.$backdrop.removeClass('in')
+var callbackRemove=function(){that.removeBackdrop()
+callback&&callback()}
+$.support.transition&&this.$element.hasClass('fade')?this.$backdrop.one('bsTransitionEnd',callbackRemove).emulateTransitionEnd(150):callbackRemove()}else if(callback){callback()}}
+Modal.prototype.checkScrollbar=function(){if(document.body.clientWidth>=window.innerWidth)return
+this.scrollbarWidth=this.scrollbarWidth||this.measureScrollbar()}
+Modal.prototype.setScrollbar=function(){var bodyPad=parseInt((this.$body.css('padding-right')||0),10)
+if(this.scrollbarWidth)this.$body.css('padding-right',bodyPad+this.scrollbarWidth)}
+Modal.prototype.resetScrollbar=function(){this.$body.css('padding-right','')}
+Modal.prototype.measureScrollbar=function(){var scrollDiv=document.createElement('div')
+scrollDiv.className='modal-scrollbar-measure'
+this.$body.append(scrollDiv)
+var scrollbarWidth=scrollDiv.offsetWidth-scrollDiv.clientWidth
+this.$body[0].removeChild(scrollDiv)
+return scrollbarWidth}
+function Plugin(option,_relatedTarget){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.modal')
+var options=$.extend({},Modal.DEFAULTS,$this.data(),typeof option=='object'&&option)
+if(!data)$this.data('bs.modal',(data=new Modal(this,options)))
+if(typeof option=='string')data[option](_relatedTarget)
+else if(options.show)data.show(_relatedTarget)})}var old=$.fn.modal
+$.fn.modal=Plugin
+$.fn.modal.Constructor=Modal
+$.fn.modal.noConflict=function(){$.fn.modal=old
+return this}
+$(document).on('click.bs.modal.data-api','[data-toggle="modal"]',function(e){var $this=$(this)
+var href=$this.attr('href')
+var $target=$($this.attr('data-target')||(href&&href.replace(/.*(?=#[^\s]+$)/,'')))
+var option=$target.data('bs.modal')?'toggle':$.extend({remote:!/#/.test(href)&&href},$target.data(),$this.data())
+if($this.is('a'))e.preventDefault()
+$target.one('show.bs.modal',function(showEvent){if(showEvent.isDefaultPrevented())return
+$target.one('hidden.bs.modal',function(){$this.is(':visible')&&$this.trigger('focus')})})
+Plugin.call($target,option,this)})}(jQuery);+function($){'use strict';var Tooltip=function(element,options){this.type=this.options=this.enabled=this.timeout=this.hoverState=this.$element=null
+this.init('tooltip',element,options)}
+Tooltip.VERSION='3.2.0'
+Tooltip.DEFAULTS={animation:true,placement:'top',selector:false,template:'<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:'hover focus',title:'',delay:0,html:false,container:false,viewport:{selector:'body',padding:0}}
+Tooltip.prototype.init=function(type,element,options){this.enabled=true
+this.type=type
+this.$element=$(element)
+this.options=this.getOptions(options)
+this.$viewport=this.options.viewport&&$(this.options.viewport.selector||this.options.viewport)
+var triggers=this.options.trigger.split(' ')
+for(var i=triggers.length;i--;){var trigger=triggers[i]
+if(trigger=='click'){this.$element.on('click.'+this.type,this.options.selector,$.proxy(this.toggle,this))}else if(trigger!='manual'){var eventIn=trigger=='hover'?'mouseenter':'focusin'
+var eventOut=trigger=='hover'?'mouseleave':'focusout'
+this.$element.on(eventIn+'.'+this.type,this.options.selector,$.proxy(this.enter,this))
+this.$element.on(eventOut+'.'+this.type,this.options.selector,$.proxy(this.leave,this))}}this.options.selector?(this._options=$.extend({},this.options,{trigger:'manual',selector:''})):this.fixTitle()}
+Tooltip.prototype.getDefaults=function(){return Tooltip.DEFAULTS}
+Tooltip.prototype.getOptions=function(options){options=$.extend({},this.getDefaults(),this.$element.data(),options)
+if(options.delay&&typeof options.delay=='number'){options.delay={show:options.delay,hide:options.delay}}return options}
+Tooltip.prototype.getDelegateOptions=function(){var options={}
+var defaults=this.getDefaults()
+this._options&&$.each(this._options,function(key,value){if(defaults[key]!=value)options[key]=value})
+return options}
+Tooltip.prototype.enter=function(obj){var self=obj instanceof this.constructor?obj:$(obj.currentTarget).data('bs.'+this.type)
+if(!self){self=new this.constructor(obj.currentTarget,this.getDelegateOptions())
+$(obj.currentTarget).data('bs.'+this.type,self)}clearTimeout(self.timeout)
+self.hoverState='in'
+if(!self.options.delay||!self.options.delay.show)return self.show()
+self.timeout=setTimeout(function(){if(self.hoverState=='in')self.show()},self.options.delay.show)}
+Tooltip.prototype.leave=function(obj){var self=obj instanceof this.constructor?obj:$(obj.currentTarget).data('bs.'+this.type)
+if(!self){self=new this.constructor(obj.currentTarget,this.getDelegateOptions())
+$(obj.currentTarget).data('bs.'+this.type,self)}clearTimeout(self.timeout)
+self.hoverState='out'
+if(!self.options.delay||!self.options.delay.hide)return self.hide()
+self.timeout=setTimeout(function(){if(self.hoverState=='out')self.hide()},self.options.delay.hide)}
+Tooltip.prototype.show=function(){var e=$.Event('show.bs.'+this.type)
+if(this.hasContent()&&this.enabled){this.$element.trigger(e)
+var inDom=$.contains(document.documentElement,this.$element[0])
+if(e.isDefaultPrevented()||!inDom)return
+var that=this
+var $tip=this.tip()
+var tipId=this.getUID(this.type)
+this.setContent()
+$tip.attr('id',tipId)
+this.$element.attr('aria-describedby',tipId)
+if(this.options.animation)$tip.addClass('fade')
+var placement=typeof this.options.placement=='function'?this.options.placement.call(this,$tip[0],this.$element[0]):this.options.placement
+var autoToken=/\s?auto?\s?/i
+var autoPlace=autoToken.test(placement)
+if(autoPlace)placement=placement.replace(autoToken,'')||'top'
+$tip.detach().css({top:0,left:0,display:'block'}).addClass(placement).data('bs.'+this.type,this)
+this.options.container?$tip.appendTo(this.options.container):$tip.insertAfter(this.$element)
+var pos=this.getPosition()
+var actualWidth=$tip[0].offsetWidth
+var actualHeight=$tip[0].offsetHeight
+if(autoPlace){var orgPlacement=placement
+var $parent=this.$element.parent()
+var parentDim=this.getPosition($parent)
+placement=placement=='bottom'&&pos.top+pos.height+actualHeight-parentDim.scroll>parentDim.height?'top':placement=='top'&&pos.top-parentDim.scroll-actualHeight<0?'bottom':placement=='right'&&pos.right+actualWidth>parentDim.width?'left':placement=='left'&&pos.left-actualWidth<parentDim.left?'right':placement
+$tip.removeClass(orgPlacement).addClass(placement)}var calculatedOffset=this.getCalculatedOffset(placement,pos,actualWidth,actualHeight)
+this.applyPlacement(calculatedOffset,placement)
+var complete=function(){that.$element.trigger('shown.bs.'+that.type)
+that.hoverState=null}
+$.support.transition&&this.$tip.hasClass('fade')?$tip.one('bsTransitionEnd',complete).emulateTransitionEnd(150):complete()}}
+Tooltip.prototype.applyPlacement=function(offset,placement){var $tip=this.tip()
+var width=$tip[0].offsetWidth
+var height=$tip[0].offsetHeight
+var marginTop=parseInt($tip.css('margin-top'),10)
+var marginLeft=parseInt($tip.css('margin-left'),10)
+if(isNaN(marginTop))marginTop=0
+if(isNaN(marginLeft))marginLeft=0
+offset.top=offset.top+marginTop
+offset.left=offset.left+marginLeft
+$.offset.setOffset($tip[0],$.extend({using:function(props){$tip.css({top:Math.round(props.top),left:Math.round(props.left)})}},offset),0)
+$tip.addClass('in')
+var actualWidth=$tip[0].offsetWidth
+var actualHeight=$tip[0].offsetHeight
+if(placement=='top'&&actualHeight!=height){offset.top=offset.top+height-actualHeight}var delta=this.getViewportAdjustedDelta(placement,offset,actualWidth,actualHeight)
+if(delta.left)offset.left+=delta.left
+else offset.top+=delta.top
+var arrowDelta=delta.left?delta.left*2-width+actualWidth:delta.top*2-height+actualHeight
+var arrowPosition=delta.left?'left':'top'
+var arrowOffsetPosition=delta.left?'offsetWidth':'offsetHeight'
+$tip.offset(offset)
+this.replaceArrow(arrowDelta,$tip[0][arrowOffsetPosition],arrowPosition)}
+Tooltip.prototype.replaceArrow=function(delta,dimension,position){this.arrow().css(position,delta?(50*(1-delta/dimension)+'%'):'')}
+Tooltip.prototype.setContent=function(){var $tip=this.tip()
+var title=this.getTitle()
+$tip.find('.tooltip-inner')[this.options.html?'html':'text'](title)
+$tip.removeClass('fade in top bottom left right')}
+Tooltip.prototype.hide=function(){var that=this
+var $tip=this.tip()
+var e=$.Event('hide.bs.'+this.type)
+this.$element.removeAttr('aria-describedby')
+function complete(){if(that.hoverState!='in')$tip.detach()
+that.$element.trigger('hidden.bs.'+that.type)}this.$element.trigger(e)
+if(e.isDefaultPrevented())return
+$tip.removeClass('in')
+$.support.transition&&this.$tip.hasClass('fade')?$tip.one('bsTransitionEnd',complete).emulateTransitionEnd(150):complete()
+this.hoverState=null
+return this}
+Tooltip.prototype.fixTitle=function(){var $e=this.$element
+if($e.attr('title')||typeof($e.attr('data-original-title'))!='string'){$e.attr('data-original-title',$e.attr('title')||'').attr('title','')}}
+Tooltip.prototype.hasContent=function(){return this.getTitle()}
+Tooltip.prototype.getPosition=function($element){$element=$element||this.$element
+var el=$element[0]
+var isBody=el.tagName=='BODY'
+return $.extend({},(typeof el.getBoundingClientRect=='function')?el.getBoundingClientRect():null,{scroll:isBody?document.documentElement.scrollTop||document.body.scrollTop:$element.scrollTop(),width:isBody?$(window).width():$element.outerWidth(),height:isBody?$(window).height():$element.outerHeight()},isBody?{top:0,left:0}:$element.offset())}
+Tooltip.prototype.getCalculatedOffset=function(placement,pos,actualWidth,actualHeight){return placement=='bottom'?{top:pos.top+pos.height,left:pos.left+pos.width/2-actualWidth/2}:placement=='top'?{top:pos.top-actualHeight,left:pos.left+pos.width/2-actualWidth/2}:placement=='left'?{top:pos.top+pos.height/2-actualHeight/2,left:pos.left-actualWidth}:{top:pos.top+pos.height/2-actualHeight/2,left:pos.left+pos.width}}
+Tooltip.prototype.getViewportAdjustedDelta=function(placement,pos,actualWidth,actualHeight){var delta={top:0,left:0}
+if(!this.$viewport)return delta
+var viewportPadding=this.options.viewport&&this.options.viewport.padding||0
+var viewportDimensions=this.getPosition(this.$viewport)
+if(/right|left/.test(placement)){var topEdgeOffset=pos.top-viewportPadding-viewportDimensions.scroll
+var bottomEdgeOffset=pos.top+viewportPadding-viewportDimensions.scroll+actualHeight
+if(topEdgeOffset<viewportDimensions.top){delta.top=viewportDimensions.top-topEdgeOffset}else if(bottomEdgeOffset>viewportDimensions.top+viewportDimensions.height){delta.top=viewportDimensions.top+viewportDimensions.height-bottomEdgeOffset}}else{var leftEdgeOffset=pos.left-viewportPadding
+var rightEdgeOffset=pos.left+viewportPadding+actualWidth
+if(leftEdgeOffset<viewportDimensions.left){delta.left=viewportDimensions.left-leftEdgeOffset}else if(rightEdgeOffset>viewportDimensions.width){delta.left=viewportDimensions.left+viewportDimensions.width-rightEdgeOffset}}return delta}
+Tooltip.prototype.getTitle=function(){var title
+var $e=this.$element
+var o=this.options
+title=$e.attr('data-original-title')||(typeof o.title=='function'?o.title.call($e[0]):o.title)
+return title}
+Tooltip.prototype.getUID=function(prefix){do prefix+=~~(Math.random()*1000000)
+while(document.getElementById(prefix))return prefix}
+Tooltip.prototype.tip=function(){return(this.$tip=this.$tip||$(this.options.template))}
+Tooltip.prototype.arrow=function(){return(this.$arrow=this.$arrow||this.tip().find('.tooltip-arrow'))}
+Tooltip.prototype.validate=function(){if(!this.$element[0].parentNode){this.hide()
+this.$element=null
+this.options=null}}
+Tooltip.prototype.enable=function(){this.enabled=true}
+Tooltip.prototype.disable=function(){this.enabled=false}
+Tooltip.prototype.toggleEnabled=function(){this.enabled=!this.enabled}
+Tooltip.prototype.toggle=function(e){var self=this
+if(e){self=$(e.currentTarget).data('bs.'+this.type)
+if(!self){self=new this.constructor(e.currentTarget,this.getDelegateOptions())
+$(e.currentTarget).data('bs.'+this.type,self)}}self.tip().hasClass('in')?self.leave(self):self.enter(self)}
+Tooltip.prototype.destroy=function(){clearTimeout(this.timeout)
+this.hide().$element.off('.'+this.type).removeData('bs.'+this.type)}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.tooltip')
+var options=typeof option=='object'&&option
+if(!data&&option=='destroy')return
+if(!data)$this.data('bs.tooltip',(data=new Tooltip(this,options)))
+if(typeof option=='string')data[option]()})}var old=$.fn.tooltip
+$.fn.tooltip=Plugin
+$.fn.tooltip.Constructor=Tooltip
+$.fn.tooltip.noConflict=function(){$.fn.tooltip=old
+return this}}(jQuery);+function($){'use strict';var Popover=function(element,options){this.init('popover',element,options)}
+if(!$.fn.tooltip)throw new Error('Popover requires tooltip.js')
+Popover.VERSION='3.2.0'
+Popover.DEFAULTS=$.extend({},$.fn.tooltip.Constructor.DEFAULTS,{placement:'right',trigger:'click',content:'',template:'<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'})
+Popover.prototype=$.extend({},$.fn.tooltip.Constructor.prototype)
+Popover.prototype.constructor=Popover
+Popover.prototype.getDefaults=function(){return Popover.DEFAULTS}
+Popover.prototype.setContent=function(){var $tip=this.tip()
+var title=this.getTitle()
+var content=this.getContent()
+$tip.find('.popover-title')[this.options.html?'html':'text'](title)
+$tip.find('.popover-content').empty()[this.options.html?(typeof content=='string'?'html':'append'):'text'](content)
+$tip.removeClass('fade top bottom left right in')
+if(!$tip.find('.popover-title').html())$tip.find('.popover-title').hide()}
+Popover.prototype.hasContent=function(){return this.getTitle()||this.getContent()}
+Popover.prototype.getContent=function(){var $e=this.$element
+var o=this.options
+return $e.attr('data-content')||(typeof o.content=='function'?o.content.call($e[0]):o.content)}
+Popover.prototype.arrow=function(){return(this.$arrow=this.$arrow||this.tip().find('.arrow'))}
+Popover.prototype.tip=function(){if(!this.$tip)this.$tip=$(this.options.template)
+return this.$tip}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.popover')
+var options=typeof option=='object'&&option
+if(!data&&option=='destroy')return
+if(!data)$this.data('bs.popover',(data=new Popover(this,options)))
+if(typeof option=='string')data[option]()})}var old=$.fn.popover
+$.fn.popover=Plugin
+$.fn.popover.Constructor=Popover
+$.fn.popover.noConflict=function(){$.fn.popover=old
+return this}}(jQuery);+function($){'use strict';function ScrollSpy(element,options){var process=$.proxy(this.process,this)
+this.$body=$('body')
+this.$scrollElement=$(element).is('body')?$(window):$(element)
+this.options=$.extend({},ScrollSpy.DEFAULTS,options)
+this.selector=(this.options.target||'')+' .nav li > a'
+this.offsets=[]
+this.targets=[]
+this.activeTarget=null
+this.scrollHeight=0
+this.$scrollElement.on('scroll.bs.scrollspy',process)
+this.refresh()
+this.process()}ScrollSpy.VERSION='3.2.0'
+ScrollSpy.DEFAULTS={offset:10}
+ScrollSpy.prototype.getScrollHeight=function(){return this.$scrollElement[0].scrollHeight||Math.max(this.$body[0].scrollHeight,document.documentElement.scrollHeight)}
+ScrollSpy.prototype.refresh=function(){var offsetMethod='offset'
+var offsetBase=0
+if(!$.isWindow(this.$scrollElement[0])){offsetMethod='position'
+offsetBase=this.$scrollElement.scrollTop()}this.offsets=[]
+this.targets=[]
+this.scrollHeight=this.getScrollHeight()
+var self=this
+this.$body.find(this.selector).map(function(){var $el=$(this)
+var href=$el.data('target')||$el.attr('href')
+var $href=/^#./.test(href)&&$(href)
+return($href&&$href.length&&$href.is(':visible')&&[[$href[offsetMethod]().top+offsetBase,href]])||null}).sort(function(a,b){return a[0]-b[0]}).each(function(){self.offsets.push(this[0])
+self.targets.push(this[1])})}
+ScrollSpy.prototype.process=function(){var scrollTop=this.$scrollElement.scrollTop()+this.options.offset
+var scrollHeight=this.getScrollHeight()
+var maxScroll=this.options.offset+scrollHeight-this.$scrollElement.height()
+var offsets=this.offsets
+var targets=this.targets
+var activeTarget=this.activeTarget
+var i
+if(this.scrollHeight!=scrollHeight){this.refresh()}if(scrollTop>=maxScroll){return activeTarget!=(i=targets[targets.length-1])&&this.activate(i)}if(activeTarget&&scrollTop<=offsets[0]){return activeTarget!=(i=targets[0])&&this.activate(i)}for(i=offsets.length;i--;){activeTarget!=targets[i]&&scrollTop>=offsets[i]&&(!offsets[i+1]||scrollTop<=offsets[i+1])&&this.activate(targets[i])}}
+ScrollSpy.prototype.activate=function(target){this.activeTarget=target
+$(this.selector).parentsUntil(this.options.target,'.active').removeClass('active')
+var selector=this.selector+'[data-target="'+target+'"],'+this.selector+'[href="'+target+'"]'
+var active=$(selector).parents('li').addClass('active')
+if(active.parent('.dropdown-menu').length){active=active.closest('li.dropdown').addClass('active')}active.trigger('activate.bs.scrollspy')}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.scrollspy')
+var options=typeof option=='object'&&option
+if(!data)$this.data('bs.scrollspy',(data=new ScrollSpy(this,options)))
+if(typeof option=='string')data[option]()})}var old=$.fn.scrollspy
+$.fn.scrollspy=Plugin
+$.fn.scrollspy.Constructor=ScrollSpy
+$.fn.scrollspy.noConflict=function(){$.fn.scrollspy=old
+return this}
+$(window).on('load.bs.scrollspy.data-api',function(){$('[data-spy="scroll"]').each(function(){var $spy=$(this)
+Plugin.call($spy,$spy.data())})})}(jQuery);+function($){'use strict';var Tab=function(element){this.element=$(element)}
+Tab.VERSION='3.2.0'
+Tab.prototype.show=function(){var $this=this.element
+var $ul=$this.closest('ul:not(.dropdown-menu)')
+var selector=$this.data('target')
+if(!selector){selector=$this.attr('href')
+selector=selector&&selector.replace(/.*(?=#[^\s]*$)/,'')}if($this.parent('li').hasClass('active'))return
+var previous=$ul.find('.active:last a')[0]
+var e=$.Event('show.bs.tab',{relatedTarget:previous})
+$this.trigger(e)
+if(e.isDefaultPrevented())return
+var $target=$(selector)
+this.activate($this.closest('li'),$ul)
+this.activate($target,$target.parent(),function(){$this.trigger({type:'shown.bs.tab',relatedTarget:previous})})}
+Tab.prototype.activate=function(element,container,callback){var $active=container.find('> .active')
+var transition=callback&&$.support.transition&&$active.hasClass('fade')
+function next(){$active.removeClass('active').find('> .dropdown-menu > .active').removeClass('active')
+element.addClass('active')
+if(transition){element[0].offsetWidth
+element.addClass('in')}else{element.removeClass('fade')}if(element.parent('.dropdown-menu')){element.closest('li.dropdown').addClass('active')}callback&&callback()}transition?$active.one('bsTransitionEnd',next).emulateTransitionEnd(150):next()
+$active.removeClass('in')}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.tab')
+if(!data)$this.data('bs.tab',(data=new Tab(this)))
+if(typeof option=='string')data[option]()})}var old=$.fn.tab
+$.fn.tab=Plugin
+$.fn.tab.Constructor=Tab
+$.fn.tab.noConflict=function(){$.fn.tab=old
+return this}
+$(document).on('click.bs.tab.data-api','[data-toggle="tab"], [data-toggle="pill"]',function(e){e.preventDefault()
+Plugin.call($(this),'show')})}(jQuery);+function($){'use strict';var Affix=function(element,options){this.options=$.extend({},Affix.DEFAULTS,options)
+this.$target=$(this.options.target).on('scroll.bs.affix.data-api',$.proxy(this.checkPosition,this)).on('click.bs.affix.data-api',$.proxy(this.checkPositionWithEventLoop,this))
+this.$element=$(element)
+this.affixed=this.unpin=this.pinnedOffset=null
+this.checkPosition()}
+Affix.VERSION='3.2.0'
+Affix.RESET='affix affix-top affix-bottom'
+Affix.DEFAULTS={offset:0,target:window}
+Affix.prototype.getPinnedOffset=function(){if(this.pinnedOffset)return this.pinnedOffset
+this.$element.removeClass(Affix.RESET).addClass('affix')
+var scrollTop=this.$target.scrollTop()
+var position=this.$element.offset()
+return(this.pinnedOffset=position.top-scrollTop)}
+Affix.prototype.checkPositionWithEventLoop=function(){setTimeout($.proxy(this.checkPosition,this),1)}
+Affix.prototype.checkPosition=function(){if(!this.$element.is(':visible'))return
+var scrollHeight=$(document).height()
+var scrollTop=this.$target.scrollTop()
+var position=this.$element.offset()
+var offset=this.options.offset
+var offsetTop=offset.top
+var offsetBottom=offset.bottom
+if(typeof offset!='object')offsetBottom=offsetTop=offset
+if(typeof offsetTop=='function')offsetTop=offset.top(this.$element)
+if(typeof offsetBottom=='function')offsetBottom=offset.bottom(this.$element)
+var affix=this.unpin!=null&&(scrollTop+this.unpin<=position.top)?false:offsetBottom!=null&&(position.top+this.$element.height()>=scrollHeight-offsetBottom)?'bottom':offsetTop!=null&&(scrollTop<=offsetTop)?'top':false
+if(this.affixed===affix)return
+if(this.unpin!=null)this.$element.css('top','')
+var affixType='affix'+(affix?'-'+affix:'')
+var e=$.Event(affixType+'.bs.affix')
+this.$element.trigger(e)
+if(e.isDefaultPrevented())return
+this.affixed=affix
+this.unpin=affix=='bottom'?this.getPinnedOffset():null
+this.$element.removeClass(Affix.RESET).addClass(affixType).trigger($.Event(affixType.replace('affix','affixed')))
+if(affix=='bottom'){this.$element.offset({top:scrollHeight-this.$element.height()-offsetBottom})}}
+function Plugin(option){return this.each(function(){var $this=$(this)
+var data=$this.data('bs.affix')
+var options=typeof option=='object'&&option
+if(!data)$this.data('bs.affix',(data=new Affix(this,options)))
+if(typeof option=='string')data[option]()})}var old=$.fn.affix
+$.fn.affix=Plugin
+$.fn.affix.Constructor=Affix
+$.fn.affix.noConflict=function(){$.fn.affix=old
+return this}
+$(window).on('load',function(){$('[data-spy="affix"]').each(function(){var $spy=$(this)
+var data=$spy.data()
+data.offset=data.offset||{}
+if(data.offsetBottom)data.offset.bottom=data.offsetBottom
+if(data.offsetTop)data.offset.top=data.offsetTop
+Plugin.call($spy,data)})})}(jQuery);         20190128165852Á          ﬁ                                      dù      i f ( t y p e o f   j Q u e r y = = = ' u n d e f i n e d ' ) { t h r o w   n e w   E r r o r ( ' B o o t s t r a p \ ' s   J a v a S c r i p t   r e q u i r e s   j Q u e r y ' ) } + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; f u n c t i o n   t r a n s i t i o n E n d ( ) { v a r   e l = d o c u m e n t . c r e a t e E l e m e n t ( ' b o o t s t r a p ' ) 
+ v a r   t r a n s E n d E v e n t N a m e s = { W e b k i t T r a n s i t i o n : ' w e b k i t T r a n s i t i o n E n d ' , M o z T r a n s i t i o n : ' t r a n s i t i o n e n d ' , O T r a n s i t i o n : ' o T r a n s i t i o n E n d   o t r a n s i t i o n e n d ' , t r a n s i t i o n : ' t r a n s i t i o n e n d ' } 
+ f o r ( v a r   n a m e   i n   t r a n s E n d E v e n t N a m e s ) { i f ( e l . s t y l e [ n a m e ] ! = = u n d e f i n e d ) { r e t u r n { e n d : t r a n s E n d E v e n t N a m e s [ n a m e ] } } } r e t u r n   f a l s e } $ . f n . e m u l a t e T r a n s i t i o n E n d = f u n c t i o n ( d u r a t i o n ) { v a r   c a l l e d = f a l s e 
+ v a r   $ e l = t h i s 
+ $ ( t h i s ) . o n e ( ' b s T r a n s i t i o n E n d ' , f u n c t i o n ( ) { c a l l e d = t r u e } ) 
+ v a r   c a l l b a c k = f u n c t i o n ( ) { i f ( ! c a l l e d ) $ ( $ e l ) . t r i g g e r ( $ . s u p p o r t . t r a n s i t i o n . e n d ) } 
+ s e t T i m e o u t ( c a l l b a c k , d u r a t i o n ) 
+ r e t u r n   t h i s } 
+ $ ( f u n c t i o n ( ) { $ . s u p p o r t . t r a n s i t i o n = t r a n s i t i o n E n d ( ) 
+ i f ( ! $ . s u p p o r t . t r a n s i t i o n ) r e t u r n 
+ $ . e v e n t . s p e c i a l . b s T r a n s i t i o n E n d = { b i n d T y p e : $ . s u p p o r t . t r a n s i t i o n . e n d , d e l e g a t e T y p e : $ . s u p p o r t . t r a n s i t i o n . e n d , h a n d l e : f u n c t i o n ( e ) { i f ( $ ( e . t a r g e t ) . i s ( t h i s ) ) r e t u r n   e . h a n d l e O b j . h a n d l e r . a p p l y ( t h i s , a r g u m e n t s ) } } } ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   d i s m i s s = ' [ d a t a - d i s m i s s = " a l e r t " ] ' 
+ v a r   A l e r t = f u n c t i o n ( e l ) { $ ( e l ) . o n ( ' c l i c k ' , d i s m i s s , t h i s . c l o s e ) } 
+ A l e r t . V E R S I O N = ' 3 . 2 . 0 ' 
+ A l e r t . p r o t o t y p e . c l o s e = f u n c t i o n ( e ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   s e l e c t o r = $ t h i s . a t t r ( ' d a t a - t a r g e t ' ) 
+ i f ( ! s e l e c t o r ) { s e l e c t o r = $ t h i s . a t t r ( ' h r e f ' ) 
+ s e l e c t o r = s e l e c t o r & & s e l e c t o r . r e p l a c e ( / . * ( ? = # [ ^ \ s ] * $ ) / , ' ' ) } v a r   $ p a r e n t = $ ( s e l e c t o r ) 
+ i f ( e ) e . p r e v e n t D e f a u l t ( ) 
+ i f ( ! $ p a r e n t . l e n g t h ) { $ p a r e n t = $ t h i s . h a s C l a s s ( ' a l e r t ' ) ? $ t h i s : $ t h i s . p a r e n t ( ) } $ p a r e n t . t r i g g e r ( e = $ . E v e n t ( ' c l o s e . b s . a l e r t ' ) ) 
+ i f ( e . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ $ p a r e n t . r e m o v e C l a s s ( ' i n ' ) 
+ f u n c t i o n   r e m o v e E l e m e n t ( ) { $ p a r e n t . d e t a c h ( ) . t r i g g e r ( ' c l o s e d . b s . a l e r t ' ) . r e m o v e ( ) } $ . s u p p o r t . t r a n s i t i o n & & $ p a r e n t . h a s C l a s s ( ' f a d e ' ) ? $ p a r e n t . o n e ( ' b s T r a n s i t i o n E n d ' , r e m o v e E l e m e n t ) . e m u l a t e T r a n s i t i o n E n d ( 1 5 0 ) : r e m o v e E l e m e n t ( ) } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . a l e r t ' ) 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . a l e r t ' , ( d a t a = n e w   A l e r t ( t h i s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] . c a l l ( $ t h i s ) } ) } v a r   o l d = $ . f n . a l e r t 
+ $ . f n . a l e r t = P l u g i n 
+ $ . f n . a l e r t . C o n s t r u c t o r = A l e r t 
+ $ . f n . a l e r t . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . a l e r t = o l d 
+ r e t u r n   t h i s } 
+ $ ( d o c u m e n t ) . o n ( ' c l i c k . b s . a l e r t . d a t a - a p i ' , d i s m i s s , A l e r t . p r o t o t y p e . c l o s e ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   B u t t o n = f u n c t i o n ( e l e m e n t , o p t i o n s ) { t h i s . $ e l e m e n t = $ ( e l e m e n t ) 
+ t h i s . o p t i o n s = $ . e x t e n d ( { } , B u t t o n . D E F A U L T S , o p t i o n s ) 
+ t h i s . i s L o a d i n g = f a l s e } 
+ B u t t o n . V E R S I O N = ' 3 . 2 . 0 ' 
+ B u t t o n . D E F A U L T S = { l o a d i n g T e x t : ' l o a d i n g . . . ' } 
+ B u t t o n . p r o t o t y p e . s e t S t a t e = f u n c t i o n ( s t a t e ) { v a r   d = ' d i s a b l e d ' 
+ v a r   $ e l = t h i s . $ e l e m e n t 
+ v a r   v a l = $ e l . i s ( ' i n p u t ' ) ? ' v a l ' : ' h t m l ' 
+ v a r   d a t a = $ e l . d a t a ( ) 
+ s t a t e = s t a t e + ' T e x t ' 
+ i f ( d a t a . r e s e t T e x t = = n u l l ) $ e l . d a t a ( ' r e s e t T e x t ' , $ e l [ v a l ] ( ) ) 
+ $ e l [ v a l ] ( d a t a [ s t a t e ] = = n u l l ? t h i s . o p t i o n s [ s t a t e ] : d a t a [ s t a t e ] ) 
+ s e t T i m e o u t ( $ . p r o x y ( f u n c t i o n ( ) { i f ( s t a t e = = ' l o a d i n g T e x t ' ) { t h i s . i s L o a d i n g = t r u e 
+ $ e l . a d d C l a s s ( d ) . a t t r ( d , d ) } e l s e   i f ( t h i s . i s L o a d i n g ) { t h i s . i s L o a d i n g = f a l s e 
+ $ e l . r e m o v e C l a s s ( d ) . r e m o v e A t t r ( d ) } } , t h i s ) , 0 ) } 
+ B u t t o n . p r o t o t y p e . t o g g l e = f u n c t i o n ( ) { v a r   c h a n g e d = t r u e 
+ v a r   $ p a r e n t = t h i s . $ e l e m e n t . c l o s e s t ( ' [ d a t a - t o g g l e = " b u t t o n s " ] ' ) 
+ i f ( $ p a r e n t . l e n g t h ) { v a r   $ i n p u t = t h i s . $ e l e m e n t . f i n d ( ' i n p u t ' ) 
+ i f ( $ i n p u t . p r o p ( ' t y p e ' ) = = ' r a d i o ' ) { i f ( $ i n p u t . p r o p ( ' c h e c k e d ' ) & & t h i s . $ e l e m e n t . h a s C l a s s ( ' a c t i v e ' ) ) c h a n g e d = f a l s e 
+ e l s e   $ p a r e n t . f i n d ( ' . a c t i v e ' ) . r e m o v e C l a s s ( ' a c t i v e ' ) } i f ( c h a n g e d ) $ i n p u t . p r o p ( ' c h e c k e d ' , ! t h i s . $ e l e m e n t . h a s C l a s s ( ' a c t i v e ' ) ) . t r i g g e r ( ' c h a n g e ' ) } i f ( c h a n g e d ) t h i s . $ e l e m e n t . t o g g l e C l a s s ( ' a c t i v e ' ) } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . b u t t o n ' ) 
+ v a r   o p t i o n s = t y p e o f   o p t i o n = = ' o b j e c t ' & & o p t i o n 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . b u t t o n ' , ( d a t a = n e w   B u t t o n ( t h i s , o p t i o n s ) ) ) 
+ i f ( o p t i o n = = ' t o g g l e ' ) d a t a . t o g g l e ( ) 
+ e l s e   i f ( o p t i o n ) d a t a . s e t S t a t e ( o p t i o n ) } ) } v a r   o l d = $ . f n . b u t t o n 
+ $ . f n . b u t t o n = P l u g i n 
+ $ . f n . b u t t o n . C o n s t r u c t o r = B u t t o n 
+ $ . f n . b u t t o n . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . b u t t o n = o l d 
+ r e t u r n   t h i s } 
+ $ ( d o c u m e n t ) . o n ( ' c l i c k . b s . b u t t o n . d a t a - a p i ' , ' [ d a t a - t o g g l e ^ = " b u t t o n " ] ' , f u n c t i o n ( e ) { v a r   $ b t n = $ ( e . t a r g e t ) 
+ i f ( ! $ b t n . h a s C l a s s ( ' b t n ' ) ) $ b t n = $ b t n . c l o s e s t ( ' . b t n ' ) 
+ P l u g i n . c a l l ( $ b t n , ' t o g g l e ' ) 
+ e . p r e v e n t D e f a u l t ( ) } ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   C a r o u s e l = f u n c t i o n ( e l e m e n t , o p t i o n s ) { t h i s . $ e l e m e n t = $ ( e l e m e n t ) . o n ( ' k e y d o w n . b s . c a r o u s e l ' , $ . p r o x y ( t h i s . k e y d o w n , t h i s ) ) 
+ t h i s . $ i n d i c a t o r s = t h i s . $ e l e m e n t . f i n d ( ' . c a r o u s e l - i n d i c a t o r s ' ) 
+ t h i s . o p t i o n s = o p t i o n s 
+ t h i s . p a u s e d = t h i s . s l i d i n g = t h i s . i n t e r v a l = t h i s . $ a c t i v e = t h i s . $ i t e m s = n u l l 
+ t h i s . o p t i o n s . p a u s e = = ' h o v e r ' & & t h i s . $ e l e m e n t . o n ( ' m o u s e e n t e r . b s . c a r o u s e l ' , $ . p r o x y ( t h i s . p a u s e , t h i s ) ) . o n ( ' m o u s e l e a v e . b s . c a r o u s e l ' , $ . p r o x y ( t h i s . c y c l e , t h i s ) ) } 
+ C a r o u s e l . V E R S I O N = ' 3 . 2 . 0 ' 
+ C a r o u s e l . D E F A U L T S = { i n t e r v a l : 5 0 0 0 , p a u s e : ' h o v e r ' , w r a p : t r u e } 
+ C a r o u s e l . p r o t o t y p e . k e y d o w n = f u n c t i o n ( e ) { s w i t c h ( e . w h i c h ) { c a s e   3 7 : t h i s . p r e v ( ) ; b r e a k 
+ c a s e   3 9 : t h i s . n e x t ( ) ; b r e a k 
+ d e f a u l t : r e t u r n } e . p r e v e n t D e f a u l t ( ) } 
+ C a r o u s e l . p r o t o t y p e . c y c l e = f u n c t i o n ( e ) { e | | ( t h i s . p a u s e d = f a l s e ) 
+ t h i s . i n t e r v a l & & c l e a r I n t e r v a l ( t h i s . i n t e r v a l ) 
+ t h i s . o p t i o n s . i n t e r v a l & & ! t h i s . p a u s e d & & ( t h i s . i n t e r v a l = s e t I n t e r v a l ( $ . p r o x y ( t h i s . n e x t , t h i s ) , t h i s . o p t i o n s . i n t e r v a l ) ) 
+ r e t u r n   t h i s } 
+ C a r o u s e l . p r o t o t y p e . g e t I t e m I n d e x = f u n c t i o n ( i t e m ) { t h i s . $ i t e m s = i t e m . p a r e n t ( ) . c h i l d r e n ( ' . i t e m ' ) 
+ r e t u r n   t h i s . $ i t e m s . i n d e x ( i t e m | | t h i s . $ a c t i v e ) } 
+ C a r o u s e l . p r o t o t y p e . t o = f u n c t i o n ( p o s ) { v a r   t h a t = t h i s 
+ v a r   a c t i v e I n d e x = t h i s . g e t I t e m I n d e x ( t h i s . $ a c t i v e = t h i s . $ e l e m e n t . f i n d ( ' . i t e m . a c t i v e ' ) ) 
+ i f ( p o s > ( t h i s . $ i t e m s . l e n g t h - 1 ) | | p o s < 0 ) r e t u r n 
+ i f ( t h i s . s l i d i n g ) r e t u r n   t h i s . $ e l e m e n t . o n e ( ' s l i d . b s . c a r o u s e l ' , f u n c t i o n ( ) { t h a t . t o ( p o s ) } ) 
+ i f ( a c t i v e I n d e x = = p o s ) r e t u r n   t h i s . p a u s e ( ) . c y c l e ( ) 
+ r e t u r n   t h i s . s l i d e ( p o s > a c t i v e I n d e x ? ' n e x t ' : ' p r e v ' , $ ( t h i s . $ i t e m s [ p o s ] ) ) } 
+ C a r o u s e l . p r o t o t y p e . p a u s e = f u n c t i o n ( e ) { e | | ( t h i s . p a u s e d = t r u e ) 
+ i f ( t h i s . $ e l e m e n t . f i n d ( ' . n e x t ,   . p r e v ' ) . l e n g t h & & $ . s u p p o r t . t r a n s i t i o n ) { t h i s . $ e l e m e n t . t r i g g e r ( $ . s u p p o r t . t r a n s i t i o n . e n d ) 
+ t h i s . c y c l e ( t r u e ) } t h i s . i n t e r v a l = c l e a r I n t e r v a l ( t h i s . i n t e r v a l ) 
+ r e t u r n   t h i s } 
+ C a r o u s e l . p r o t o t y p e . n e x t = f u n c t i o n ( ) { i f ( t h i s . s l i d i n g ) r e t u r n 
+ r e t u r n   t h i s . s l i d e ( ' n e x t ' ) } 
+ C a r o u s e l . p r o t o t y p e . p r e v = f u n c t i o n ( ) { i f ( t h i s . s l i d i n g ) r e t u r n 
+ r e t u r n   t h i s . s l i d e ( ' p r e v ' ) } 
+ C a r o u s e l . p r o t o t y p e . s l i d e = f u n c t i o n ( t y p e , n e x t ) { v a r   $ a c t i v e = t h i s . $ e l e m e n t . f i n d ( ' . i t e m . a c t i v e ' ) 
+ v a r   $ n e x t = n e x t | | $ a c t i v e [ t y p e ] ( ) 
+ v a r   i s C y c l i n g = t h i s . i n t e r v a l 
+ v a r   d i r e c t i o n = t y p e = = ' n e x t ' ? ' l e f t ' : ' r i g h t ' 
+ v a r   f a l l b a c k = t y p e = = ' n e x t ' ? ' f i r s t ' : ' l a s t ' 
+ v a r   t h a t = t h i s 
+ i f ( ! $ n e x t . l e n g t h ) { i f ( ! t h i s . o p t i o n s . w r a p ) r e t u r n 
+ $ n e x t = t h i s . $ e l e m e n t . f i n d ( ' . i t e m ' ) [ f a l l b a c k ] ( ) } i f ( $ n e x t . h a s C l a s s ( ' a c t i v e ' ) ) r e t u r n ( t h i s . s l i d i n g = f a l s e ) 
+ v a r   r e l a t e d T a r g e t = $ n e x t [ 0 ] 
+ v a r   s l i d e E v e n t = $ . E v e n t ( ' s l i d e . b s . c a r o u s e l ' , { r e l a t e d T a r g e t : r e l a t e d T a r g e t , d i r e c t i o n : d i r e c t i o n } ) 
+ t h i s . $ e l e m e n t . t r i g g e r ( s l i d e E v e n t ) 
+ i f ( s l i d e E v e n t . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ t h i s . s l i d i n g = t r u e 
+ i s C y c l i n g & & t h i s . p a u s e ( ) 
+ i f ( t h i s . $ i n d i c a t o r s . l e n g t h ) { t h i s . $ i n d i c a t o r s . f i n d ( ' . a c t i v e ' ) . r e m o v e C l a s s ( ' a c t i v e ' ) 
+ v a r   $ n e x t I n d i c a t o r = $ ( t h i s . $ i n d i c a t o r s . c h i l d r e n ( ) [ t h i s . g e t I t e m I n d e x ( $ n e x t ) ] ) 
+ $ n e x t I n d i c a t o r & & $ n e x t I n d i c a t o r . a d d C l a s s ( ' a c t i v e ' ) } v a r   s l i d E v e n t = $ . E v e n t ( ' s l i d . b s . c a r o u s e l ' , { r e l a t e d T a r g e t : r e l a t e d T a r g e t , d i r e c t i o n : d i r e c t i o n } ) 
+ i f ( $ . s u p p o r t . t r a n s i t i o n & & t h i s . $ e l e m e n t . h a s C l a s s ( ' s l i d e ' ) ) { $ n e x t . a d d C l a s s ( t y p e ) 
+ $ n e x t [ 0 ] . o f f s e t W i d t h 
+ $ a c t i v e . a d d C l a s s ( d i r e c t i o n ) 
+ $ n e x t . a d d C l a s s ( d i r e c t i o n ) 
+ $ a c t i v e . o n e ( ' b s T r a n s i t i o n E n d ' , f u n c t i o n ( ) { $ n e x t . r e m o v e C l a s s ( [ t y p e , d i r e c t i o n ] . j o i n ( '   ' ) ) . a d d C l a s s ( ' a c t i v e ' ) 
+ $ a c t i v e . r e m o v e C l a s s ( [ ' a c t i v e ' , d i r e c t i o n ] . j o i n ( '   ' ) ) 
+ t h a t . s l i d i n g = f a l s e 
+ s e t T i m e o u t ( f u n c t i o n ( ) { t h a t . $ e l e m e n t . t r i g g e r ( s l i d E v e n t ) } , 0 ) } ) . e m u l a t e T r a n s i t i o n E n d ( $ a c t i v e . c s s ( ' t r a n s i t i o n - d u r a t i o n ' ) . s l i c e ( 0 , - 1 ) * 1 0 0 0 ) } e l s e { $ a c t i v e . r e m o v e C l a s s ( ' a c t i v e ' ) 
+ $ n e x t . a d d C l a s s ( ' a c t i v e ' ) 
+ t h i s . s l i d i n g = f a l s e 
+ t h i s . $ e l e m e n t . t r i g g e r ( s l i d E v e n t ) } i s C y c l i n g & & t h i s . c y c l e ( ) 
+ r e t u r n   t h i s } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . c a r o u s e l ' ) 
+ v a r   o p t i o n s = $ . e x t e n d ( { } , C a r o u s e l . D E F A U L T S , $ t h i s . d a t a ( ) , t y p e o f   o p t i o n = = ' o b j e c t ' & & o p t i o n ) 
+ v a r   a c t i o n = t y p e o f   o p t i o n = = ' s t r i n g ' ? o p t i o n : o p t i o n s . s l i d e 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . c a r o u s e l ' , ( d a t a = n e w   C a r o u s e l ( t h i s , o p t i o n s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' n u m b e r ' ) d a t a . t o ( o p t i o n ) 
+ e l s e   i f ( a c t i o n ) d a t a [ a c t i o n ] ( ) 
+ e l s e   i f ( o p t i o n s . i n t e r v a l ) d a t a . p a u s e ( ) . c y c l e ( ) } ) } v a r   o l d = $ . f n . c a r o u s e l 
+ $ . f n . c a r o u s e l = P l u g i n 
+ $ . f n . c a r o u s e l . C o n s t r u c t o r = C a r o u s e l 
+ $ . f n . c a r o u s e l . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . c a r o u s e l = o l d 
+ r e t u r n   t h i s } 
+ $ ( d o c u m e n t ) . o n ( ' c l i c k . b s . c a r o u s e l . d a t a - a p i ' , ' [ d a t a - s l i d e ] ,   [ d a t a - s l i d e - t o ] ' , f u n c t i o n ( e ) { v a r   h r e f 
+ v a r   $ t h i s = $ ( t h i s ) 
+ v a r   $ t a r g e t = $ ( $ t h i s . a t t r ( ' d a t a - t a r g e t ' ) | | ( h r e f = $ t h i s . a t t r ( ' h r e f ' ) ) & & h r e f . r e p l a c e ( / . * ( ? = # [ ^ \ s ] + $ ) / , ' ' ) ) 
+ i f ( ! $ t a r g e t . h a s C l a s s ( ' c a r o u s e l ' ) ) r e t u r n 
+ v a r   o p t i o n s = $ . e x t e n d ( { } , $ t a r g e t . d a t a ( ) , $ t h i s . d a t a ( ) ) 
+ v a r   s l i d e I n d e x = $ t h i s . a t t r ( ' d a t a - s l i d e - t o ' ) 
+ i f ( s l i d e I n d e x ) o p t i o n s . i n t e r v a l = f a l s e 
+ P l u g i n . c a l l ( $ t a r g e t , o p t i o n s ) 
+ i f ( s l i d e I n d e x ) { $ t a r g e t . d a t a ( ' b s . c a r o u s e l ' ) . t o ( s l i d e I n d e x ) } e . p r e v e n t D e f a u l t ( ) } ) 
+ $ ( w i n d o w ) . o n ( ' l o a d ' , f u n c t i o n ( ) { $ ( ' [ d a t a - r i d e = " c a r o u s e l " ] ' ) . e a c h ( f u n c t i o n ( ) { v a r   $ c a r o u s e l = $ ( t h i s ) 
+ P l u g i n . c a l l ( $ c a r o u s e l , $ c a r o u s e l . d a t a ( ) ) } ) } ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   C o l l a p s e = f u n c t i o n ( e l e m e n t , o p t i o n s ) { t h i s . $ e l e m e n t = $ ( e l e m e n t ) 
+ t h i s . o p t i o n s = $ . e x t e n d ( { } , C o l l a p s e . D E F A U L T S , o p t i o n s ) 
+ t h i s . t r a n s i t i o n i n g = n u l l 
+ i f ( t h i s . o p t i o n s . p a r e n t ) t h i s . $ p a r e n t = $ ( t h i s . o p t i o n s . p a r e n t ) 
+ i f ( t h i s . o p t i o n s . t o g g l e ) t h i s . t o g g l e ( ) } 
+ C o l l a p s e . V E R S I O N = ' 3 . 2 . 0 ' 
+ C o l l a p s e . D E F A U L T S = { t o g g l e : t r u e } 
+ C o l l a p s e . p r o t o t y p e . d i m e n s i o n = f u n c t i o n ( ) { v a r   h a s W i d t h = t h i s . $ e l e m e n t . h a s C l a s s ( ' w i d t h ' ) 
+ r e t u r n   h a s W i d t h ? ' w i d t h ' : ' h e i g h t ' } 
+ C o l l a p s e . p r o t o t y p e . s h o w = f u n c t i o n ( ) { i f ( t h i s . t r a n s i t i o n i n g | | t h i s . $ e l e m e n t . h a s C l a s s ( ' i n ' ) ) r e t u r n 
+ v a r   s t a r t E v e n t = $ . E v e n t ( ' s h o w . b s . c o l l a p s e ' ) 
+ t h i s . $ e l e m e n t . t r i g g e r ( s t a r t E v e n t ) 
+ i f ( s t a r t E v e n t . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ v a r   a c t i v e s = t h i s . $ p a r e n t & & t h i s . $ p a r e n t . f i n d ( ' >   . p a n e l   >   . i n ' ) 
+ i f ( a c t i v e s & & a c t i v e s . l e n g t h ) { v a r   h a s D a t a = a c t i v e s . d a t a ( ' b s . c o l l a p s e ' ) 
+ i f ( h a s D a t a & & h a s D a t a . t r a n s i t i o n i n g ) r e t u r n 
+ P l u g i n . c a l l ( a c t i v e s , ' h i d e ' ) 
+ h a s D a t a | | a c t i v e s . d a t a ( ' b s . c o l l a p s e ' , n u l l ) } v a r   d i m e n s i o n = t h i s . d i m e n s i o n ( ) 
+ t h i s . $ e l e m e n t . r e m o v e C l a s s ( ' c o l l a p s e ' ) . a d d C l a s s ( ' c o l l a p s i n g ' ) [ d i m e n s i o n ] ( 0 ) 
+ t h i s . t r a n s i t i o n i n g = 1 
+ v a r   c o m p l e t e = f u n c t i o n ( ) { t h i s . $ e l e m e n t . r e m o v e C l a s s ( ' c o l l a p s i n g ' ) . a d d C l a s s ( ' c o l l a p s e   i n ' ) [ d i m e n s i o n ] ( ' ' ) 
+ t h i s . t r a n s i t i o n i n g = 0 
+ t h i s . $ e l e m e n t . t r i g g e r ( ' s h o w n . b s . c o l l a p s e ' ) } 
+ i f ( ! $ . s u p p o r t . t r a n s i t i o n ) r e t u r n   c o m p l e t e . c a l l ( t h i s ) 
+ v a r   s c r o l l S i z e = $ . c a m e l C a s e ( [ ' s c r o l l ' , d i m e n s i o n ] . j o i n ( ' - ' ) ) 
+ t h i s . $ e l e m e n t . o n e ( ' b s T r a n s i t i o n E n d ' , $ . p r o x y ( c o m p l e t e , t h i s ) ) . e m u l a t e T r a n s i t i o n E n d ( 3 5 0 ) [ d i m e n s i o n ] ( t h i s . $ e l e m e n t [ 0 ] [ s c r o l l S i z e ] ) } 
+ C o l l a p s e . p r o t o t y p e . h i d e = f u n c t i o n ( ) { i f ( t h i s . t r a n s i t i o n i n g | | ! t h i s . $ e l e m e n t . h a s C l a s s ( ' i n ' ) ) r e t u r n 
+ v a r   s t a r t E v e n t = $ . E v e n t ( ' h i d e . b s . c o l l a p s e ' ) 
+ t h i s . $ e l e m e n t . t r i g g e r ( s t a r t E v e n t ) 
+ i f ( s t a r t E v e n t . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ v a r   d i m e n s i o n = t h i s . d i m e n s i o n ( ) 
+ t h i s . $ e l e m e n t [ d i m e n s i o n ] ( t h i s . $ e l e m e n t [ d i m e n s i o n ] ( ) ) [ 0 ] . o f f s e t H e i g h t 
+ t h i s . $ e l e m e n t . a d d C l a s s ( ' c o l l a p s i n g ' ) . r e m o v e C l a s s ( ' c o l l a p s e ' ) . r e m o v e C l a s s ( ' i n ' ) 
+ t h i s . t r a n s i t i o n i n g = 1 
+ v a r   c o m p l e t e = f u n c t i o n ( ) { t h i s . t r a n s i t i o n i n g = 0 
+ t h i s . $ e l e m e n t . t r i g g e r ( ' h i d d e n . b s . c o l l a p s e ' ) . r e m o v e C l a s s ( ' c o l l a p s i n g ' ) . a d d C l a s s ( ' c o l l a p s e ' ) } 
+ i f ( ! $ . s u p p o r t . t r a n s i t i o n ) r e t u r n   c o m p l e t e . c a l l ( t h i s ) 
+ t h i s . $ e l e m e n t 
+ [ d i m e n s i o n ] ( 0 ) . o n e ( ' b s T r a n s i t i o n E n d ' , $ . p r o x y ( c o m p l e t e , t h i s ) ) . e m u l a t e T r a n s i t i o n E n d ( 3 5 0 ) } 
+ C o l l a p s e . p r o t o t y p e . t o g g l e = f u n c t i o n ( ) { t h i s [ t h i s . $ e l e m e n t . h a s C l a s s ( ' i n ' ) ? ' h i d e ' : ' s h o w ' ] ( ) } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . c o l l a p s e ' ) 
+ v a r   o p t i o n s = $ . e x t e n d ( { } , C o l l a p s e . D E F A U L T S , $ t h i s . d a t a ( ) , t y p e o f   o p t i o n = = ' o b j e c t ' & & o p t i o n ) 
+ i f ( ! d a t a & & o p t i o n s . t o g g l e & & o p t i o n = = ' s h o w ' ) o p t i o n = ! o p t i o n 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . c o l l a p s e ' , ( d a t a = n e w   C o l l a p s e ( t h i s , o p t i o n s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] ( ) } ) } v a r   o l d = $ . f n . c o l l a p s e 
+ $ . f n . c o l l a p s e = P l u g i n 
+ $ . f n . c o l l a p s e . C o n s t r u c t o r = C o l l a p s e 
+ $ . f n . c o l l a p s e . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . c o l l a p s e = o l d 
+ r e t u r n   t h i s } 
+ $ ( d o c u m e n t ) . o n ( ' c l i c k . b s . c o l l a p s e . d a t a - a p i ' , ' [ d a t a - t o g g l e = " c o l l a p s e " ] ' , f u n c t i o n ( e ) { v a r   h r e f 
+ v a r   $ t h i s = $ ( t h i s ) 
+ v a r   t a r g e t = $ t h i s . a t t r ( ' d a t a - t a r g e t ' ) | | e . p r e v e n t D e f a u l t ( ) | | ( h r e f = $ t h i s . a t t r ( ' h r e f ' ) ) & & h r e f . r e p l a c e ( / . * ( ? = # [ ^ \ s ] + $ ) / , ' ' ) 
+ v a r   $ t a r g e t = $ ( t a r g e t ) 
+ v a r   d a t a = $ t a r g e t . d a t a ( ' b s . c o l l a p s e ' ) 
+ v a r   o p t i o n = d a t a ? ' t o g g l e ' : $ t h i s . d a t a ( ) 
+ v a r   p a r e n t = $ t h i s . a t t r ( ' d a t a - p a r e n t ' ) 
+ v a r   $ p a r e n t = p a r e n t & & $ ( p a r e n t ) 
+ i f ( ! d a t a | | ! d a t a . t r a n s i t i o n i n g ) { i f ( $ p a r e n t ) $ p a r e n t . f i n d ( ' [ d a t a - t o g g l e = " c o l l a p s e " ] [ d a t a - p a r e n t = " ' + p a r e n t + ' " ] ' ) . n o t ( $ t h i s ) . a d d C l a s s ( ' c o l l a p s e d ' ) 
+ $ t h i s [ $ t a r g e t . h a s C l a s s ( ' i n ' ) ? ' a d d C l a s s ' : ' r e m o v e C l a s s ' ] ( ' c o l l a p s e d ' ) } P l u g i n . c a l l ( $ t a r g e t , o p t i o n ) } ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   b a c k d r o p = ' . d r o p d o w n - b a c k d r o p ' 
+ v a r   t o g g l e = ' [ d a t a - t o g g l e = " d r o p d o w n " ] ' 
+ v a r   D r o p d o w n = f u n c t i o n ( e l e m e n t ) { $ ( e l e m e n t ) . o n ( ' c l i c k . b s . d r o p d o w n ' , t h i s . t o g g l e ) } 
+ D r o p d o w n . V E R S I O N = ' 3 . 2 . 0 ' 
+ D r o p d o w n . p r o t o t y p e . t o g g l e = f u n c t i o n ( e ) { v a r   $ t h i s = $ ( t h i s ) 
+ i f ( $ t h i s . i s ( ' . d i s a b l e d ,   : d i s a b l e d ' ) ) r e t u r n 
+ v a r   $ p a r e n t = g e t P a r e n t ( $ t h i s ) 
+ v a r   i s A c t i v e = $ p a r e n t . h a s C l a s s ( ' o p e n ' ) 
+ c l e a r M e n u s ( ) 
+ i f ( ! i s A c t i v e ) { i f ( ' o n t o u c h s t a r t ' i n   d o c u m e n t . d o c u m e n t E l e m e n t & & ! $ p a r e n t . c l o s e s t ( ' . n a v b a r - n a v ' ) . l e n g t h ) { $ ( ' < d i v   c l a s s = " d r o p d o w n - b a c k d r o p " / > ' ) . i n s e r t A f t e r ( $ ( t h i s ) ) . o n ( ' c l i c k ' , c l e a r M e n u s ) } v a r   r e l a t e d T a r g e t = { r e l a t e d T a r g e t : t h i s } 
+ $ p a r e n t . t r i g g e r ( e = $ . E v e n t ( ' s h o w . b s . d r o p d o w n ' , r e l a t e d T a r g e t ) ) 
+ i f ( e . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ $ t h i s . t r i g g e r ( ' f o c u s ' ) 
+ $ p a r e n t . t o g g l e C l a s s ( ' o p e n ' ) . t r i g g e r ( ' s h o w n . b s . d r o p d o w n ' , r e l a t e d T a r g e t ) } r e t u r n   f a l s e } 
+ D r o p d o w n . p r o t o t y p e . k e y d o w n = f u n c t i o n ( e ) { i f ( ! / ( 3 8 | 4 0 | 2 7 ) / . t e s t ( e . k e y C o d e ) ) r e t u r n 
+ v a r   $ t h i s = $ ( t h i s ) 
+ e . p r e v e n t D e f a u l t ( ) 
+ e . s t o p P r o p a g a t i o n ( ) 
+ i f ( $ t h i s . i s ( ' . d i s a b l e d ,   : d i s a b l e d ' ) ) r e t u r n 
+ v a r   $ p a r e n t = g e t P a r e n t ( $ t h i s ) 
+ v a r   i s A c t i v e = $ p a r e n t . h a s C l a s s ( ' o p e n ' ) 
+ i f ( ! i s A c t i v e | | ( i s A c t i v e & & e . k e y C o d e = = 2 7 ) ) { i f ( e . w h i c h = = 2 7 ) $ p a r e n t . f i n d ( t o g g l e ) . t r i g g e r ( ' f o c u s ' ) 
+ r e t u r n   $ t h i s . t r i g g e r ( ' c l i c k ' ) } v a r   d e s c = '   l i : n o t ( . d i v i d e r ) : v i s i b l e   a ' 
+ v a r   $ i t e m s = $ p a r e n t . f i n d ( ' [ r o l e = " m e n u " ] ' + d e s c + ' ,   [ r o l e = " l i s t b o x " ] ' + d e s c ) 
+ i f ( ! $ i t e m s . l e n g t h ) r e t u r n 
+ v a r   i n d e x = $ i t e m s . i n d e x ( $ i t e m s . f i l t e r ( ' : f o c u s ' ) ) 
+ i f ( e . k e y C o d e = = 3 8 & & i n d e x > 0 ) i n d e x - - 
+ i f ( e . k e y C o d e = = 4 0 & & i n d e x < $ i t e m s . l e n g t h - 1 ) i n d e x + + 
+ i f ( ! ~ i n d e x ) i n d e x = 0 
+ $ i t e m s . e q ( i n d e x ) . t r i g g e r ( ' f o c u s ' ) } 
+ f u n c t i o n   c l e a r M e n u s ( e ) { i f ( e & & e . w h i c h = = = 3 ) r e t u r n 
+ $ ( b a c k d r o p ) . r e m o v e ( ) 
+ $ ( t o g g l e ) . e a c h ( f u n c t i o n ( ) { v a r   $ p a r e n t = g e t P a r e n t ( $ ( t h i s ) ) 
+ v a r   r e l a t e d T a r g e t = { r e l a t e d T a r g e t : t h i s } 
+ i f ( ! $ p a r e n t . h a s C l a s s ( ' o p e n ' ) ) r e t u r n 
+ $ p a r e n t . t r i g g e r ( e = $ . E v e n t ( ' h i d e . b s . d r o p d o w n ' , r e l a t e d T a r g e t ) ) 
+ i f ( e . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ $ p a r e n t . r e m o v e C l a s s ( ' o p e n ' ) . t r i g g e r ( ' h i d d e n . b s . d r o p d o w n ' , r e l a t e d T a r g e t ) } ) } f u n c t i o n   g e t P a r e n t ( $ t h i s ) { v a r   s e l e c t o r = $ t h i s . a t t r ( ' d a t a - t a r g e t ' ) 
+ i f ( ! s e l e c t o r ) { s e l e c t o r = $ t h i s . a t t r ( ' h r e f ' ) 
+ s e l e c t o r = s e l e c t o r & & / # [ A - Z a - z ] / . t e s t ( s e l e c t o r ) & & s e l e c t o r . r e p l a c e ( / . * ( ? = # [ ^ \ s ] * $ ) / , ' ' ) } v a r   $ p a r e n t = s e l e c t o r & & $ ( s e l e c t o r ) 
+ r e t u r n   $ p a r e n t & & $ p a r e n t . l e n g t h ? $ p a r e n t : $ t h i s . p a r e n t ( ) } f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . d r o p d o w n ' ) 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . d r o p d o w n ' , ( d a t a = n e w   D r o p d o w n ( t h i s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] . c a l l ( $ t h i s ) } ) } v a r   o l d = $ . f n . d r o p d o w n 
+ $ . f n . d r o p d o w n = P l u g i n 
+ $ . f n . d r o p d o w n . C o n s t r u c t o r = D r o p d o w n 
+ $ . f n . d r o p d o w n . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . d r o p d o w n = o l d 
+ r e t u r n   t h i s } 
+ $ ( d o c u m e n t ) . o n ( ' c l i c k . b s . d r o p d o w n . d a t a - a p i ' , c l e a r M e n u s ) . o n ( ' c l i c k . b s . d r o p d o w n . d a t a - a p i ' , ' . d r o p d o w n   f o r m ' , f u n c t i o n ( e ) { e . s t o p P r o p a g a t i o n ( ) } ) . o n ( ' c l i c k . b s . d r o p d o w n . d a t a - a p i ' , t o g g l e , D r o p d o w n . p r o t o t y p e . t o g g l e ) . o n ( ' k e y d o w n . b s . d r o p d o w n . d a t a - a p i ' , t o g g l e + ' ,   [ r o l e = " m e n u " ] ,   [ r o l e = " l i s t b o x " ] ' , D r o p d o w n . p r o t o t y p e . k e y d o w n ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   M o d a l = f u n c t i o n ( e l e m e n t , o p t i o n s ) { t h i s . o p t i o n s = o p t i o n s 
+ t h i s . $ b o d y = $ ( d o c u m e n t . b o d y ) 
+ t h i s . $ e l e m e n t = $ ( e l e m e n t ) 
+ t h i s . $ b a c k d r o p = t h i s . i s S h o w n = n u l l 
+ t h i s . s c r o l l b a r W i d t h = 0 
+ i f ( t h i s . o p t i o n s . r e m o t e ) { t h i s . $ e l e m e n t . f i n d ( ' . m o d a l - c o n t e n t ' ) . l o a d ( t h i s . o p t i o n s . r e m o t e , $ . p r o x y ( f u n c t i o n ( ) { t h i s . $ e l e m e n t . t r i g g e r ( ' l o a d e d . b s . m o d a l ' ) } , t h i s ) ) } } 
+ M o d a l . V E R S I O N = ' 3 . 2 . 0 ' 
+ M o d a l . D E F A U L T S = { b a c k d r o p : t r u e , k e y b o a r d : t r u e , s h o w : t r u e } 
+ M o d a l . p r o t o t y p e . t o g g l e = f u n c t i o n ( _ r e l a t e d T a r g e t ) { r e t u r n   t h i s . i s S h o w n ? t h i s . h i d e ( ) : t h i s . s h o w ( _ r e l a t e d T a r g e t ) } 
+ M o d a l . p r o t o t y p e . s h o w = f u n c t i o n ( _ r e l a t e d T a r g e t ) { v a r   t h a t = t h i s 
+ v a r   e = $ . E v e n t ( ' s h o w . b s . m o d a l ' , { r e l a t e d T a r g e t : _ r e l a t e d T a r g e t } ) 
+ t h i s . $ e l e m e n t . t r i g g e r ( e ) 
+ i f ( t h i s . i s S h o w n | | e . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ t h i s . i s S h o w n = t r u e 
+ t h i s . c h e c k S c r o l l b a r ( ) 
+ t h i s . $ b o d y . a d d C l a s s ( ' m o d a l - o p e n ' ) 
+ t h i s . s e t S c r o l l b a r ( ) 
+ t h i s . e s c a p e ( ) 
+ t h i s . $ e l e m e n t . o n ( ' c l i c k . d i s m i s s . b s . m o d a l ' , ' [ d a t a - d i s m i s s = " m o d a l " ] ' , $ . p r o x y ( t h i s . h i d e , t h i s ) ) 
+ t h i s . b a c k d r o p ( f u n c t i o n ( ) { v a r   t r a n s i t i o n = $ . s u p p o r t . t r a n s i t i o n & & t h a t . $ e l e m e n t . h a s C l a s s ( ' f a d e ' ) 
+ i f ( ! t h a t . $ e l e m e n t . p a r e n t ( ) . l e n g t h ) { t h a t . $ e l e m e n t . a p p e n d T o ( t h a t . $ b o d y ) } t h a t . $ e l e m e n t . s h o w ( ) . s c r o l l T o p ( 0 ) 
+ i f ( t r a n s i t i o n ) { t h a t . $ e l e m e n t [ 0 ] . o f f s e t W i d t h } t h a t . $ e l e m e n t . a d d C l a s s ( ' i n ' ) . a t t r ( ' a r i a - h i d d e n ' , f a l s e ) 
+ t h a t . e n f o r c e F o c u s ( ) 
+ v a r   e = $ . E v e n t ( ' s h o w n . b s . m o d a l ' , { r e l a t e d T a r g e t : _ r e l a t e d T a r g e t } ) 
+ t r a n s i t i o n ? t h a t . $ e l e m e n t . f i n d ( ' . m o d a l - d i a l o g ' ) . o n e ( ' b s T r a n s i t i o n E n d ' , f u n c t i o n ( ) { t h a t . $ e l e m e n t . t r i g g e r ( ' f o c u s ' ) . t r i g g e r ( e ) } ) . e m u l a t e T r a n s i t i o n E n d ( 3 0 0 ) : t h a t . $ e l e m e n t . t r i g g e r ( ' f o c u s ' ) . t r i g g e r ( e ) } ) } 
+ M o d a l . p r o t o t y p e . h i d e = f u n c t i o n ( e ) { i f ( e ) e . p r e v e n t D e f a u l t ( ) 
+ e = $ . E v e n t ( ' h i d e . b s . m o d a l ' ) 
+ t h i s . $ e l e m e n t . t r i g g e r ( e ) 
+ i f ( ! t h i s . i s S h o w n | | e . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ t h i s . i s S h o w n = f a l s e 
+ t h i s . $ b o d y . r e m o v e C l a s s ( ' m o d a l - o p e n ' ) 
+ t h i s . r e s e t S c r o l l b a r ( ) 
+ t h i s . e s c a p e ( ) 
+ $ ( d o c u m e n t ) . o f f ( ' f o c u s i n . b s . m o d a l ' ) 
+ t h i s . $ e l e m e n t . r e m o v e C l a s s ( ' i n ' ) . a t t r ( ' a r i a - h i d d e n ' , t r u e ) . o f f ( ' c l i c k . d i s m i s s . b s . m o d a l ' ) 
+ $ . s u p p o r t . t r a n s i t i o n & & t h i s . $ e l e m e n t . h a s C l a s s ( ' f a d e ' ) ? t h i s . $ e l e m e n t . o n e ( ' b s T r a n s i t i o n E n d ' , $ . p r o x y ( t h i s . h i d e M o d a l , t h i s ) ) . e m u l a t e T r a n s i t i o n E n d ( 3 0 0 ) : t h i s . h i d e M o d a l ( ) } 
+ M o d a l . p r o t o t y p e . e n f o r c e F o c u s = f u n c t i o n ( ) { $ ( d o c u m e n t ) . o f f ( ' f o c u s i n . b s . m o d a l ' ) . o n ( ' f o c u s i n . b s . m o d a l ' , $ . p r o x y ( f u n c t i o n ( e ) { i f ( t h i s . $ e l e m e n t [ 0 ] ! = = e . t a r g e t & & ! t h i s . $ e l e m e n t . h a s ( e . t a r g e t ) . l e n g t h ) { t h i s . $ e l e m e n t . t r i g g e r ( ' f o c u s ' ) } } , t h i s ) ) } 
+ M o d a l . p r o t o t y p e . e s c a p e = f u n c t i o n ( ) { i f ( t h i s . i s S h o w n & & t h i s . o p t i o n s . k e y b o a r d ) { t h i s . $ e l e m e n t . o n ( ' k e y u p . d i s m i s s . b s . m o d a l ' , $ . p r o x y ( f u n c t i o n ( e ) { e . w h i c h = = 2 7 & & t h i s . h i d e ( ) } , t h i s ) ) } e l s e   i f ( ! t h i s . i s S h o w n ) { t h i s . $ e l e m e n t . o f f ( ' k e y u p . d i s m i s s . b s . m o d a l ' ) } } 
+ M o d a l . p r o t o t y p e . h i d e M o d a l = f u n c t i o n ( ) { v a r   t h a t = t h i s 
+ t h i s . $ e l e m e n t . h i d e ( ) 
+ t h i s . b a c k d r o p ( f u n c t i o n ( ) { t h a t . $ e l e m e n t . t r i g g e r ( ' h i d d e n . b s . m o d a l ' ) } ) } 
+ M o d a l . p r o t o t y p e . r e m o v e B a c k d r o p = f u n c t i o n ( ) { t h i s . $ b a c k d r o p & & t h i s . $ b a c k d r o p . r e m o v e ( ) 
+ t h i s . $ b a c k d r o p = n u l l } 
+ M o d a l . p r o t o t y p e . b a c k d r o p = f u n c t i o n ( c a l l b a c k ) { v a r   t h a t = t h i s 
+ v a r   a n i m a t e = t h i s . $ e l e m e n t . h a s C l a s s ( ' f a d e ' ) ? ' f a d e ' : ' ' 
+ i f ( t h i s . i s S h o w n & & t h i s . o p t i o n s . b a c k d r o p ) { v a r   d o A n i m a t e = $ . s u p p o r t . t r a n s i t i o n & & a n i m a t e 
+ t h i s . $ b a c k d r o p = $ ( ' < d i v   c l a s s = " m o d a l - b a c k d r o p   ' + a n i m a t e + ' "   / > ' ) . a p p e n d T o ( t h i s . $ b o d y ) 
+ t h i s . $ e l e m e n t . o n ( ' c l i c k . d i s m i s s . b s . m o d a l ' , $ . p r o x y ( f u n c t i o n ( e ) { i f ( e . t a r g e t ! = = e . c u r r e n t T a r g e t ) r e t u r n 
+ t h i s . o p t i o n s . b a c k d r o p = = ' s t a t i c ' ? t h i s . $ e l e m e n t [ 0 ] . f o c u s . c a l l ( t h i s . $ e l e m e n t [ 0 ] ) : t h i s . h i d e . c a l l ( t h i s ) } , t h i s ) ) 
+ i f ( d o A n i m a t e ) t h i s . $ b a c k d r o p [ 0 ] . o f f s e t W i d t h 
+ t h i s . $ b a c k d r o p . a d d C l a s s ( ' i n ' ) 
+ i f ( ! c a l l b a c k ) r e t u r n 
+ d o A n i m a t e ? t h i s . $ b a c k d r o p . o n e ( ' b s T r a n s i t i o n E n d ' , c a l l b a c k ) . e m u l a t e T r a n s i t i o n E n d ( 1 5 0 ) : c a l l b a c k ( ) } e l s e   i f ( ! t h i s . i s S h o w n & & t h i s . $ b a c k d r o p ) { t h i s . $ b a c k d r o p . r e m o v e C l a s s ( ' i n ' ) 
+ v a r   c a l l b a c k R e m o v e = f u n c t i o n ( ) { t h a t . r e m o v e B a c k d r o p ( ) 
+ c a l l b a c k & & c a l l b a c k ( ) } 
+ $ . s u p p o r t . t r a n s i t i o n & & t h i s . $ e l e m e n t . h a s C l a s s ( ' f a d e ' ) ? t h i s . $ b a c k d r o p . o n e ( ' b s T r a n s i t i o n E n d ' , c a l l b a c k R e m o v e ) . e m u l a t e T r a n s i t i o n E n d ( 1 5 0 ) : c a l l b a c k R e m o v e ( ) } e l s e   i f ( c a l l b a c k ) { c a l l b a c k ( ) } } 
+ M o d a l . p r o t o t y p e . c h e c k S c r o l l b a r = f u n c t i o n ( ) { i f ( d o c u m e n t . b o d y . c l i e n t W i d t h > = w i n d o w . i n n e r W i d t h ) r e t u r n 
+ t h i s . s c r o l l b a r W i d t h = t h i s . s c r o l l b a r W i d t h | | t h i s . m e a s u r e S c r o l l b a r ( ) } 
+ M o d a l . p r o t o t y p e . s e t S c r o l l b a r = f u n c t i o n ( ) { v a r   b o d y P a d = p a r s e I n t ( ( t h i s . $ b o d y . c s s ( ' p a d d i n g - r i g h t ' ) | | 0 ) , 1 0 ) 
+ i f ( t h i s . s c r o l l b a r W i d t h ) t h i s . $ b o d y . c s s ( ' p a d d i n g - r i g h t ' , b o d y P a d + t h i s . s c r o l l b a r W i d t h ) } 
+ M o d a l . p r o t o t y p e . r e s e t S c r o l l b a r = f u n c t i o n ( ) { t h i s . $ b o d y . c s s ( ' p a d d i n g - r i g h t ' , ' ' ) } 
+ M o d a l . p r o t o t y p e . m e a s u r e S c r o l l b a r = f u n c t i o n ( ) { v a r   s c r o l l D i v = d o c u m e n t . c r e a t e E l e m e n t ( ' d i v ' ) 
+ s c r o l l D i v . c l a s s N a m e = ' m o d a l - s c r o l l b a r - m e a s u r e ' 
+ t h i s . $ b o d y . a p p e n d ( s c r o l l D i v ) 
+ v a r   s c r o l l b a r W i d t h = s c r o l l D i v . o f f s e t W i d t h - s c r o l l D i v . c l i e n t W i d t h 
+ t h i s . $ b o d y [ 0 ] . r e m o v e C h i l d ( s c r o l l D i v ) 
+ r e t u r n   s c r o l l b a r W i d t h } 
+ f u n c t i o n   P l u g i n ( o p t i o n , _ r e l a t e d T a r g e t ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . m o d a l ' ) 
+ v a r   o p t i o n s = $ . e x t e n d ( { } , M o d a l . D E F A U L T S , $ t h i s . d a t a ( ) , t y p e o f   o p t i o n = = ' o b j e c t ' & & o p t i o n ) 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . m o d a l ' , ( d a t a = n e w   M o d a l ( t h i s , o p t i o n s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] ( _ r e l a t e d T a r g e t ) 
+ e l s e   i f ( o p t i o n s . s h o w ) d a t a . s h o w ( _ r e l a t e d T a r g e t ) } ) } v a r   o l d = $ . f n . m o d a l 
+ $ . f n . m o d a l = P l u g i n 
+ $ . f n . m o d a l . C o n s t r u c t o r = M o d a l 
+ $ . f n . m o d a l . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . m o d a l = o l d 
+ r e t u r n   t h i s } 
+ $ ( d o c u m e n t ) . o n ( ' c l i c k . b s . m o d a l . d a t a - a p i ' , ' [ d a t a - t o g g l e = " m o d a l " ] ' , f u n c t i o n ( e ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   h r e f = $ t h i s . a t t r ( ' h r e f ' ) 
+ v a r   $ t a r g e t = $ ( $ t h i s . a t t r ( ' d a t a - t a r g e t ' ) | | ( h r e f & & h r e f . r e p l a c e ( / . * ( ? = # [ ^ \ s ] + $ ) / , ' ' ) ) ) 
+ v a r   o p t i o n = $ t a r g e t . d a t a ( ' b s . m o d a l ' ) ? ' t o g g l e ' : $ . e x t e n d ( { r e m o t e : ! / # / . t e s t ( h r e f ) & & h r e f } , $ t a r g e t . d a t a ( ) , $ t h i s . d a t a ( ) ) 
+ i f ( $ t h i s . i s ( ' a ' ) ) e . p r e v e n t D e f a u l t ( ) 
+ $ t a r g e t . o n e ( ' s h o w . b s . m o d a l ' , f u n c t i o n ( s h o w E v e n t ) { i f ( s h o w E v e n t . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ $ t a r g e t . o n e ( ' h i d d e n . b s . m o d a l ' , f u n c t i o n ( ) { $ t h i s . i s ( ' : v i s i b l e ' ) & & $ t h i s . t r i g g e r ( ' f o c u s ' ) } ) } ) 
+ P l u g i n . c a l l ( $ t a r g e t , o p t i o n , t h i s ) } ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   T o o l t i p = f u n c t i o n ( e l e m e n t , o p t i o n s ) { t h i s . t y p e = t h i s . o p t i o n s = t h i s . e n a b l e d = t h i s . t i m e o u t = t h i s . h o v e r S t a t e = t h i s . $ e l e m e n t = n u l l 
+ t h i s . i n i t ( ' t o o l t i p ' , e l e m e n t , o p t i o n s ) } 
+ T o o l t i p . V E R S I O N = ' 3 . 2 . 0 ' 
+ T o o l t i p . D E F A U L T S = { a n i m a t i o n : t r u e , p l a c e m e n t : ' t o p ' , s e l e c t o r : f a l s e , t e m p l a t e : ' < d i v   c l a s s = " t o o l t i p "   r o l e = " t o o l t i p " > < d i v   c l a s s = " t o o l t i p - a r r o w " > < / d i v > < d i v   c l a s s = " t o o l t i p - i n n e r " > < / d i v > < / d i v > ' , t r i g g e r : ' h o v e r   f o c u s ' , t i t l e : ' ' , d e l a y : 0 , h t m l : f a l s e , c o n t a i n e r : f a l s e , v i e w p o r t : { s e l e c t o r : ' b o d y ' , p a d d i n g : 0 } } 
+ T o o l t i p . p r o t o t y p e . i n i t = f u n c t i o n ( t y p e , e l e m e n t , o p t i o n s ) { t h i s . e n a b l e d = t r u e 
+ t h i s . t y p e = t y p e 
+ t h i s . $ e l e m e n t = $ ( e l e m e n t ) 
+ t h i s . o p t i o n s = t h i s . g e t O p t i o n s ( o p t i o n s ) 
+ t h i s . $ v i e w p o r t = t h i s . o p t i o n s . v i e w p o r t & & $ ( t h i s . o p t i o n s . v i e w p o r t . s e l e c t o r | | t h i s . o p t i o n s . v i e w p o r t ) 
+ v a r   t r i g g e r s = t h i s . o p t i o n s . t r i g g e r . s p l i t ( '   ' ) 
+ f o r ( v a r   i = t r i g g e r s . l e n g t h ; i - - ; ) { v a r   t r i g g e r = t r i g g e r s [ i ] 
+ i f ( t r i g g e r = = ' c l i c k ' ) { t h i s . $ e l e m e n t . o n ( ' c l i c k . ' + t h i s . t y p e , t h i s . o p t i o n s . s e l e c t o r , $ . p r o x y ( t h i s . t o g g l e , t h i s ) ) } e l s e   i f ( t r i g g e r ! = ' m a n u a l ' ) { v a r   e v e n t I n = t r i g g e r = = ' h o v e r ' ? ' m o u s e e n t e r ' : ' f o c u s i n ' 
+ v a r   e v e n t O u t = t r i g g e r = = ' h o v e r ' ? ' m o u s e l e a v e ' : ' f o c u s o u t ' 
+ t h i s . $ e l e m e n t . o n ( e v e n t I n + ' . ' + t h i s . t y p e , t h i s . o p t i o n s . s e l e c t o r , $ . p r o x y ( t h i s . e n t e r , t h i s ) ) 
+ t h i s . $ e l e m e n t . o n ( e v e n t O u t + ' . ' + t h i s . t y p e , t h i s . o p t i o n s . s e l e c t o r , $ . p r o x y ( t h i s . l e a v e , t h i s ) ) } } t h i s . o p t i o n s . s e l e c t o r ? ( t h i s . _ o p t i o n s = $ . e x t e n d ( { } , t h i s . o p t i o n s , { t r i g g e r : ' m a n u a l ' , s e l e c t o r : ' ' } ) ) : t h i s . f i x T i t l e ( ) } 
+ T o o l t i p . p r o t o t y p e . g e t D e f a u l t s = f u n c t i o n ( ) { r e t u r n   T o o l t i p . D E F A U L T S } 
+ T o o l t i p . p r o t o t y p e . g e t O p t i o n s = f u n c t i o n ( o p t i o n s ) { o p t i o n s = $ . e x t e n d ( { } , t h i s . g e t D e f a u l t s ( ) , t h i s . $ e l e m e n t . d a t a ( ) , o p t i o n s ) 
+ i f ( o p t i o n s . d e l a y & & t y p e o f   o p t i o n s . d e l a y = = ' n u m b e r ' ) { o p t i o n s . d e l a y = { s h o w : o p t i o n s . d e l a y , h i d e : o p t i o n s . d e l a y } } r e t u r n   o p t i o n s } 
+ T o o l t i p . p r o t o t y p e . g e t D e l e g a t e O p t i o n s = f u n c t i o n ( ) { v a r   o p t i o n s = { } 
+ v a r   d e f a u l t s = t h i s . g e t D e f a u l t s ( ) 
+ t h i s . _ o p t i o n s & & $ . e a c h ( t h i s . _ o p t i o n s , f u n c t i o n ( k e y , v a l u e ) { i f ( d e f a u l t s [ k e y ] ! = v a l u e ) o p t i o n s [ k e y ] = v a l u e } ) 
+ r e t u r n   o p t i o n s } 
+ T o o l t i p . p r o t o t y p e . e n t e r = f u n c t i o n ( o b j ) { v a r   s e l f = o b j   i n s t a n c e o f   t h i s . c o n s t r u c t o r ? o b j : $ ( o b j . c u r r e n t T a r g e t ) . d a t a ( ' b s . ' + t h i s . t y p e ) 
+ i f ( ! s e l f ) { s e l f = n e w   t h i s . c o n s t r u c t o r ( o b j . c u r r e n t T a r g e t , t h i s . g e t D e l e g a t e O p t i o n s ( ) ) 
+ $ ( o b j . c u r r e n t T a r g e t ) . d a t a ( ' b s . ' + t h i s . t y p e , s e l f ) } c l e a r T i m e o u t ( s e l f . t i m e o u t ) 
+ s e l f . h o v e r S t a t e = ' i n ' 
+ i f ( ! s e l f . o p t i o n s . d e l a y | | ! s e l f . o p t i o n s . d e l a y . s h o w ) r e t u r n   s e l f . s h o w ( ) 
+ s e l f . t i m e o u t = s e t T i m e o u t ( f u n c t i o n ( ) { i f ( s e l f . h o v e r S t a t e = = ' i n ' ) s e l f . s h o w ( ) } , s e l f . o p t i o n s . d e l a y . s h o w ) } 
+ T o o l t i p . p r o t o t y p e . l e a v e = f u n c t i o n ( o b j ) { v a r   s e l f = o b j   i n s t a n c e o f   t h i s . c o n s t r u c t o r ? o b j : $ ( o b j . c u r r e n t T a r g e t ) . d a t a ( ' b s . ' + t h i s . t y p e ) 
+ i f ( ! s e l f ) { s e l f = n e w   t h i s . c o n s t r u c t o r ( o b j . c u r r e n t T a r g e t , t h i s . g e t D e l e g a t e O p t i o n s ( ) ) 
+ $ ( o b j . c u r r e n t T a r g e t ) . d a t a ( ' b s . ' + t h i s . t y p e , s e l f ) } c l e a r T i m e o u t ( s e l f . t i m e o u t ) 
+ s e l f . h o v e r S t a t e = ' o u t ' 
+ i f ( ! s e l f . o p t i o n s . d e l a y | | ! s e l f . o p t i o n s . d e l a y . h i d e ) r e t u r n   s e l f . h i d e ( ) 
+ s e l f . t i m e o u t = s e t T i m e o u t ( f u n c t i o n ( ) { i f ( s e l f . h o v e r S t a t e = = ' o u t ' ) s e l f . h i d e ( ) } , s e l f . o p t i o n s . d e l a y . h i d e ) } 
+ T o o l t i p . p r o t o t y p e . s h o w = f u n c t i o n ( ) { v a r   e = $ . E v e n t ( ' s h o w . b s . ' + t h i s . t y p e ) 
+ i f ( t h i s . h a s C o n t e n t ( ) & & t h i s . e n a b l e d ) { t h i s . $ e l e m e n t . t r i g g e r ( e ) 
+ v a r   i n D o m = $ . c o n t a i n s ( d o c u m e n t . d o c u m e n t E l e m e n t , t h i s . $ e l e m e n t [ 0 ] ) 
+ i f ( e . i s D e f a u l t P r e v e n t e d ( ) | | ! i n D o m ) r e t u r n 
+ v a r   t h a t = t h i s 
+ v a r   $ t i p = t h i s . t i p ( ) 
+ v a r   t i p I d = t h i s . g e t U I D ( t h i s . t y p e ) 
+ t h i s . s e t C o n t e n t ( ) 
+ $ t i p . a t t r ( ' i d ' , t i p I d ) 
+ t h i s . $ e l e m e n t . a t t r ( ' a r i a - d e s c r i b e d b y ' , t i p I d ) 
+ i f ( t h i s . o p t i o n s . a n i m a t i o n ) $ t i p . a d d C l a s s ( ' f a d e ' ) 
+ v a r   p l a c e m e n t = t y p e o f   t h i s . o p t i o n s . p l a c e m e n t = = ' f u n c t i o n ' ? t h i s . o p t i o n s . p l a c e m e n t . c a l l ( t h i s , $ t i p [ 0 ] , t h i s . $ e l e m e n t [ 0 ] ) : t h i s . o p t i o n s . p l a c e m e n t 
+ v a r   a u t o T o k e n = / \ s ? a u t o ? \ s ? / i 
+ v a r   a u t o P l a c e = a u t o T o k e n . t e s t ( p l a c e m e n t ) 
+ i f ( a u t o P l a c e ) p l a c e m e n t = p l a c e m e n t . r e p l a c e ( a u t o T o k e n , ' ' ) | | ' t o p ' 
+ $ t i p . d e t a c h ( ) . c s s ( { t o p : 0 , l e f t : 0 , d i s p l a y : ' b l o c k ' } ) . a d d C l a s s ( p l a c e m e n t ) . d a t a ( ' b s . ' + t h i s . t y p e , t h i s ) 
+ t h i s . o p t i o n s . c o n t a i n e r ? $ t i p . a p p e n d T o ( t h i s . o p t i o n s . c o n t a i n e r ) : $ t i p . i n s e r t A f t e r ( t h i s . $ e l e m e n t ) 
+ v a r   p o s = t h i s . g e t P o s i t i o n ( ) 
+ v a r   a c t u a l W i d t h = $ t i p [ 0 ] . o f f s e t W i d t h 
+ v a r   a c t u a l H e i g h t = $ t i p [ 0 ] . o f f s e t H e i g h t 
+ i f ( a u t o P l a c e ) { v a r   o r g P l a c e m e n t = p l a c e m e n t 
+ v a r   $ p a r e n t = t h i s . $ e l e m e n t . p a r e n t ( ) 
+ v a r   p a r e n t D i m = t h i s . g e t P o s i t i o n ( $ p a r e n t ) 
+ p l a c e m e n t = p l a c e m e n t = = ' b o t t o m ' & & p o s . t o p + p o s . h e i g h t + a c t u a l H e i g h t - p a r e n t D i m . s c r o l l > p a r e n t D i m . h e i g h t ? ' t o p ' : p l a c e m e n t = = ' t o p ' & & p o s . t o p - p a r e n t D i m . s c r o l l - a c t u a l H e i g h t < 0 ? ' b o t t o m ' : p l a c e m e n t = = ' r i g h t ' & & p o s . r i g h t + a c t u a l W i d t h > p a r e n t D i m . w i d t h ? ' l e f t ' : p l a c e m e n t = = ' l e f t ' & & p o s . l e f t - a c t u a l W i d t h < p a r e n t D i m . l e f t ? ' r i g h t ' : p l a c e m e n t 
+ $ t i p . r e m o v e C l a s s ( o r g P l a c e m e n t ) . a d d C l a s s ( p l a c e m e n t ) } v a r   c a l c u l a t e d O f f s e t = t h i s . g e t C a l c u l a t e d O f f s e t ( p l a c e m e n t , p o s , a c t u a l W i d t h , a c t u a l H e i g h t ) 
+ t h i s . a p p l y P l a c e m e n t ( c a l c u l a t e d O f f s e t , p l a c e m e n t ) 
+ v a r   c o m p l e t e = f u n c t i o n ( ) { t h a t . $ e l e m e n t . t r i g g e r ( ' s h o w n . b s . ' + t h a t . t y p e ) 
+ t h a t . h o v e r S t a t e = n u l l } 
+ $ . s u p p o r t . t r a n s i t i o n & & t h i s . $ t i p . h a s C l a s s ( ' f a d e ' ) ? $ t i p . o n e ( ' b s T r a n s i t i o n E n d ' , c o m p l e t e ) . e m u l a t e T r a n s i t i o n E n d ( 1 5 0 ) : c o m p l e t e ( ) } } 
+ T o o l t i p . p r o t o t y p e . a p p l y P l a c e m e n t = f u n c t i o n ( o f f s e t , p l a c e m e n t ) { v a r   $ t i p = t h i s . t i p ( ) 
+ v a r   w i d t h = $ t i p [ 0 ] . o f f s e t W i d t h 
+ v a r   h e i g h t = $ t i p [ 0 ] . o f f s e t H e i g h t 
+ v a r   m a r g i n T o p = p a r s e I n t ( $ t i p . c s s ( ' m a r g i n - t o p ' ) , 1 0 ) 
+ v a r   m a r g i n L e f t = p a r s e I n t ( $ t i p . c s s ( ' m a r g i n - l e f t ' ) , 1 0 ) 
+ i f ( i s N a N ( m a r g i n T o p ) ) m a r g i n T o p = 0 
+ i f ( i s N a N ( m a r g i n L e f t ) ) m a r g i n L e f t = 0 
+ o f f s e t . t o p = o f f s e t . t o p + m a r g i n T o p 
+ o f f s e t . l e f t = o f f s e t . l e f t + m a r g i n L e f t 
+ $ . o f f s e t . s e t O f f s e t ( $ t i p [ 0 ] , $ . e x t e n d ( { u s i n g : f u n c t i o n ( p r o p s ) { $ t i p . c s s ( { t o p : M a t h . r o u n d ( p r o p s . t o p ) , l e f t : M a t h . r o u n d ( p r o p s . l e f t ) } ) } } , o f f s e t ) , 0 ) 
+ $ t i p . a d d C l a s s ( ' i n ' ) 
+ v a r   a c t u a l W i d t h = $ t i p [ 0 ] . o f f s e t W i d t h 
+ v a r   a c t u a l H e i g h t = $ t i p [ 0 ] . o f f s e t H e i g h t 
+ i f ( p l a c e m e n t = = ' t o p ' & & a c t u a l H e i g h t ! = h e i g h t ) { o f f s e t . t o p = o f f s e t . t o p + h e i g h t - a c t u a l H e i g h t } v a r   d e l t a = t h i s . g e t V i e w p o r t A d j u s t e d D e l t a ( p l a c e m e n t , o f f s e t , a c t u a l W i d t h , a c t u a l H e i g h t ) 
+ i f ( d e l t a . l e f t ) o f f s e t . l e f t + = d e l t a . l e f t 
+ e l s e   o f f s e t . t o p + = d e l t a . t o p 
+ v a r   a r r o w D e l t a = d e l t a . l e f t ? d e l t a . l e f t * 2 - w i d t h + a c t u a l W i d t h : d e l t a . t o p * 2 - h e i g h t + a c t u a l H e i g h t 
+ v a r   a r r o w P o s i t i o n = d e l t a . l e f t ? ' l e f t ' : ' t o p ' 
+ v a r   a r r o w O f f s e t P o s i t i o n = d e l t a . l e f t ? ' o f f s e t W i d t h ' : ' o f f s e t H e i g h t ' 
+ $ t i p . o f f s e t ( o f f s e t ) 
+ t h i s . r e p l a c e A r r o w ( a r r o w D e l t a , $ t i p [ 0 ] [ a r r o w O f f s e t P o s i t i o n ] , a r r o w P o s i t i o n ) } 
+ T o o l t i p . p r o t o t y p e . r e p l a c e A r r o w = f u n c t i o n ( d e l t a , d i m e n s i o n , p o s i t i o n ) { t h i s . a r r o w ( ) . c s s ( p o s i t i o n , d e l t a ? ( 5 0 * ( 1 - d e l t a / d i m e n s i o n ) + ' % ' ) : ' ' ) } 
+ T o o l t i p . p r o t o t y p e . s e t C o n t e n t = f u n c t i o n ( ) { v a r   $ t i p = t h i s . t i p ( ) 
+ v a r   t i t l e = t h i s . g e t T i t l e ( ) 
+ $ t i p . f i n d ( ' . t o o l t i p - i n n e r ' ) [ t h i s . o p t i o n s . h t m l ? ' h t m l ' : ' t e x t ' ] ( t i t l e ) 
+ $ t i p . r e m o v e C l a s s ( ' f a d e   i n   t o p   b o t t o m   l e f t   r i g h t ' ) } 
+ T o o l t i p . p r o t o t y p e . h i d e = f u n c t i o n ( ) { v a r   t h a t = t h i s 
+ v a r   $ t i p = t h i s . t i p ( ) 
+ v a r   e = $ . E v e n t ( ' h i d e . b s . ' + t h i s . t y p e ) 
+ t h i s . $ e l e m e n t . r e m o v e A t t r ( ' a r i a - d e s c r i b e d b y ' ) 
+ f u n c t i o n   c o m p l e t e ( ) { i f ( t h a t . h o v e r S t a t e ! = ' i n ' ) $ t i p . d e t a c h ( ) 
+ t h a t . $ e l e m e n t . t r i g g e r ( ' h i d d e n . b s . ' + t h a t . t y p e ) } t h i s . $ e l e m e n t . t r i g g e r ( e ) 
+ i f ( e . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ $ t i p . r e m o v e C l a s s ( ' i n ' ) 
+ $ . s u p p o r t . t r a n s i t i o n & & t h i s . $ t i p . h a s C l a s s ( ' f a d e ' ) ? $ t i p . o n e ( ' b s T r a n s i t i o n E n d ' , c o m p l e t e ) . e m u l a t e T r a n s i t i o n E n d ( 1 5 0 ) : c o m p l e t e ( ) 
+ t h i s . h o v e r S t a t e = n u l l 
+ r e t u r n   t h i s } 
+ T o o l t i p . p r o t o t y p e . f i x T i t l e = f u n c t i o n ( ) { v a r   $ e = t h i s . $ e l e m e n t 
+ i f ( $ e . a t t r ( ' t i t l e ' ) | | t y p e o f ( $ e . a t t r ( ' d a t a - o r i g i n a l - t i t l e ' ) ) ! = ' s t r i n g ' ) { $ e . a t t r ( ' d a t a - o r i g i n a l - t i t l e ' , $ e . a t t r ( ' t i t l e ' ) | | ' ' ) . a t t r ( ' t i t l e ' , ' ' ) } } 
+ T o o l t i p . p r o t o t y p e . h a s C o n t e n t = f u n c t i o n ( ) { r e t u r n   t h i s . g e t T i t l e ( ) } 
+ T o o l t i p . p r o t o t y p e . g e t P o s i t i o n = f u n c t i o n ( $ e l e m e n t ) { $ e l e m e n t = $ e l e m e n t | | t h i s . $ e l e m e n t 
+ v a r   e l = $ e l e m e n t [ 0 ] 
+ v a r   i s B o d y = e l . t a g N a m e = = ' B O D Y ' 
+ r e t u r n   $ . e x t e n d ( { } , ( t y p e o f   e l . g e t B o u n d i n g C l i e n t R e c t = = ' f u n c t i o n ' ) ? e l . g e t B o u n d i n g C l i e n t R e c t ( ) : n u l l , { s c r o l l : i s B o d y ? d o c u m e n t . d o c u m e n t E l e m e n t . s c r o l l T o p | | d o c u m e n t . b o d y . s c r o l l T o p : $ e l e m e n t . s c r o l l T o p ( ) , w i d t h : i s B o d y ? $ ( w i n d o w ) . w i d t h ( ) : $ e l e m e n t . o u t e r W i d t h ( ) , h e i g h t : i s B o d y ? $ ( w i n d o w ) . h e i g h t ( ) : $ e l e m e n t . o u t e r H e i g h t ( ) } , i s B o d y ? { t o p : 0 , l e f t : 0 } : $ e l e m e n t . o f f s e t ( ) ) } 
+ T o o l t i p . p r o t o t y p e . g e t C a l c u l a t e d O f f s e t = f u n c t i o n ( p l a c e m e n t , p o s , a c t u a l W i d t h , a c t u a l H e i g h t ) { r e t u r n   p l a c e m e n t = = ' b o t t o m ' ? { t o p : p o s . t o p + p o s . h e i g h t , l e f t : p o s . l e f t + p o s . w i d t h / 2 - a c t u a l W i d t h / 2 } : p l a c e m e n t = = ' t o p ' ? { t o p : p o s . t o p - a c t u a l H e i g h t , l e f t : p o s . l e f t + p o s . w i d t h / 2 - a c t u a l W i d t h / 2 } : p l a c e m e n t = = ' l e f t ' ? { t o p : p o s . t o p + p o s . h e i g h t / 2 - a c t u a l H e i g h t / 2 , l e f t : p o s . l e f t - a c t u a l W i d t h } : { t o p : p o s . t o p + p o s . h e i g h t / 2 - a c t u a l H e i g h t / 2 , l e f t : p o s . l e f t + p o s . w i d t h } } 
+ T o o l t i p . p r o t o t y p e . g e t V i e w p o r t A d j u s t e d D e l t a = f u n c t i o n ( p l a c e m e n t , p o s , a c t u a l W i d t h , a c t u a l H e i g h t ) { v a r   d e l t a = { t o p : 0 , l e f t : 0 } 
+ i f ( ! t h i s . $ v i e w p o r t ) r e t u r n   d e l t a 
+ v a r   v i e w p o r t P a d d i n g = t h i s . o p t i o n s . v i e w p o r t & & t h i s . o p t i o n s . v i e w p o r t . p a d d i n g | | 0 
+ v a r   v i e w p o r t D i m e n s i o n s = t h i s . g e t P o s i t i o n ( t h i s . $ v i e w p o r t ) 
+ i f ( / r i g h t | l e f t / . t e s t ( p l a c e m e n t ) ) { v a r   t o p E d g e O f f s e t = p o s . t o p - v i e w p o r t P a d d i n g - v i e w p o r t D i m e n s i o n s . s c r o l l 
+ v a r   b o t t o m E d g e O f f s e t = p o s . t o p + v i e w p o r t P a d d i n g - v i e w p o r t D i m e n s i o n s . s c r o l l + a c t u a l H e i g h t 
+ i f ( t o p E d g e O f f s e t < v i e w p o r t D i m e n s i o n s . t o p ) { d e l t a . t o p = v i e w p o r t D i m e n s i o n s . t o p - t o p E d g e O f f s e t } e l s e   i f ( b o t t o m E d g e O f f s e t > v i e w p o r t D i m e n s i o n s . t o p + v i e w p o r t D i m e n s i o n s . h e i g h t ) { d e l t a . t o p = v i e w p o r t D i m e n s i o n s . t o p + v i e w p o r t D i m e n s i o n s . h e i g h t - b o t t o m E d g e O f f s e t } } e l s e { v a r   l e f t E d g e O f f s e t = p o s . l e f t - v i e w p o r t P a d d i n g 
+ v a r   r i g h t E d g e O f f s e t = p o s . l e f t + v i e w p o r t P a d d i n g + a c t u a l W i d t h 
+ i f ( l e f t E d g e O f f s e t < v i e w p o r t D i m e n s i o n s . l e f t ) { d e l t a . l e f t = v i e w p o r t D i m e n s i o n s . l e f t - l e f t E d g e O f f s e t } e l s e   i f ( r i g h t E d g e O f f s e t > v i e w p o r t D i m e n s i o n s . w i d t h ) { d e l t a . l e f t = v i e w p o r t D i m e n s i o n s . l e f t + v i e w p o r t D i m e n s i o n s . w i d t h - r i g h t E d g e O f f s e t } } r e t u r n   d e l t a } 
+ T o o l t i p . p r o t o t y p e . g e t T i t l e = f u n c t i o n ( ) { v a r   t i t l e 
+ v a r   $ e = t h i s . $ e l e m e n t 
+ v a r   o = t h i s . o p t i o n s 
+ t i t l e = $ e . a t t r ( ' d a t a - o r i g i n a l - t i t l e ' ) | | ( t y p e o f   o . t i t l e = = ' f u n c t i o n ' ? o . t i t l e . c a l l ( $ e [ 0 ] ) : o . t i t l e ) 
+ r e t u r n   t i t l e } 
+ T o o l t i p . p r o t o t y p e . g e t U I D = f u n c t i o n ( p r e f i x ) { d o   p r e f i x + = ~ ~ ( M a t h . r a n d o m ( ) * 1 0 0 0 0 0 0 ) 
+ w h i l e ( d o c u m e n t . g e t E l e m e n t B y I d ( p r e f i x ) ) r e t u r n   p r e f i x } 
+ T o o l t i p . p r o t o t y p e . t i p = f u n c t i o n ( ) { r e t u r n ( t h i s . $ t i p = t h i s . $ t i p | | $ ( t h i s . o p t i o n s . t e m p l a t e ) ) } 
+ T o o l t i p . p r o t o t y p e . a r r o w = f u n c t i o n ( ) { r e t u r n ( t h i s . $ a r r o w = t h i s . $ a r r o w | | t h i s . t i p ( ) . f i n d ( ' . t o o l t i p - a r r o w ' ) ) } 
+ T o o l t i p . p r o t o t y p e . v a l i d a t e = f u n c t i o n ( ) { i f ( ! t h i s . $ e l e m e n t [ 0 ] . p a r e n t N o d e ) { t h i s . h i d e ( ) 
+ t h i s . $ e l e m e n t = n u l l 
+ t h i s . o p t i o n s = n u l l } } 
+ T o o l t i p . p r o t o t y p e . e n a b l e = f u n c t i o n ( ) { t h i s . e n a b l e d = t r u e } 
+ T o o l t i p . p r o t o t y p e . d i s a b l e = f u n c t i o n ( ) { t h i s . e n a b l e d = f a l s e } 
+ T o o l t i p . p r o t o t y p e . t o g g l e E n a b l e d = f u n c t i o n ( ) { t h i s . e n a b l e d = ! t h i s . e n a b l e d } 
+ T o o l t i p . p r o t o t y p e . t o g g l e = f u n c t i o n ( e ) { v a r   s e l f = t h i s 
+ i f ( e ) { s e l f = $ ( e . c u r r e n t T a r g e t ) . d a t a ( ' b s . ' + t h i s . t y p e ) 
+ i f ( ! s e l f ) { s e l f = n e w   t h i s . c o n s t r u c t o r ( e . c u r r e n t T a r g e t , t h i s . g e t D e l e g a t e O p t i o n s ( ) ) 
+ $ ( e . c u r r e n t T a r g e t ) . d a t a ( ' b s . ' + t h i s . t y p e , s e l f ) } } s e l f . t i p ( ) . h a s C l a s s ( ' i n ' ) ? s e l f . l e a v e ( s e l f ) : s e l f . e n t e r ( s e l f ) } 
+ T o o l t i p . p r o t o t y p e . d e s t r o y = f u n c t i o n ( ) { c l e a r T i m e o u t ( t h i s . t i m e o u t ) 
+ t h i s . h i d e ( ) . $ e l e m e n t . o f f ( ' . ' + t h i s . t y p e ) . r e m o v e D a t a ( ' b s . ' + t h i s . t y p e ) } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . t o o l t i p ' ) 
+ v a r   o p t i o n s = t y p e o f   o p t i o n = = ' o b j e c t ' & & o p t i o n 
+ i f ( ! d a t a & & o p t i o n = = ' d e s t r o y ' ) r e t u r n 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . t o o l t i p ' , ( d a t a = n e w   T o o l t i p ( t h i s , o p t i o n s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] ( ) } ) } v a r   o l d = $ . f n . t o o l t i p 
+ $ . f n . t o o l t i p = P l u g i n 
+ $ . f n . t o o l t i p . C o n s t r u c t o r = T o o l t i p 
+ $ . f n . t o o l t i p . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . t o o l t i p = o l d 
+ r e t u r n   t h i s } } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   P o p o v e r = f u n c t i o n ( e l e m e n t , o p t i o n s ) { t h i s . i n i t ( ' p o p o v e r ' , e l e m e n t , o p t i o n s ) } 
+ i f ( ! $ . f n . t o o l t i p ) t h r o w   n e w   E r r o r ( ' P o p o v e r   r e q u i r e s   t o o l t i p . j s ' ) 
+ P o p o v e r . V E R S I O N = ' 3 . 2 . 0 ' 
+ P o p o v e r . D E F A U L T S = $ . e x t e n d ( { } , $ . f n . t o o l t i p . C o n s t r u c t o r . D E F A U L T S , { p l a c e m e n t : ' r i g h t ' , t r i g g e r : ' c l i c k ' , c o n t e n t : ' ' , t e m p l a t e : ' < d i v   c l a s s = " p o p o v e r "   r o l e = " t o o l t i p " > < d i v   c l a s s = " a r r o w " > < / d i v > < h 3   c l a s s = " p o p o v e r - t i t l e " > < / h 3 > < d i v   c l a s s = " p o p o v e r - c o n t e n t " > < / d i v > < / d i v > ' } ) 
+ P o p o v e r . p r o t o t y p e = $ . e x t e n d ( { } , $ . f n . t o o l t i p . C o n s t r u c t o r . p r o t o t y p e ) 
+ P o p o v e r . p r o t o t y p e . c o n s t r u c t o r = P o p o v e r 
+ P o p o v e r . p r o t o t y p e . g e t D e f a u l t s = f u n c t i o n ( ) { r e t u r n   P o p o v e r . D E F A U L T S } 
+ P o p o v e r . p r o t o t y p e . s e t C o n t e n t = f u n c t i o n ( ) { v a r   $ t i p = t h i s . t i p ( ) 
+ v a r   t i t l e = t h i s . g e t T i t l e ( ) 
+ v a r   c o n t e n t = t h i s . g e t C o n t e n t ( ) 
+ $ t i p . f i n d ( ' . p o p o v e r - t i t l e ' ) [ t h i s . o p t i o n s . h t m l ? ' h t m l ' : ' t e x t ' ] ( t i t l e ) 
+ $ t i p . f i n d ( ' . p o p o v e r - c o n t e n t ' ) . e m p t y ( ) [ t h i s . o p t i o n s . h t m l ? ( t y p e o f   c o n t e n t = = ' s t r i n g ' ? ' h t m l ' : ' a p p e n d ' ) : ' t e x t ' ] ( c o n t e n t ) 
+ $ t i p . r e m o v e C l a s s ( ' f a d e   t o p   b o t t o m   l e f t   r i g h t   i n ' ) 
+ i f ( ! $ t i p . f i n d ( ' . p o p o v e r - t i t l e ' ) . h t m l ( ) ) $ t i p . f i n d ( ' . p o p o v e r - t i t l e ' ) . h i d e ( ) } 
+ P o p o v e r . p r o t o t y p e . h a s C o n t e n t = f u n c t i o n ( ) { r e t u r n   t h i s . g e t T i t l e ( ) | | t h i s . g e t C o n t e n t ( ) } 
+ P o p o v e r . p r o t o t y p e . g e t C o n t e n t = f u n c t i o n ( ) { v a r   $ e = t h i s . $ e l e m e n t 
+ v a r   o = t h i s . o p t i o n s 
+ r e t u r n   $ e . a t t r ( ' d a t a - c o n t e n t ' ) | | ( t y p e o f   o . c o n t e n t = = ' f u n c t i o n ' ? o . c o n t e n t . c a l l ( $ e [ 0 ] ) : o . c o n t e n t ) } 
+ P o p o v e r . p r o t o t y p e . a r r o w = f u n c t i o n ( ) { r e t u r n ( t h i s . $ a r r o w = t h i s . $ a r r o w | | t h i s . t i p ( ) . f i n d ( ' . a r r o w ' ) ) } 
+ P o p o v e r . p r o t o t y p e . t i p = f u n c t i o n ( ) { i f ( ! t h i s . $ t i p ) t h i s . $ t i p = $ ( t h i s . o p t i o n s . t e m p l a t e ) 
+ r e t u r n   t h i s . $ t i p } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . p o p o v e r ' ) 
+ v a r   o p t i o n s = t y p e o f   o p t i o n = = ' o b j e c t ' & & o p t i o n 
+ i f ( ! d a t a & & o p t i o n = = ' d e s t r o y ' ) r e t u r n 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . p o p o v e r ' , ( d a t a = n e w   P o p o v e r ( t h i s , o p t i o n s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] ( ) } ) } v a r   o l d = $ . f n . p o p o v e r 
+ $ . f n . p o p o v e r = P l u g i n 
+ $ . f n . p o p o v e r . C o n s t r u c t o r = P o p o v e r 
+ $ . f n . p o p o v e r . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . p o p o v e r = o l d 
+ r e t u r n   t h i s } } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; f u n c t i o n   S c r o l l S p y ( e l e m e n t , o p t i o n s ) { v a r   p r o c e s s = $ . p r o x y ( t h i s . p r o c e s s , t h i s ) 
+ t h i s . $ b o d y = $ ( ' b o d y ' ) 
+ t h i s . $ s c r o l l E l e m e n t = $ ( e l e m e n t ) . i s ( ' b o d y ' ) ? $ ( w i n d o w ) : $ ( e l e m e n t ) 
+ t h i s . o p t i o n s = $ . e x t e n d ( { } , S c r o l l S p y . D E F A U L T S , o p t i o n s ) 
+ t h i s . s e l e c t o r = ( t h i s . o p t i o n s . t a r g e t | | ' ' ) + '   . n a v   l i   >   a ' 
+ t h i s . o f f s e t s = [ ] 
+ t h i s . t a r g e t s = [ ] 
+ t h i s . a c t i v e T a r g e t = n u l l 
+ t h i s . s c r o l l H e i g h t = 0 
+ t h i s . $ s c r o l l E l e m e n t . o n ( ' s c r o l l . b s . s c r o l l s p y ' , p r o c e s s ) 
+ t h i s . r e f r e s h ( ) 
+ t h i s . p r o c e s s ( ) } S c r o l l S p y . V E R S I O N = ' 3 . 2 . 0 ' 
+ S c r o l l S p y . D E F A U L T S = { o f f s e t : 1 0 } 
+ S c r o l l S p y . p r o t o t y p e . g e t S c r o l l H e i g h t = f u n c t i o n ( ) { r e t u r n   t h i s . $ s c r o l l E l e m e n t [ 0 ] . s c r o l l H e i g h t | | M a t h . m a x ( t h i s . $ b o d y [ 0 ] . s c r o l l H e i g h t , d o c u m e n t . d o c u m e n t E l e m e n t . s c r o l l H e i g h t ) } 
+ S c r o l l S p y . p r o t o t y p e . r e f r e s h = f u n c t i o n ( ) { v a r   o f f s e t M e t h o d = ' o f f s e t ' 
+ v a r   o f f s e t B a s e = 0 
+ i f ( ! $ . i s W i n d o w ( t h i s . $ s c r o l l E l e m e n t [ 0 ] ) ) { o f f s e t M e t h o d = ' p o s i t i o n ' 
+ o f f s e t B a s e = t h i s . $ s c r o l l E l e m e n t . s c r o l l T o p ( ) } t h i s . o f f s e t s = [ ] 
+ t h i s . t a r g e t s = [ ] 
+ t h i s . s c r o l l H e i g h t = t h i s . g e t S c r o l l H e i g h t ( ) 
+ v a r   s e l f = t h i s 
+ t h i s . $ b o d y . f i n d ( t h i s . s e l e c t o r ) . m a p ( f u n c t i o n ( ) { v a r   $ e l = $ ( t h i s ) 
+ v a r   h r e f = $ e l . d a t a ( ' t a r g e t ' ) | | $ e l . a t t r ( ' h r e f ' ) 
+ v a r   $ h r e f = / ^ # . / . t e s t ( h r e f ) & & $ ( h r e f ) 
+ r e t u r n ( $ h r e f & & $ h r e f . l e n g t h & & $ h r e f . i s ( ' : v i s i b l e ' ) & & [ [ $ h r e f [ o f f s e t M e t h o d ] ( ) . t o p + o f f s e t B a s e , h r e f ] ] ) | | n u l l } ) . s o r t ( f u n c t i o n ( a , b ) { r e t u r n   a [ 0 ] - b [ 0 ] } ) . e a c h ( f u n c t i o n ( ) { s e l f . o f f s e t s . p u s h ( t h i s [ 0 ] ) 
+ s e l f . t a r g e t s . p u s h ( t h i s [ 1 ] ) } ) } 
+ S c r o l l S p y . p r o t o t y p e . p r o c e s s = f u n c t i o n ( ) { v a r   s c r o l l T o p = t h i s . $ s c r o l l E l e m e n t . s c r o l l T o p ( ) + t h i s . o p t i o n s . o f f s e t 
+ v a r   s c r o l l H e i g h t = t h i s . g e t S c r o l l H e i g h t ( ) 
+ v a r   m a x S c r o l l = t h i s . o p t i o n s . o f f s e t + s c r o l l H e i g h t - t h i s . $ s c r o l l E l e m e n t . h e i g h t ( ) 
+ v a r   o f f s e t s = t h i s . o f f s e t s 
+ v a r   t a r g e t s = t h i s . t a r g e t s 
+ v a r   a c t i v e T a r g e t = t h i s . a c t i v e T a r g e t 
+ v a r   i 
+ i f ( t h i s . s c r o l l H e i g h t ! = s c r o l l H e i g h t ) { t h i s . r e f r e s h ( ) } i f ( s c r o l l T o p > = m a x S c r o l l ) { r e t u r n   a c t i v e T a r g e t ! = ( i = t a r g e t s [ t a r g e t s . l e n g t h - 1 ] ) & & t h i s . a c t i v a t e ( i ) } i f ( a c t i v e T a r g e t & & s c r o l l T o p < = o f f s e t s [ 0 ] ) { r e t u r n   a c t i v e T a r g e t ! = ( i = t a r g e t s [ 0 ] ) & & t h i s . a c t i v a t e ( i ) } f o r ( i = o f f s e t s . l e n g t h ; i - - ; ) { a c t i v e T a r g e t ! = t a r g e t s [ i ] & & s c r o l l T o p > = o f f s e t s [ i ] & & ( ! o f f s e t s [ i + 1 ] | | s c r o l l T o p < = o f f s e t s [ i + 1 ] ) & & t h i s . a c t i v a t e ( t a r g e t s [ i ] ) } } 
+ S c r o l l S p y . p r o t o t y p e . a c t i v a t e = f u n c t i o n ( t a r g e t ) { t h i s . a c t i v e T a r g e t = t a r g e t 
+ $ ( t h i s . s e l e c t o r ) . p a r e n t s U n t i l ( t h i s . o p t i o n s . t a r g e t , ' . a c t i v e ' ) . r e m o v e C l a s s ( ' a c t i v e ' ) 
+ v a r   s e l e c t o r = t h i s . s e l e c t o r + ' [ d a t a - t a r g e t = " ' + t a r g e t + ' " ] , ' + t h i s . s e l e c t o r + ' [ h r e f = " ' + t a r g e t + ' " ] ' 
+ v a r   a c t i v e = $ ( s e l e c t o r ) . p a r e n t s ( ' l i ' ) . a d d C l a s s ( ' a c t i v e ' ) 
+ i f ( a c t i v e . p a r e n t ( ' . d r o p d o w n - m e n u ' ) . l e n g t h ) { a c t i v e = a c t i v e . c l o s e s t ( ' l i . d r o p d o w n ' ) . a d d C l a s s ( ' a c t i v e ' ) } a c t i v e . t r i g g e r ( ' a c t i v a t e . b s . s c r o l l s p y ' ) } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . s c r o l l s p y ' ) 
+ v a r   o p t i o n s = t y p e o f   o p t i o n = = ' o b j e c t ' & & o p t i o n 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . s c r o l l s p y ' , ( d a t a = n e w   S c r o l l S p y ( t h i s , o p t i o n s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] ( ) } ) } v a r   o l d = $ . f n . s c r o l l s p y 
+ $ . f n . s c r o l l s p y = P l u g i n 
+ $ . f n . s c r o l l s p y . C o n s t r u c t o r = S c r o l l S p y 
+ $ . f n . s c r o l l s p y . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . s c r o l l s p y = o l d 
+ r e t u r n   t h i s } 
+ $ ( w i n d o w ) . o n ( ' l o a d . b s . s c r o l l s p y . d a t a - a p i ' , f u n c t i o n ( ) { $ ( ' [ d a t a - s p y = " s c r o l l " ] ' ) . e a c h ( f u n c t i o n ( ) { v a r   $ s p y = $ ( t h i s ) 
+ P l u g i n . c a l l ( $ s p y , $ s p y . d a t a ( ) ) } ) } ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   T a b = f u n c t i o n ( e l e m e n t ) { t h i s . e l e m e n t = $ ( e l e m e n t ) } 
+ T a b . V E R S I O N = ' 3 . 2 . 0 ' 
+ T a b . p r o t o t y p e . s h o w = f u n c t i o n ( ) { v a r   $ t h i s = t h i s . e l e m e n t 
+ v a r   $ u l = $ t h i s . c l o s e s t ( ' u l : n o t ( . d r o p d o w n - m e n u ) ' ) 
+ v a r   s e l e c t o r = $ t h i s . d a t a ( ' t a r g e t ' ) 
+ i f ( ! s e l e c t o r ) { s e l e c t o r = $ t h i s . a t t r ( ' h r e f ' ) 
+ s e l e c t o r = s e l e c t o r & & s e l e c t o r . r e p l a c e ( / . * ( ? = # [ ^ \ s ] * $ ) / , ' ' ) } i f ( $ t h i s . p a r e n t ( ' l i ' ) . h a s C l a s s ( ' a c t i v e ' ) ) r e t u r n 
+ v a r   p r e v i o u s = $ u l . f i n d ( ' . a c t i v e : l a s t   a ' ) [ 0 ] 
+ v a r   e = $ . E v e n t ( ' s h o w . b s . t a b ' , { r e l a t e d T a r g e t : p r e v i o u s } ) 
+ $ t h i s . t r i g g e r ( e ) 
+ i f ( e . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ v a r   $ t a r g e t = $ ( s e l e c t o r ) 
+ t h i s . a c t i v a t e ( $ t h i s . c l o s e s t ( ' l i ' ) , $ u l ) 
+ t h i s . a c t i v a t e ( $ t a r g e t , $ t a r g e t . p a r e n t ( ) , f u n c t i o n ( ) { $ t h i s . t r i g g e r ( { t y p e : ' s h o w n . b s . t a b ' , r e l a t e d T a r g e t : p r e v i o u s } ) } ) } 
+ T a b . p r o t o t y p e . a c t i v a t e = f u n c t i o n ( e l e m e n t , c o n t a i n e r , c a l l b a c k ) { v a r   $ a c t i v e = c o n t a i n e r . f i n d ( ' >   . a c t i v e ' ) 
+ v a r   t r a n s i t i o n = c a l l b a c k & & $ . s u p p o r t . t r a n s i t i o n & & $ a c t i v e . h a s C l a s s ( ' f a d e ' ) 
+ f u n c t i o n   n e x t ( ) { $ a c t i v e . r e m o v e C l a s s ( ' a c t i v e ' ) . f i n d ( ' >   . d r o p d o w n - m e n u   >   . a c t i v e ' ) . r e m o v e C l a s s ( ' a c t i v e ' ) 
+ e l e m e n t . a d d C l a s s ( ' a c t i v e ' ) 
+ i f ( t r a n s i t i o n ) { e l e m e n t [ 0 ] . o f f s e t W i d t h 
+ e l e m e n t . a d d C l a s s ( ' i n ' ) } e l s e { e l e m e n t . r e m o v e C l a s s ( ' f a d e ' ) } i f ( e l e m e n t . p a r e n t ( ' . d r o p d o w n - m e n u ' ) ) { e l e m e n t . c l o s e s t ( ' l i . d r o p d o w n ' ) . a d d C l a s s ( ' a c t i v e ' ) } c a l l b a c k & & c a l l b a c k ( ) } t r a n s i t i o n ? $ a c t i v e . o n e ( ' b s T r a n s i t i o n E n d ' , n e x t ) . e m u l a t e T r a n s i t i o n E n d ( 1 5 0 ) : n e x t ( ) 
+ $ a c t i v e . r e m o v e C l a s s ( ' i n ' ) } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . t a b ' ) 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . t a b ' , ( d a t a = n e w   T a b ( t h i s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] ( ) } ) } v a r   o l d = $ . f n . t a b 
+ $ . f n . t a b = P l u g i n 
+ $ . f n . t a b . C o n s t r u c t o r = T a b 
+ $ . f n . t a b . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . t a b = o l d 
+ r e t u r n   t h i s } 
+ $ ( d o c u m e n t ) . o n ( ' c l i c k . b s . t a b . d a t a - a p i ' , ' [ d a t a - t o g g l e = " t a b " ] ,   [ d a t a - t o g g l e = " p i l l " ] ' , f u n c t i o n ( e ) { e . p r e v e n t D e f a u l t ( ) 
+ P l u g i n . c a l l ( $ ( t h i s ) , ' s h o w ' ) } ) } ( j Q u e r y ) ; + f u n c t i o n ( $ ) { ' u s e   s t r i c t ' ; v a r   A f f i x = f u n c t i o n ( e l e m e n t , o p t i o n s ) { t h i s . o p t i o n s = $ . e x t e n d ( { } , A f f i x . D E F A U L T S , o p t i o n s ) 
+ t h i s . $ t a r g e t = $ ( t h i s . o p t i o n s . t a r g e t ) . o n ( ' s c r o l l . b s . a f f i x . d a t a - a p i ' , $ . p r o x y ( t h i s . c h e c k P o s i t i o n , t h i s ) ) . o n ( ' c l i c k . b s . a f f i x . d a t a - a p i ' , $ . p r o x y ( t h i s . c h e c k P o s i t i o n W i t h E v e n t L o o p , t h i s ) ) 
+ t h i s . $ e l e m e n t = $ ( e l e m e n t ) 
+ t h i s . a f f i x e d = t h i s . u n p i n = t h i s . p i n n e d O f f s e t = n u l l 
+ t h i s . c h e c k P o s i t i o n ( ) } 
+ A f f i x . V E R S I O N = ' 3 . 2 . 0 ' 
+ A f f i x . R E S E T = ' a f f i x   a f f i x - t o p   a f f i x - b o t t o m ' 
+ A f f i x . D E F A U L T S = { o f f s e t : 0 , t a r g e t : w i n d o w } 
+ A f f i x . p r o t o t y p e . g e t P i n n e d O f f s e t = f u n c t i o n ( ) { i f ( t h i s . p i n n e d O f f s e t ) r e t u r n   t h i s . p i n n e d O f f s e t 
+ t h i s . $ e l e m e n t . r e m o v e C l a s s ( A f f i x . R E S E T ) . a d d C l a s s ( ' a f f i x ' ) 
+ v a r   s c r o l l T o p = t h i s . $ t a r g e t . s c r o l l T o p ( ) 
+ v a r   p o s i t i o n = t h i s . $ e l e m e n t . o f f s e t ( ) 
+ r e t u r n ( t h i s . p i n n e d O f f s e t = p o s i t i o n . t o p - s c r o l l T o p ) } 
+ A f f i x . p r o t o t y p e . c h e c k P o s i t i o n W i t h E v e n t L o o p = f u n c t i o n ( ) { s e t T i m e o u t ( $ . p r o x y ( t h i s . c h e c k P o s i t i o n , t h i s ) , 1 ) } 
+ A f f i x . p r o t o t y p e . c h e c k P o s i t i o n = f u n c t i o n ( ) { i f ( ! t h i s . $ e l e m e n t . i s ( ' : v i s i b l e ' ) ) r e t u r n 
+ v a r   s c r o l l H e i g h t = $ ( d o c u m e n t ) . h e i g h t ( ) 
+ v a r   s c r o l l T o p = t h i s . $ t a r g e t . s c r o l l T o p ( ) 
+ v a r   p o s i t i o n = t h i s . $ e l e m e n t . o f f s e t ( ) 
+ v a r   o f f s e t = t h i s . o p t i o n s . o f f s e t 
+ v a r   o f f s e t T o p = o f f s e t . t o p 
+ v a r   o f f s e t B o t t o m = o f f s e t . b o t t o m 
+ i f ( t y p e o f   o f f s e t ! = ' o b j e c t ' ) o f f s e t B o t t o m = o f f s e t T o p = o f f s e t 
+ i f ( t y p e o f   o f f s e t T o p = = ' f u n c t i o n ' ) o f f s e t T o p = o f f s e t . t o p ( t h i s . $ e l e m e n t ) 
+ i f ( t y p e o f   o f f s e t B o t t o m = = ' f u n c t i o n ' ) o f f s e t B o t t o m = o f f s e t . b o t t o m ( t h i s . $ e l e m e n t ) 
+ v a r   a f f i x = t h i s . u n p i n ! = n u l l & & ( s c r o l l T o p + t h i s . u n p i n < = p o s i t i o n . t o p ) ? f a l s e : o f f s e t B o t t o m ! = n u l l & & ( p o s i t i o n . t o p + t h i s . $ e l e m e n t . h e i g h t ( ) > = s c r o l l H e i g h t - o f f s e t B o t t o m ) ? ' b o t t o m ' : o f f s e t T o p ! = n u l l & & ( s c r o l l T o p < = o f f s e t T o p ) ? ' t o p ' : f a l s e 
+ i f ( t h i s . a f f i x e d = = = a f f i x ) r e t u r n 
+ i f ( t h i s . u n p i n ! = n u l l ) t h i s . $ e l e m e n t . c s s ( ' t o p ' , ' ' ) 
+ v a r   a f f i x T y p e = ' a f f i x ' + ( a f f i x ? ' - ' + a f f i x : ' ' ) 
+ v a r   e = $ . E v e n t ( a f f i x T y p e + ' . b s . a f f i x ' ) 
+ t h i s . $ e l e m e n t . t r i g g e r ( e ) 
+ i f ( e . i s D e f a u l t P r e v e n t e d ( ) ) r e t u r n 
+ t h i s . a f f i x e d = a f f i x 
+ t h i s . u n p i n = a f f i x = = ' b o t t o m ' ? t h i s . g e t P i n n e d O f f s e t ( ) : n u l l 
+ t h i s . $ e l e m e n t . r e m o v e C l a s s ( A f f i x . R E S E T ) . a d d C l a s s ( a f f i x T y p e ) . t r i g g e r ( $ . E v e n t ( a f f i x T y p e . r e p l a c e ( ' a f f i x ' , ' a f f i x e d ' ) ) ) 
+ i f ( a f f i x = = ' b o t t o m ' ) { t h i s . $ e l e m e n t . o f f s e t ( { t o p : s c r o l l H e i g h t - t h i s . $ e l e m e n t . h e i g h t ( ) - o f f s e t B o t t o m } ) } } 
+ f u n c t i o n   P l u g i n ( o p t i o n ) { r e t u r n   t h i s . e a c h ( f u n c t i o n ( ) { v a r   $ t h i s = $ ( t h i s ) 
+ v a r   d a t a = $ t h i s . d a t a ( ' b s . a f f i x ' ) 
+ v a r   o p t i o n s = t y p e o f   o p t i o n = = ' o b j e c t ' & & o p t i o n 
+ i f ( ! d a t a ) $ t h i s . d a t a ( ' b s . a f f i x ' , ( d a t a = n e w   A f f i x ( t h i s , o p t i o n s ) ) ) 
+ i f ( t y p e o f   o p t i o n = = ' s t r i n g ' ) d a t a [ o p t i o n ] ( ) } ) } v a r   o l d = $ . f n . a f f i x 
+ $ . f n . a f f i x = P l u g i n 
+ $ . f n . a f f i x . C o n s t r u c t o r = A f f i x 
+ $ . f n . a f f i x . n o C o n f l i c t = f u n c t i o n ( ) { $ . f n . a f f i x = o l d 
+ r e t u r n   t h i s } 
+ $ ( w i n d o w ) . o n ( ' l o a d ' , f u n c t i o n ( ) { $ ( ' [ d a t a - s p y = " a f f i x " ] ' ) . e a c h ( f u n c t i o n ( ) { v a r   $ s p y = $ ( t h i s ) 
+ v a r   d a t a = $ s p y . d a t a ( ) 
+ d a t a . o f f s e t = d a t a . o f f s e t | | { } 
+ i f ( d a t a . o f f s e t B o t t o m ) d a t a . o f f s e t . b o t t o m = d a t a . o f f s e t B o t t o m 
+ i f ( d a t a . o f f s e t T o p ) d a t a . o f f s e t . t o p = d a t a . o f f s e t T o p 
+ P l u g i n . c a l l ( $ s p y , d a t a ) } ) } ) } ( j Q u e r y ) ;    A       https://campusinteraction.com/Campus/srm-aaruush/js/bootstrap.js     dù      dù                    ö    '=   H   Êö   A=   ,  R pÊÇ    ö    : #QÇ   ö    : #QÇ   ö    : #QÇ   ö    : #QÇ   ö    : #QÇ   ö    : #QÇ   ö    : #QÇ   ö    : #QÇ   ö    : #QÇ	   ö    : #QÇ
+   ö    : #QÇ   ö    : #QôòÃûœòù5Æ≠ò\≠òÄ  “Æ≠òÄ  ”≠òQÆ@≠òR≠@òÆÄ  ë≠@ò≠Ä  ëò5ÆÄ  Ã≠Ä  ëò6≠Ä  ÃòkÆÄ  ¸≠Ä  Ãòl≠Ä  ¸òÄ ?ÆÄ P≠Ä  ¸òÄ @≠Ä Pò,ÆÄ „≠Ä Pò-≠Ä „òÆÄ ≠Ä „ò≠Ä òÆÄ 2≠Ä ò≠Ä 2ò+ÆÄ P≠Ä 2ò,≠Ä Pò'ÆÄ Å≠Ä Pò(≠Ä Åò$    jQuery   undefined   ErrorM   Bootstrap's JavaScript requires jQueryá!´!ˇˇˇˇ            ´+íHç!´!       C  1                                            Ü d   È  \   È                    GÇ    â   Qà   5    Ç   0   Qà   Ç   Á QôÃ®òv’®	œ®òÄ  »    fn)   emulateTransitionEndå!´!ˇˇˇˇ      $   transitionEnd       ´+íHç!´!    	      transitionEnd   û          3                                     ã   ‘  u   ‘     ã             ö    ∏   
+=   : W   Q[    =   ]   =   ]   =   ]   =   ]	   W  QV  K=   mﬁW  V   5
+   V  7ö   I   Ê[   V  V  7]   òQNôÊ„ÅQLM√ˇˇˇÊQNBôòÄ  í—ò»†òù ò' ò ò,œ†>Büú ‘ûùŒò+ùˇˇˇãÕòiô    document   createElement   bootstrap'   webkitTransitionEnd!   WebkitTransition   transitionend   MozTransition;   oTransitionEnd otransitionend   OTransition   transition   style   undefined   endå!´!ˇˇˇˇ      el%   transEndEventNames	   name         ´+íHé!´!       é!´!!   WebkitTransitionã!´!é!´!   MozTransitionã!´!é!´!   OTransitionã!´!é!´!   transitionã!´!    é!´!       é!´!   endã!´!    öò;¯   V   D   0       5ûç!´!       3   $.fn.emulateTransitionEndb ˆ  Õ  Ó  Õ     ò   2          called    $el    B  E  T  =  T     &           5û    B  k  ¢  c  ¢                5û  5ûç!´!       C   â       	   %                                      ÿ  Á  –  Á  	                  à   5    à   :  0   Qà   5    5       ÊÊà   5   5   [   à   5    5   5   ]   à   5    5   5   ]   Ç    ]   0   Qôò–ò…†ò–û°òÄ  ∆öˇˇˇ:‘ò!Ÿò"Ÿò&–ò]    support   transition   event   special   end   bindType   delegateType   handle   bsTransitionEndå!´!ˇˇˇˇ              ´+íHç!´!           handleB ò  Â  ê  Â     x           5û é!´!       é!´!   bindTypeã!´!é!´!   delegateTypeã!´!é!´!   handleã!´!    öò;¯ 5ûöò;¯ 5ûç!´!       C  ÷         "                                   Ü ˚  í  Û  í                   GÇ    W   Q=    â   QÇ   â   Qà   =   0   Qà   5   Ç   0   Qà   5   5   â   Qà   5   V   0   Qà   5   5   à   0   Qà   5   5   Ç   0   Qà   ö	   : ∏
+   
+=   à   à   5   5   Á QôÀòÄ  À†òÀ†–†’®ò:’†‘†⁄†⁄®Óòú; -   [data-dismiss="alert"]   3.2.0   VERSION   prototype   close   fn   alert   Constructor   noConflict   document   on/   click.bs.alert.data-apiå!´!ˇˇˇˇ      $   dismiss   Alert   Plugin   old      ´+íHç!´!          Plugin   À  ¯  À        "          option   B  )  …  !  …     1           5û  5ûç!´!          AlertB C  m  ;  m                5ûç!´!       +   Alert.prototype.closeb ¢  ˜  ö  ˜        B          $parent      removeElement  9  q  #  q                5û 5ûç!´!       +   $.fn.alert.noConflictb  +  I  #  I                5ûöò;¯ 5ûç!´!       C  Ú         &                                   Ü §  á  ú  á                    GÇ    â   QÇ   â   Qà   =    0   Qà   [   =   ]   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   5	   â   Qà   5   à   0	   Qà   5   5	   à   0
+   Qà   5   5	   Ç   0   Qà   ö   : ∏   
+=   =   Ç   Á QôÃòoÀ®"–† ò–†’®.’®8ò+’†’†⁄†⁄®=‰ò¨@ò    3.2.0   VERSION   loading...   loadingText   DEFAULTS   prototype   setState   toggle   fn   button   Constructor   noConflict   document   on1   click.bs.button.data-api/   [data-toggle^="button"]å!´!ˇˇˇˇ      $   Button   Plugin   old       ´+íHç!´!          Plugin ,  :    :  3      "          option   B  N  8  F  8  3   1           5û  5ûç!´!          ButtonB »  :	  ¿  :	     ~           5û é!´!       é!´!   loadingTextã!´!    ç!´!        3   Button.prototype.setStateb ü	  M  ó	  M  $   "   B          state    d    $el   B  ™
+  C  ¢
+  C  +      2        5û  5ûç!´!       /   Button.prototype.toggleb  n    f    .       2        5ûç!´!       -   $.fn.button.noConflictb  ü  æ  ó  æ  ;              5û ç!´!       B   Ö    Ö  =   L           5û öò;¯ 5ûç!´!       C  °        H                         )          Ü ô  ì!  ë  ì!  @                  GÇ    â   QÇ   â   Qà   =    0   Qà   [   Xà]   =   ]   C]   0   Qà   5   Ç   0   Qà   5   Ç   0	   Qà   5   Ç   0
+   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç	   0   Qà   5   Ç
+   0   Qà   5   5   â   Qà   5   à   0   Qà   5   5   à   0   Qà   5   5   Ç   0   Qà   ö   : ∏   
+=   =   Ç   Á Qà   ö   : ∏   
+=   Ç   Á QôÃò<À®E–† ò»ò òÃ†’®J’®N’®P’®V’®Z’®\’®^’®Ä  Çò4’†’†⁄†⁄††‰ò¨Ä  êﬂò
+§ò+    3.2.0   VERSION   interval   hover   pause	   wrap   DEFAULTS   prototype   keydown   cycle   getItemIndex   to	   next	   prev   slide   fn   carousel   Constructor   noConflict   document   on5   click.bs.carousel.data-api;   [data-slide], [data-slide-to]   window	   loadå!´!ˇˇˇˇ      $   Carousel   Plugin   old       ´+íHç!´!     	      Plugin                                              Ç  ⁄  Ç  À  Ç  {                 πW   QV   ∏    
+Ç    : ôû–ò´Ä  Çò/ 	   eachå!´!ˇˇˇˇ      option   .this      ´+íHç!´!           Plugin/<c   T        Q                                     ¸  Ä  Ù  Ä  {   1             πW  Qà  V  : W   QV   ∏    
+=   : W  Qà  ∏   
+[    à  5   V   ∏    
+:  à   '=   E   ÊQà   Ê: W  Qà   '=      Êà      ÊV  5   ÊW  QV   3   ÊV   ∏    
+=   à  AV  V  ,  R W  Á QÊà   '=      ÊV  ∏   
+à   Á QM   ÊV     ÊV  V  ¡
+Á  Q.   ÊV  5	      ÊV  ∏
+   
+:  ∏   
+Á  QÊôû8 ò»†ò–ò»†òÊò&õŸòˇˇˇ’»†òòÃ‡†òû‚òüˇˇˇ·•òÃû⁄†òû
+Àò †ò…û’òù 	   data   bs.carousel   extend   DEFAULTS   object   string   slide   number   to   interval   pause   cycleå!´!ˇˇˇˇ      $this	   data   options   action   .this         ´+íHé!´!            öò;¯        5ûöò;¯ 5ûç!´!    	      CarouselC "        ,                                     ø  L  ∑  L  @   M      	       πW   QV   à   T  : ∏    
+=   à   ∏   
+V   5   V   : : 0   QV   V   5   ∏   
+=   : 0   QV   T 0   QV   V   V   V   V   @0	   0
+   0   0   0   QV   5   5   =   Ef   ÊQV   5   ∏    
+=   à   ∏   
+V   5   V   : : ∏    
+=   à   ∏   
+V   5   V   : : ÊQôû_ÕòËò$õˇˇˇÁ…†Ÿò…†Õ†Ô†ˇ òGõˇˇˇ÷Ëò`õˇˇˇ‰ù5    on'   keydown.bs.carousel   proxy   keydown   $element	   find)   .carousel-indicators   $indicators   options   $items   $active   interval   sliding   paused   pause   hover-   mouseenter.bs.carousel-   mouseleave.bs.carousel   cycleå!´!ˇˇˇˇ      element   options   .this       ´+íHöò;¯       5û é!´!       é!´!   intervalã!´!é!´!   pauseã!´!é!´!	   wrapã!´!    ç!´!        5   Carousel.prototype.keydownb √  -  ª  -  G   #   "        5ûç!´!    	   1   Carousel.prototype.cyclec  ≤                                              O    G    J   !             πW   QT  D   ÊQV   B0    ÊQV   5   E   ÊQö   ù   V   5   : ÊQV   5   5   EX   ÊQV   5     EG   ÊQV   ö   ù   à   ∏   
+V   5   V   : V   5   5   : 0   ÊQV   ôû%÷†„ò•’ò¯ò)—òˇˇˇÙ †ú    paused   interval   clearInterval   options   setInterval   proxy	   nextå!´!ˇˇˇˇ      e   .this       ´+íHöò;¯       5ûç!´!       ?   Carousel.prototype.getItemIndexb ;  õ  3  õ  N   (           5ûç!´!       +   Carousel.prototype.tob ∫    ≤    P      2          pos 	   that    B  ë  °  â  °  S   D           5û  5ûç!´!    	   1   Carousel.prototype.pausec  µ                                              :    2    V   !             πW   QT  D   ÊQV   C0    ÊQV   5   ∏   
+=   : Ÿ   E   ÊQà   5   5   Ê>   ÊV   5   ∏   
+à   5   5   5   Á QV   ∏	   
+CÁ QÊV   ö
+   ù
+   V   5   : 0   QV   ôû%÷†’òﬂûAË†—ò◊ò…†ú    paused   $element	   find   .next, .prev   length   support   transition   trigger   end   cycle   clearInterval   intervalå!´!ˇˇˇˇ      e   .this       ´+íHöò;¯"       5ûç!´!       /   Carousel.prototype.nextb  1  e  )  e  Z               5ûç!´!       /   Carousel.prototype.prevb  Ü  ∫  ~  ∫  \               5ûç!´!       1   Carousel.prototype.slideb ‹     ‘     ^   !   ≤       	   type    $active    $next    direction 	   that    slidEvent    B  $  Í    Í  s   &             B  ¬  Ê  ∫  Ê  v              5û  5û 5ûç!´!       1   $.fn.carousel.noConflictb  Ò    È    Ö   !           5û ç!´!       B g  !  _  !  á   T   "        5ûç!´!       C             	                                      "!  ë!  !  ë!  ê                  à   =    : ∏   
+Ç    Á Qôò⁄ò§ò) -   [data-ride="carousel"]	   eachå!´!ˇˇˇˇ              ´+íHç!´!        C   ;                                               N!  è!  F!  è!  ê   H             πW  Qà   V  : W   Qà   ∏    
+V   V   ∏   
+:  l QôûO ò
+»†€òõˇˇˇÍú' 	   call	   dataå!´!ˇˇˇˇ      $carousel   .this         ´+íHöò;¯        5ûöò;¯ 5ûöò;¯ 5ûç!´!       C          ;       	                            Ü •!  Ω.  ù!  Ω.  ë                  GÇ    â   QÇ   â   Qà   =    0   Qà   [   C]   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   5	   â   Qà   5   à   0	   Qà   5   5	   à   0
+   Qà   5   5	   Ç   0   Qà   ö   : ∏   
+=   =   Ç   Á QôÃòSÀ®Ä  ñ–† òÃ†’††’®Ä  ´’®Ä  ∏’®Ä  æò0’†’†⁄†⁄††‰ò¨Ä  Ãòa    3.2.0   VERSION   toggle   DEFAULTS   prototype   dimension	   show	   hide   fn   collapse   Constructor   noConflict   document   on5   click.bs.collapse.data-api1   [data-toggle="collapse"]å!´!ˇˇˇˇ      $   Collapse   Plugin   old       ´+íHç!´!          Plugin X*  ≥+  I*  ≥+  π      "          option   B  z*  ±+  r*  ±+  π   1           5û  5ûç!´!          CollapseB À!  ¢"  √!  ¢"  ë   d           5û é!´!       é!´!   toggleã!´!    ç!´!       9   Collapse.prototype.dimensionb  #  R#  ˘"  R#  ò   %           5û ç!´!       /   Collapse.prototype.showb  s#  .'  k#  .'  ö       2          dimension    B  ≠%  ?&  •%  ?&  •              5û  5ûç!´!       /   Collapse.prototype.hideb  O'  Ô)  G'  Ô)  ´                B  ‚(  U)  ⁄(  U)  ≥              5û  5ûç!´!       3   Collapse.prototype.toggleb  *  H*  
+*  H*  ∏   "           5ûç!´!       1   $.fn.collapse.noConflictb  ",  C,  ,  C,  ¡   !           5û ç!´!       B ì,  ª.  ã,  ª.  √   O   "        5ûöò;¯ 5ûç!´!       C  b        8                         %          Ü œ.  »9  «.  »9  Ã                 GÇ    â   QÇ   â   QÇ   W   Q=    â   Q=   â   QÇ   â   Qà   =   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   5   â   Qà   5   V   0   Qà   5   5   à   0	   Qà   5   5   Ç   0
+   Qà   ö   : ∏   
+=   à   : ∏   
+=   =   Ç   : ∏   
+=   à   à   5   5   : ∏   
+=   à   =   à   5   5   Á Qô·òÄ  âÀ†òÀ†òÀ†–†’®Ä  ⁄’®Ä  ˜ò:’†‘†⁄†⁄††ﬂòŸò,„òSÈòBúh %   .dropdown-backdrop1   [data-toggle="dropdown"]   3.2.0   VERSION   prototype   toggle   keydown   fn   dropdown   Constructor   noConflict   document   on5   click.bs.dropdown.data-api   .dropdown form9   keydown.bs.dropdown.data-apiC   , [role="menu"], [role="listbox"]å!´!ˇˇˇˇ      $   backdrop   toggle   Dropdown   clearMenus   getParent   Plugin   old      ´+íHç!´!           clearMenus Ø4  6  ú4  6  Í                 e    B  ¯4  6  4  6  Ï              5û  5ûç!´!          getParent 6  %7  6  %7  Ò   \            5û ç!´!          Plugin 47  8  %7  8  Ù   E   "          option   B  V7  ˇ7  N7  ˇ7  Ù   g           5û  5ûç!´!          DropdownB =/  v/  5/  v/  Œ              5û ç!´!       3   Dropdown.prototype.toggleb ≤/  È1  ™/  È1  –   "   2        5ûç!´!       5   Dropdown.prototype.keydownb 2  õ4  2  õ4  ⁄   #   "        5ûç!´!       1   $.fn.dropdown.noConflictb  p8  ë8  h8  ë8  ˙   !           5û ç!´!       B 9  9  ˚8  9  ¸   q           5û öò;¯ 5ûç!´!       C  Ã        Z                         ,          Ü ⁄9  dO  “9  dO  ¸                  GÇ    â   QÇ   â   Qà   =    0   Qà   [   C]   C]   C]   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0	   Qà   5   Ç   0
+   Qà   5   Ç   0   Qà   5   Ç	   0   Qà   5   Ç
+   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   5   â   Qà   5   à   0   Qà   5   5   à   0   Qà   5   5   Ç   0   Qà   ö   : ∏   
+=   =   Ç   Á QôÃòÄ ]À®Ä –† òûûÃ†’†’®Ä ’®Ä  ’†’†’†††’††’®Ä 4’††’††’†’®Ä Dò5’†’†⁄†⁄††‰ò¨Ä Pò"    3.2.0   VERSION   backdrop   keyboard	   show   DEFAULTS   prototype   toggle	   hide   enforceFocus   escape   hideModal   removeBackdrop   checkScrollbar   setScrollbar   resetScrollbar!   measureScrollbar   fn   modal   Constructor   noConflict   document   on/   click.bs.modal.data-api+   [data-toggle="modal"]å!´!ˇˇˇˇ      $   Modal   Plugin   old       ´+íHç!´!           Plugin GK  ™L  8K  ™L  ?     2          option    _relatedTarget    B  xK  ®L  pK  ®L  ?  @           5û  5ûç!´!          ModalB ˝9  +;  ı9  +;  ¸   k  "          B  ˆ:  ";  Ó:  ";    f           5û  5ûé!´!       é!´!   backdropã!´!é!´!   keyboardã!´!é!´!	   showã!´!    ç!´!       -   Modal.prototype.toggleb ò;  „;  ê;  „;               5û ç!´!       )   Modal.prototype.showb <  ´?  ˘;  ´?       2          _relatedTarget 	   that    B  Ñ=  ©?  |=  ©?       @          e    B  6?  c?  .?  c?    M           5û  5û 5ûç!´!       )   Modal.prototype.hideb …?  ¬A  ¡?  ¬A               5û ç!´!       9   Modal.prototype.enforceFocusb  ËA  ¶B  ‡A  ¶B     %             B 5B  ûB  -B  ûB     r   "        5û 5ûç!´!       -   Modal.prototype.escapeb  ∆B  îC  æB  îC  !     2          B +C  HC  #C  HC  !  Ñ           5û  5ûç!´!       3   Modal.prototype.hideModalb  ∑C  !D  ØC  !D  "  "   "       	   that    B  ÛC  D  ÎC  D  $             5û  5ûç!´!       =   Modal.prototype.removeBackdropb  ID  àD  AD  àD  %  '           5û ç!´!       1   Modal.prototype.backdropb ™D  nH  ¢D  nH  '  !   b          callback 	   that   B ⁄E  fF  “E  fF  +  :           5û    B  åG  ∫G  ÑG  ∫G  1             5û  5ûç!´!       =   Modal.prototype.checkScrollbarb  ñH  I  éH  I  4  '           5û ç!´!       9   Modal.prototype.setScrollbarb  7I  ÀI  /I  ÀI  6  %           5û ç!´!       =   Modal.prototype.resetScrollbarb  ÛI  J  ÎI  J  8  '           5û ç!´!       A   Modal.prototype.measureScrollbarb  CJ  7K  ;J  7K  9  )           5û ç!´!       +   $.fn.modal.noConflictb  
+M  (M  M  (M  G             5ûç!´!       B rM  bO  jM  bO  I  I   2          $this    $target    B ≤N  ?O  ™N  ?O  N  $             B  O  =O  O  =O  O  &           5û  5û 5ûöò;¯ 5ûç!´!       C       2   û                         B          Ü vO  ix  nO  ix  P                GÇ    W   QÇ   â   Qà   =    0   Qà   [   C]   =   ]   B]   =   ]   =   ]	   =
+   ]   >]   B]   B]   [   =   ]   >]   ]   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç	   0   Qà   5   Ç
+   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0    Qà   5   Ç   0!   Qà   5   Ç   0"   Qà   5   Ç   0#   Qà   5   Ç   0$   Qà   5   Ç   0%   Qà   5   Ç   0&   Qà   5   Ç   0'   Qà   5   Ç   0(   Qà   5   Ç   0)   Qà   5   Ç   0*   Qà   5   Ç   0+   Qà   5   Ç   0,   Qà   5   Ç   0-   Qà   5.   5/   â   Qà   5.   V   0/   Qà   5.   5/   à   00   Qà   5.   5/   Ç   01   QôÀòJÀ††–† òû òû òx ò ò	ûûûù
+ ò—†’®Ä _’†’††’††††’®Ä l’®Ä r’®Ä è’®Ä §’†’††††’®Ä ¥’††’†’††††’†’®Ä ≈’®Ä  ’††’†’†’†††’†’†’†’††††’®Ä ﬂò0’†‘†⁄†⁄†ò    3.2.0   VERSION   animation   top   placement   selectorŸ   <div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>   template   hover focus   trigger      title   delay	   html   container	   body   padding   viewport   DEFAULTS   prototype	   init   getDefaults   getOptions%   getDelegateOptions   enter   leave	   show   applyPlacement   replaceArrow   setContent	   hide   fixTitle   hasContent   getPosition'   getCalculatedOffset1   getViewportAdjustedDelta   getTitle   getUID   tip   arrow   validate   enable   disable   toggleEnabled   toggle   destroy   fn   tooltip   Constructor   noConflictå!´!ˇˇˇˇ      $   Tooltip   Plugin   old      ´+íHç!´!           Plugin «v  ﬁw  ∏v  ﬁw  ⁄     "          option   B  Èv  ‹w  ·v  ‹w  ⁄  1           5û  5ûç!´!          TooltipB õO  &P  ìO  &P  P  Z           5ûé!´!       é!´!   selectorã!´!é!´!   paddingã!´!    é!´!    
+   é!´!   animationã!´!é!´!   placementã!´!é!´!   selectorã!´!é!´!   templateã!´!é!´!   triggerã!´!é!´!   titleã!´!é!´!   delayã!´!é!´!	   htmlã!´!é!´!   containerã!´!é!´!   viewportã!´!    ç!´!        -   Tooltip.prototype.initb ~Q  «T  vQ  «T  T     B        5ûç!´!       ;   Tooltip.prototype.getDefaultsb  ÓT  	U  ÊT  	U  _  &           5ûç!´!       9   Tooltip.prototype.getOptionsb /U  ıU  'U  ıU  `  %   "        5ûç!´!       I   Tooltip.prototype.getDelegateOptionsb  #V  …V  V  …V  b  -   2          options    defaults   B ÅV  ∏V  yV  ∏V  d  ,           5û  5ûç!´!       /   Tooltip.prototype.enterb ÍV  üX  ‚V  üX  f      2       	   self   B  ]X  ÖX  UX  ÖX  k              5û  5ûç!´!       /   Tooltip.prototype.leaveb ¿X  wZ  ∏X  wZ  l      2       	   self   B  4Z  ]Z  ,Z  ]Z  q              5û  5ûç!´!       -   Tooltip.prototype.showb  óZ  îa  èZ  îa  r     B       	   that   B  “`  a   `  a  å             5û  5ûç!´!       A   Tooltip.prototype.applyPlacementb æa  ˇe  ∂a  ˇe  è  )   2       	   $tip    B Ac  ãc  9c  ãc  ò  3           5û  5ûç!´!       =   Tooltip.prototype.replaceArrowb 'f  Éf  f  Éf  §  '           5û ç!´!       9   Tooltip.prototype.setContentb  ©f  Pg  °f  Pg  •  %           5û ç!´!       -   Tooltip.prototype.hideb  pg  <i  hg  <i  ©     2       	   that 	   $tip       complete  ˜g  Oh  Êg  Oh  ≠             5û  5ûç!´!       5   Tooltip.prototype.fixTitleb  `i  j  Xi  j  ¥  #   "        5ûç!´!       9   Tooltip.prototype.hasContentb  +j  Ej  #j  Ej  ∂  %           5û ç!´!       ;   Tooltip.prototype.getPositionb lj  !l  dj  !l  ∑  &           5ûç!´!       K   Tooltip.prototype.getCalculatedOffsetb Pl  ¡m  Hl  ¡m  ª  .           5ûç!´!       U   Tooltip.prototype.getViewportAdjustedDeltab ım  ◊q  Ìm  ◊q  º  3   r        5û ç!´!       5   Tooltip.prototype.getTitleb  ˚q  úr  Ûq  úr  ≈  #           5û ç!´!       1   Tooltip.prototype.getUIDb ær   s  ∂r   s     !           5û ç!´!       +   Tooltip.prototype.tipb  ?s  xs  7s  xs  Ã             5ûç!´!       /   Tooltip.prototype.arrowb  ôs  ﬂs  ës  ﬂs  Õ              5ûç!´!       5   Tooltip.prototype.validateb  t  Yt  ˚s  Yt  Œ  #   "        5ûç!´!       1   Tooltip.prototype.enableb  {t  êt  st  êt  —  !           5û ç!´!       3   Tooltip.prototype.disableb  ≥t  …t  ´t  …t  “  "           5ûç!´!       ?   Tooltip.prototype.toggleEnabledb  Út  u  Ít  u  ”  (           5ûç!´!       1   Tooltip.prototype.toggleb 2u  2v  *u  2v  ‘  !   2        5û ç!´!       3   Tooltip.prototype.destroyb  Uv  ∑v  Mv  ∑v  ÿ  "           5ûç!´!       /   $.fn.tooltip.noConflictb  Hx  hx  @x  hx  ‚              5ûöò;¯ 5ûç!´!       C  ﬁ        O                         3          Ü {x  ˙  sx  ˙  „                GÇ    W   QÇ   â   Qà   5    5       Êö   A=   ,  R pÊà   =   0   Qà   à   ∏   
+[   à   5    5   5   5   [   =	   ]
+   =   ]   =   ]   =   ]   : 0   Qà   à   ∏   
+[   à   5    5   5   5   : 0   Qà   5   à   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç	   0   Qà   5   Ç
+   0   Qà   5    5   â   Qà   5    V   0   Qà   5    5   à   0   Qà   5    5   Ç   0   QôÀò4À†ò–ûœò•–†Ùò@ ò ò ò òˇˇˇ§…†Ôò…†’†’†’®Ä Ò’†’†††’†’®Ä ˝ò0’†‘†⁄†⁄†ò    fn   tooltip   Error7   Popover requires tooltip.js   3.2.0   VERSION   extend   Constructor   DEFAULTS   right   placement   click   trigger      content  <div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>   template   prototype   constructor   getDefaults   setContent   hasContent   getContent   arrow   tip   popover   noConflictå!´!ˇˇˇˇ      $   Popover   Plugin   old      ´+íHç!´!          Plugin X~  o  I~  o  ¯     "          option   B  z~  m  r~  m  ¯  1           5û  5ûç!´!          PopoverB †x  ◊x  òx  ◊x  „  D           5ûé!´!            é!´!       é!´!   placementã!´!é!´!   triggerã!´!é!´!   contentã!´!é!´!   templateã!´!    é!´!            ç!´!        ;   Popover.prototype.getDefaultsb  æz  Ÿz  ∂z  Ÿz  È  &           5ûç!´!       9   Popover.prototype.setContentb  ˇz  Ç|  ˜z  Ç|  Í  %           5û ç!´!       9   Popover.prototype.hasContentb  ®|  ’|  †|  ’|  Ò  %           5û ç!´!       9   Popover.prototype.getContentb  ˚|  Ö}  Û|  Ö}  Ú  %           5û ç!´!       /   Popover.prototype.arrowb  ¶}  ‰}  û}  ‰}  ı              5ûç!´!       +   Popover.prototype.tipb  ~  H~  ˚}  H~  ˆ             5ûç!´!       /   $.fn.popover.noConflictb  Ÿ  ˘  —  ˘                 5ûöò;¯ 5ûç!´!       C          5       	                            Ü Ä  »ã  Ä  »ã                   GÇ    â   QÇ   â   Qà   =    0   Qà   [   ◊
+]   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5	   5
+   â   Qà   5	   à   0
+   Qà   5	   5
+   à   0   Qà   5	   5
+   Ç   0   Qà   ö   : ∏   
+=   Ç   Á Qô◊®Ä ò–† òÕ†’†’®Ä ’®Ä #’®Ä ,ò0’†’†⁄†⁄††ﬂò
+§ò!    3.2.0   VERSION   offset   DEFAULTS   prototype   getScrollHeight   refresh   process   activate   fn   scrollspy   Constructor   noConflict   window   on5   load.bs.scrollspy.data-apiå!´!ˇˇˇˇ      $   ScrollSpy   Plugin   old       ´+íHç!´!    	      ScrollSpy  Q        2                                    /Ä  «Å  Ä  «Å    B             πW  Qà   ∏    
+V  5   V  : W   QV  à   =   : 0   QV  à   T  : ∏   
+=   :    Êà   ö   :    Êà   T  : Ê0   QV  à   ∏   
+[    à   5   T : 0	   QV  V  5	   5
+   D   ÊQ=   Ê=   0   QV  Z    0   QV  Z    0   QV  @0   QV  >0   QV  5   ∏   
+=   V   Á QV  ∏   
+Á  QV  ∏   
+Á  QôûXŸò»†œò…†Õòœò—ò“ò
+ †‚ò…†Î†œ†œ†À†À†›†œ†œò    proxy   process	   body   $body   is   window   $scrollElement   extend   DEFAULTS   options   target       .nav li > a   selector   offsets   targets   activeTarget   scrollHeight   on'   scroll.bs.scrollspy   refreshå!´!ˇˇˇˇ      element   options   process   .this       ´+íHé!´!            öò;¯       5û ç!´!    	      Plugin                                              Ç  ¶â  †ä  óâ  †ä  (                πW   QV   ∏    
+Ç    : ôû–ò£†††ò+ 	   eachå!´!ˇˇˇˇ      option   .this      ´+íHç!´!          Plugin/<c   ´         .                                      »â  ûä  ¿â  ûä  (  1             πW  Qà  V  : W   QV   ∏    
+=   : W  Qà   '=   E   ÊQà   ÊW  QV   3   ÊV   ∏    
+=   à  AV  V  ,  R W  Á QÊà   '=      ÊV  à   ¡
+Á  QÊôû8 ò»†ò–ò»†òòﬁ†òû‚ò üˇˇˇ‡•òÃûÃòù 	   data   bs.scrollspy   object   stringå!´!ˇˇˇˇ      $this	   data   options   .this         ´+íHöò;¯        5û öò;¯ 5ûé!´!       é!´!   offsetã!´!    ç!´!    	   G   ScrollSpy.prototype.getScrollHeightc   N                                               ,Ç  ¶Ç  $Ç  ¶Ç    ,             πW   QV   5    >75   D5   ÊQö   ∏   
+V   5   >75   ö   5   5   : Êôû/ˇõ,úJ    $scrollElement   scrollHeight	   Math   max   $body   document   documentElementå!´!ˇˇˇˇ      .this         ´+íHöò;¯       5û ç!´!    	   7   ScrollSpy.prototype.refreshc   È         4                                      ÀÇ  "Ö  √Ç  "Ö                  πW   Q=    â   Q>â   Qà  ∏   
+V   5   >7:  *   Ê=   â   QV   5   ∏   
+:  â   QÊV   Z    0   QV   Z    0   QV   V   ∏   
+:  0   QV   â   QV   5	   ∏
+   
+V   5   : ∏   
+Ç    : ∏   
+Ç   : ∏   
+Ç   Á Qôû+À†òßò◊òû$À†–ò ò œ†œ†œò…†ò †Ëòœ†††òiœò&§ò    offset   isWindow   $scrollElement   position   scrollTop   offsets   targets   getScrollHeight   scrollHeight   $body	   find   selector   map	   sort	   eachå!´!ˇˇˇˇ      offsetMethod   offsetBase	   self   .this        ´+íHç!´!        ;   ScrollSpy.prototype.refresh/<c         	   -                                     ÊÉ  ≤Ñ  ﬁÉ  ≤Ñ    +      	       πW  Qà  V  : W   QV   ∏    
+=   : D   ÊQV   ∏   
+=   : ÊW  Q†    ∏   
+V  : E   ÊQà  V  : ÊW  QV  Eh   ÊQV  Ÿ   EX   ÊQV  ∏   
+=   : E>   ÊQZ   Z   V  à   ¡
+:  5   à   `    V  `   `    ÊD   ÊQ@Êôû2 ò»†ò–ò⁄ò…†ò–ò‘ò…†ÎòœòùÃò”òÿò 	   data   target	   attr	   href	   test   length   is   :visible   topå!´!ˇˇˇˇ      $el	   href   $href   .this         ´+íHå!´!   ^#.    öò;¯        5ûç!´!       ;   ScrollSpy.prototype.refresh/<c                                                   ¡Ñ  ÿÑ  πÑ  ÿÑ    v              T  >7T >7ôò|Àò å!´!ˇˇˇˇ      a   b        ´+íHöò;¯        5û ç!´!       ;   ScrollSpy.prototype.refresh/<c   =                                   
+            ÁÑ   Ö  ﬂÑ   Ö    ú             πW   Qà   5    ∏   
+V   >7Á Qà   5   ∏   
+V   ?7Á QôûÄ  ü€†€ò    offsets	   push   targetså!´!ˇˇˇˇ      .this         ´+íHöò;¯        5ûöò;¯ 5ûç!´!    	   7   ScrollSpy.prototype.processc   ‡        f                         "            GÖ  €á  ?Ö  €á    $             πW  QV  5    ∏   
+:  V  5   5   W   QV  ∏   
+:  W  QV  5   5   V  V  5    ∏   
+:  W  QV  5   W  QV  5   W  QV  5   W  QV  5	   V     ÊV  ∏
+   
+Á  QÊV   V  :   ÊV  V  V  Ÿ   ?7W  E   ÊQV  ∏   
+V  : ÊÊV  E   ÊQV   V  >7Ê0   ÊV  V  >7W  E   ÊQV  ∏   
+V  : ÊÊV  Ÿ   W  Q u   mV  V  V  7E^   ÊQV   V  V  7EI   ÊQV  V  ?7 D   ÊQV   V  V  ?7ÊE   ÊQV  ∏   
+V  V  7: ÊQÊ„ÅV  #?W  QÅˇˇˇÊôû+–ò
+◊†òÀò»†ò„ò+…†òŒ†òŒ†òŒ†ò†Œû$–ò…ûÔò4úÄ  ˇöˇˇˇ◊û(Âò%úÄ  °öˇˇˇtŒ utÄ  ÑûÎò2ˇò)ûˇˇˇü’ò{    $scrollElement   scrollTop   options   offset   getScrollHeight   height   offsets   targets   activeTarget   scrollHeight   refresh   length   activateå!´!ˇˇˇˇ      scrollTop   scrollHeight   maxScroll   offsets   targets   activeTarget   i   .this         ´+íHöò;¯    Z  Ñ   R       5û ç!´!       9   ScrollSpy.prototype.activateb à  ñâ  ˘á  ñâ  #  %   "        5ûç!´!       3   $.fn.scrollspy.noConflictb  ã  6ã  ã  6ã  /  "           5ûç!´!       C             	                                      iã  ∆ã  aã  ∆ã  1                 à   =    : ∏   
+Ç    Á Qôò5⁄ò§ò '   [data-spy="scroll"]	   eachå!´!ˇˇˇˇ              ´+íHç!´!         C   ;                                               íã  ƒã  äã  ƒã  1  [             πW  Qà   V  : W   Qà   ∏    
+V   V   ∏   
+:  l Qôûb ò»†€òõˇˇˇÔú 	   call	   dataå!´!ˇˇˇˇ   	   $spy   .this         ´+íHöò;¯        5û öò;¯ 5ûöò;¯ 5ûç!´!       C  ÿ         %                                   Ü ⁄ã  ∏í  “ã  ∏í  2                 GÇ    â   QÇ   â   Qà   =    0   Qà   5   Ç   0   Qà   5   Ç   0   Qà   5   5   â   Qà   5   à   0   Qà   5   5   à   0   Qà   5   5   Ç   0   Qà   ö	   : ∏
+   
+=   =   Ç   Á QôÃòIÀ†–†’®Ä @’®Ä Jò0’†’†⁄†⁄††‰ò§ò    3.2.0   VERSION   prototype	   show   activate   fn   tab   Constructor   noConflict   document   on+   click.bs.tab.data-apiS   [data-toggle="tab"], [data-toggle="pill"]å!´!ˇˇˇˇ      $   Tab   Plugin   old       ´+íHç!´!           Plugin ë  µë  Úê  µë  G     "          option   B  #ë  ≥ë  ë  ≥ë  G  1           5û  5ûç!´!          TabB ˚ã  å  Ûã  å  2  U           5ûç!´!       %   Tab.prototype.showb  Må  éé  Eå  éé  4     B          $this    previous    B  Mé  åé  Eé  åé  ?  /           5û  5ûç!´!       -   Tab.prototype.activateb Æé  Òê  ¶é  Òê  @     P          element    callback    $active    transition    	   next  Hè  áê  ;è  áê  B     @        5û 5ûç!´!       '   $.fn.tab.noConflictb  í  'í  í  'í  M             5ûç!´!       B Éí  ∂í  {í  ∂í  O  [           5û öò;¯ 5ûç!´!       C          8                                   Ü  í  [ù  ¬í  [ù  P                 GÇ    â   QÇ   â   Qà   =    0   Qà   =   0   Qà   [   >]   ö   ]   0   Qà   5   Ç   0	   Qà   5   Ç   0
+   Qà   5   Ç   0   Qà   5   5   â   Qà   5   à   0   Qà   5   5   à   0   Qà   5   5   Ç   0   Qà   ö   : ∏   
+=   Ç   Á QôÃòEÀ®Ä U–†–† òû	–†’®Ä ]’†’®Ä wò0’†’†⁄†⁄††ﬂò
+¨Ä Åò    3.2.0   VERSION9   affix affix-top affix-bottom   RESET   offset   window   target   DEFAULTS   prototype   getPinnedOffset5   checkPositionWithEventLoop   checkPosition   fn   affix   Constructor   noConflict   on	   loadå!´!ˇˇˇˇ      $   Affix   Plugin   old       ´+íHç!´!     	      Plugin                                              Ç  ﬂö  Õõ  –ö  Õõ  s                πW   QV   ∏    
+Ç    : ôû–ò£†††ò+ 	   eachå!´!ˇˇˇˇ      option   .this      ´+íHç!´!          Plugin/<c   ´         .                                      õ  Àõ  ˘ö  Àõ  s  1             πW  Qà  V  : W   QV   ∏    
+=   : W  Qà   '=   E   ÊQà   ÊW  QV   3   ÊV   ∏    
+=   à  AV  V  ,  R W  Á QÊà   '=      ÊV  à   ¡
+Á  QÊôû8 ò»†ò–ò»†òòﬁ†òû‚òüˇˇˇ‰•òÃûÃòù 	   data   bs.affix   object   stringå!´!ˇˇˇˇ      $this	   data   options   .this         ´+íHöò;¯        5û öò;¯ 5ûç!´!    	      AffixC Î         '                                    Ìí  =î  Âí  =î  P  S      	       πW   QV   à   ∏    
+[    à   5   T : 0   QV   à   V   5   5   : ∏   
+=   à   ∏   
+V   5   V   : : ∏   
+=   à   ∏   
+V   5	   V   : : 0
+   QV   à   T  : 0   QV   V   V   @0   0   0   QV   ∏   
+Á  Qôûe‚ò…†ÿòËò5õˇˇˇ‚Ëò]õˇˇˇ„…†Õò…†›†œò    extend   DEFAULTS   options   target   on1   scroll.bs.affix.data-api   proxy   checkPosition/   click.bs.affix.data-api5   checkPositionWithEventLoop   $target   $element   pinnedOffset   unpin   affixedå!´!ˇˇˇˇ      element   options   .this       ´+íHé!´!            öò;¯       5û é!´!       é!´!   offsetã!´!é!´!   targetã!´!    ç!´!       ?   Affix.prototype.getPinnedOffsetb  œî  µï  «î  µï  X  (           5ûç!´!       U   Affix.prototype.checkPositionWithEventLoopb  Èï  ñ  ·ï  ñ  ]  3           5û ç!´!    	   ;   Affix.prototype.checkPositionc   s        »                         B            Bñ  œö  :ñ  œö  ^  &   
+          πW	  QV	  5    ∏   
+=   :     ÊÊà   ö   : ∏   
+:  W   QV	  5   ∏   
+:  W  QV	  5    ∏   
+:  W  QV	  5   5   W  QV  5	   W  QV  5
+   W  QV  '=      ÊV  W  W  QÊV  '=   "   ÊV  ∏	   
+V	  5    : W  QÊV  '=   "   ÊV  ∏
+   
+V	  5    : W  QÊV	  5   @E   ÊQV  V	  5   V  5	   Ê   ÊBu   ÊV  @E.   ÊQV  5	   V	  5    ∏   
+:  V   V  Ê   Ê=
+   /   ÊV  @E   ÊQV  V  Ê   Ê=	      ÊBÊW  QV	  5   V  H   ÊÊV	  5   @$   ÊV	  5    ∏   
+=	   =   Á QÊ=   V     Ê=   V     Ê=   ÊW  Qà   ∏   
+V  =   : W  QV	  5    ∏   
+V  Á QV  ∏   
+:     ÊÊV	  V  0   QV	  V  =
+      ÊV	  ∏   
+:     Ê@Ê0   QV	  5    ∏   
+à   5   : ∏   
+V  : ∏   
+à   ∏   
+V  ∏   
+=   =   : : Á QV  =
+   A   ÊV	  5    ∏   
+[    V   V	  5    ∏   
+:  V  ]	   Á QÊôû)ò’òû©Ä ròa™Ä _òÀò ò»†ò–ò
+»†ò–ò	»†ò”†òŒ†òŒ†òÀûŒ†òÀû‘ò
+…†òÀû ‘ò…†òÎÛòeœËÿ†Œû©Ä ròa™Ä jÀûﬂ†ò…‚†ò÷ò»†ÿ†Àòû°†††òa™Ä oŒ†Œ—ò—†Ëò'Îò$õˇˇˇ¯õˇˇˇ¯§ û’ò‘òŒòˇˇˇŸùM    $element   is   :visible   document   height   $target   scrollTop   offset   options   top   bottom   object   function   unpin   affixed   css      affix   -   Event   .bs.affix   trigger%   isDefaultPrevented   getPinnedOffset   removeClass   RESET   addClass   replaceå!´!ˇˇˇˇ
+      scrollHeight   scrollTop   position   offset   offsetTop   offsetBottom   affix   affixType   e   .this      
+   ´+íHé!´!       é!´!   topã!´!    öò;¯"       5û ç!´!       +   $.fn.affix.noConflictb  -ú  Kú  %ú  Kú  z             5ûç!´!       C                                                   hú  Yù  `ú  Yù  |                 à   =    : ∏   
+Ç    Á Qôò⁄ò¨Ä Åò %   [data-spy="affix"]	   eachå!´!ˇˇˇˇ              ´+íHç!´!       B  êú  Wù  àú  Wù  |  D           5û öò;¯ 5ûöò;¯ 5ûöò;¯˘ùº'•      0\lÔÄ\lÔÄ@^∂\uk   A    :https://campusinteraction.com/Campus/srm-aaruush/js/bootstrap.js necko:classified 1 strongly-framed 1 security-info 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 request-method GET response-head HTTP/1.1 200 OK
+Last-Modified: Thu, 28 Apr 2016 09:34:56 GMT
+ETag: "a107f-9d64-531883d38d000"
+Accept-Ranges: bytes
+Content-Length: 40292
+Content-Type: text/javascript
+Date: Tue, 19 Feb 2019 10:39:39 GMT
+Server: Apache
+ original-response-headers Date: Fri, 04 Jan 2019 11:34:54 GMT
+Server: Apache
+Last-Modified: Thu, 28 Apr 2016 09:34:56 GMT
+ETag: "a107f-9d64-531883d38d000"
+Accept-Ranges: bytes
+Content-Length: 40292
+Connection: close
+Content-Type: text/javascript
+ uncompressed-len 0 net-response-time-onstart 359 net-response-time-onstop 363 alt-data 1;40292,javascript/moz-bytecode-20190128165852 alt-data-from-child 1  a 

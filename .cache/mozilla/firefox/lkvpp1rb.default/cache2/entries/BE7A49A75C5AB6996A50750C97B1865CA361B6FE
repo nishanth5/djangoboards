@@ -1,0 +1,751 @@
+/*	
+ *	INTRO 
+ *	modal.js was written to incorporate colorbox modal in a flexible, extendable way and relies on jquery.colorbox.min.js
+ *	
+ *	OPEN A NEW MODAL:
+ *	(1) To open a modal use TVAPP.modal.open(content, options, data);
+ *		content: (string) Name of modal template to load
+ *		options: (object) Colorbox specific parameters to override
+ *		data: (object) Modal data to pass in to the modal initialize script or to activate special modal handlers
+ *			Common (optional) data parameters:
+ *				saveState:	(boolean) If true will save the existing modal state and return to it when the new modal is closed
+ *				url:		(string) If present will override the modal content to load the URL into an iframe within the modal
+ *				content:	(html as string) If present will override the modal content to load the included HTML within the modal.
+ *				cache:		(boolean) If true will load the content using contentRepository instead of ajax template.
+ *	(2) Every modal will trigger content+"_init" after loading, so bind to that event for initializing your modal interactions
+ *
+ *	OPEN A MODAL WITHIN A MODAL:
+ *	TVAPP.modal.open will check the data.saveState parameter and if true, will create/append a returnState object to allow
+ *	the modal to return to the previous state once the TVAPP.modal.close() is fired. This includes saving/returning form elements.
+ *	We also still have the original TVAPP.modal() function to open a simple dialog over top of the colorbox modal if all you
+ *	need is a user message.
+ *
+ *	CLOSE A MODAL:
+ *	Although colorbox handles closing with j$.colorbox.close(), please use TVAPP.modal.close() instead since it handles
+ *	additional options like returning to a saved state, initiating nextAction, and resetting modal variables on close.
+ *	If you wish to close a modal and ignore all saved states / next action use TVAPP.modal.close(true) which will force 
+ *	close immmediately and handle resetting the modal variables.
+ *
+ *	MODAL "LOADING-STATE":
+ *	A modal can be placed into a "loading state" which hides the modal contents and deactivates the modal escKey binding
+ *	by calling TVAPP.modal.loadingStart().  This requires a <form> wrapper around the part of the modal to hide (generally
+ *	everything but the modal_title).
+ *	Once the background process is complete you can either close the modal, open a new modal to replace it, or call
+ *	TVAPP.modal.loadingStop() to return the form and modal functionality.
+ *
+ *	CALLING FOR A MODAL BEFORE PROCEEDING WITH GIVEN ACTION (e.g. REGISTRATION):
+ *	Before calling your action:
+ *		(1) set TVAPP.modal.proceed = false
+ *		(2) define TVAPP.modal.nextAction as a function to run once your modal is complete.
+ *		(3) bind the following function to an existing event that will trigger once you know the criteria has changed
+ *			(registration uses "userInfoUpdated"):
+ *			function() {
+ *				TVAPP.modal.proceed = true;
+ *				TVAPP.modal.close();
+ *				j$(document).unbind(THISBINDING); <-- replace with your binding
+ *			}
+ *	"handleStatusUpdate" in referral.js is an excellent example of how to force a user to register/login before opening a modal
+ *
+ *	MODAL TEMPLATES:
+ *	Standard modal templates should have the following structure (copy and paste to create a new template)
+	<div class="MODAL_IDENTIFIER">
+		<div class="modal_title with_close">
+			<h3>##D.Apply.Modal.title##</h3>
+			<div class="jCloseModal modal_close">&times;</div>
+		</div>
+		<form>
+			<div class="modal_content">
+				YOUR_MODAL_CONTENT
+			</div>
+			<div class="modal_actions"><div class="action_button_holder"><div class="action_buttons">
+				<div class="submit_cancel jCloseModal">##D.global.cancel##</div>
+				<div class="generic_btn submit_finish">SUBMIT_TEXT</div>
+			</div></div></div>
+		</form> 
+	</div>
+ *
+ */
+
+TVAPP.modal = {
+	state : "closed",
+	returnState : new Array(),
+	nextAction : null,
+	cacheData : null,
+	cacheOptions : null,
+	proceed: true,
+	loading: false,
+	reset: function() {
+		TVAPP.modal.returnState.length=0;
+		TVAPP.modal.cacheData = null;
+		TVAPP.modal.cacheOptions = null;
+		TVAPP.modal.nextAction = null;
+		TVAPP.modal.proceed = true;
+		j$(document).unbind('.modal');
+	},
+	close: function(force) {
+		// if nextAction, and authorized to proceed, run it
+		if (TVAPP.modal.nextAction && TVAPP.modal.proceed && !force) {
+			j$.log('Modal Next Action');
+			TVAPP.modal.nextAction();
+			TVAPP.modal.nextAction = null;
+			TVAPP.modal.returnState.length=0;
+		// if returnState, load it into modal and set reset returnState to null
+		} else if(TVAPP.modal.returnState.length != 0 && !force) {
+			j$.log('Modal Return State');
+			var lastState = TVAPP.modal.returnState.pop();
+			TVAPP.modal.open(lastState.state, lastState.options, j$.extend({}, lastState.data, {returnState: true, data: lastState.formdata}));
+		// else close and reset modal
+		} else {
+			if(force) { j$.log('Forced Close');	}
+			else if(!TVAPP.modal.proceed) { j$.log('Not Permitted to Proceed'); }
+			else { j$.log('Modal Close'); }
+			TVAPP.modal.reset();
+			TVAPP.modal.state = "closed";
+			j$.colorbox.close();
+		}
+	},
+
+	open: function(content, options, data) {
+		data = data || {};
+		// loading delay loop
+		if(TVAPP.modal.loading) {
+			j$.log('modal loading');
+			j$(document).bind('modal_initialized.delay', function() {
+				TVAPP.modal.loading = false;
+				j$(document).unbind('modal_initialized.delay');
+				TVAPP.modal.open(content,options,data);
+			});
+			return false;
+		}
+		var modal = j$('#cboxLoadedContent');
+		// if data.clearStates, truncate TVAPP.modal.returnState
+		if (data.clearStates && TVAPP.modal.returnState.length!=0) {
+			TVAPP.modal.returnState.length=0;
+			delete data.clearStates;
+		}
+		// if data.saveState, store current content in TVAPP.modal.returnState
+		if (data.saveState && TVAPP.modal.state != 'closed') {
+			TVAPP.modal.returnState.push({
+				state:TVAPP.modal.state,
+				data:TVAPP.modal.cacheData,
+				options:TVAPP.modal.cacheOptions,
+				formdata:j$('form', modal).first().serializeArray()
+			});
+			delete data.saveState; // do not perpetuate
+		}
+		// update data and options cache for future reference
+		TVAPP.modal.cacheData = data;
+		TVAPP.modal.cacheOptions = options;
+
+		var defaults = {
+			initialWidth: 50,
+			initialHeight: 50,
+			opacity: 0.5,
+			maxWidth: 800,
+			overlayClose: false,
+			escKey: false,
+			scrolling: false,
+			fastIfram: true,
+			className: content,
+			open: true,
+			closeButton: false,
+			onComplete: function() {
+				j$('#colorbox, #cboxWrapper, #cboxLoadedContent').css({'overflow':'visible'});
+				TVAPP.modal.defaultModalInitialize(data);
+				delete data.returnState;
+				j$(document).trigger(content+"_init", data);
+			},
+			onCleanup: function() {
+				if(j$(".uploadify", modal).length) {
+					j$(".uploadify", modal).uploadify('destroy'); // must destroy uploadify to avoid errors in IE
+				}
+			}
+		};
+
+		// overwrite settings for mobile layout
+		if (j$("body").hasClass("mobile")) {
+			var initPosition = j$(window).scrollTop();
+			j$("html, body").animate({ scrollTop: 0 });
+			j$.extend(defaults, {
+				top:'0px',
+				left:'0px',
+				transition:'none',
+				opacity:0.5,
+				width:"100%",
+				reposition:false,
+				onComplete: function() {
+					TVAPP.modal.defaultModalInitialize(data);
+					j$('#cboxWrapper').animate({ scrollTop: 0 }); // always load new modal at top of content
+					delete data.returnState;
+					j$(document).trigger(content+"_init", data);
+					if(!j$("body").hasClass("jMenuOn")) {
+						j$("#body_wrapper").css({"overflow":"hidden","position":"fixed","width":"100%"});
+						j$('#footer').hide();
+					}
+				},
+				onCleanup: function() {
+					if(j$(".uploadify").length) {
+						j$(".uploadify").uploadify('destroy'); // must destroy uploadify to avoid errors in IE
+					}
+					if(!j$("body").hasClass("jMenuOn")) {
+						j$("#body_wrapper").css({"overflow":"auto","position":"static","width":"auto"});
+						j$('#footer').show();
+					}
+					j$("html, body").animate({ scrollTop: initPosition });
+				}
+			});
+		}
+
+		// if modal is in facebook app context change some display options
+		if (TVAPP.property.fb) {
+			j$.extend(defaults, {top:'50px',speed:50,transition:'none', opacity:0.9});
+		}
+		// if modal is in TBE iframe change some display options
+		if (TVAPP.property.tbe_iframe) {
+			j$.extend(defaults, {top:'120px',speed:50,transition:'none', opacity:0.9});
+		}
+		// if data.url, load external url instead of local content (using iframe method)
+		if (data.url) {
+			var settings = j$.extend({},defaults, options, {href:data.url, iframe:true });
+		// if data.load_blank, load the content or data.content within the blank_modal frame
+		} else if (data.load_blank) {
+			data.blank = data.blank || {};
+			var modalFrame = j$(TVAPP.ajaxIncludeContent({template:'blank_modal'}));
+			if (data.content) {
+				modalFrame.find('.modal_content').append(data.content);
+			} else {
+				j$.extend(data, {'template':content});
+				modalFrame.find('.modal_content').append(TVAPP.ajaxIncludeContent(data));
+			}
+			modalFrame.find('.blank_modal').addClass(content);
+			if(data.blank.title) modalFrame.find('.modal_title h3').append(data.blank.title);
+			if(data.blank.action_text) modalFrame.find('.action_buttons .submit_finish').text(data.blank.action_text);
+			if(data.blank.action_class) modalFrame.find('.action_buttons .submit_finish').addClass(data.blank.action_class);
+			if(data.blank.action_text || data.blank.action_class) modalFrame.find('.modal_actions').show();
+			var settings = j$.extend({},defaults, options, {html:modalFrame});
+		// if data.content, load it instead of ajax template
+		} else if (data.content) {
+			var settings = j$.extend({},defaults, options, {html:data.content});
+		// if data.cache, look for content in contentRepository
+		} else if (data.cache) {
+			var settings = j$.extend({},defaults, options, {html:TVAPP.smLoadContent(content, data.context)});
+		// default to loading content from template
+		} else {
+			j$.extend(data, {'template':content});
+			var settings = j$.extend({},defaults, options, {html:TVAPP.ajaxIncludeContent(data)});
+		}
+		TVAPP.modal.loading = true;
+		j$.colorbox(settings);
+		j$.log('modal state: '+content);
+		TVAPP.modal.state = content;
+	},
+	
+	loadingStart: function(data) {
+		if (TVAPP.modal.state == "closed") return false;
+		var modal = j$('#cboxLoadedContent');
+		var settings = {
+			replace: modal.find('form').first(),
+			options: {
+				lines: 13, // The number of lines to draw
+				length: 7, // The length of each line
+				width: 4, // The line thickness
+				radius: 10, // The radius of the inner circle
+				color: '#555', // #rgb or #rrggbb
+				trail: 50 // Amount of afterglow
+			}
+		};
+		j$.extend(true, settings, data);
+		settings.replace.parent().append(j$('<div class="modal_spinner" />').css({'height':settings.replace.height(),'width':settings.replace.width()}));
+		settings.replace.fadeOut('fast');
+		j$(".jCloseModal", modal).hide();
+		j$('.modal_spinner', modal).spin(settings.options);
+		j$(document).unbind('keydown.cbox');
+	},
+	
+	loadingStop: function(data) {
+		data = data || {};
+		if (TVAPP.modal.state == "closed") return false;
+		var modal = j$('#cboxLoadedContent');
+		var settings = {replace: modal.find('form').first()};
+		j$.extend(settings, data);
+		j$(".modal_spinner", modal).remove();
+		settings.replace.fadeIn('fast');		
+		j$(".jCloseModal", modal).show();
+		if (data.escKey != false) {
+			j$(document).bind('keydown.cbox', function(e){
+				if(TVAPP.modal.state != 'closed' && e.keyCode === 27) {
+					e.preventDefault();
+					TVAPP.modal.close();
+				}
+			});
+		}
+	},
+	
+	defaultModalInitialize: function(data) {
+		data = data || {};
+		var modal = j$('#cboxLoadedContent');
+		
+		// initialize close modal buttons
+		j$('.jCloseModal', modal).click(function(){	TVAPP.modal.close();});
+		if (TVAPP.modal.returnState.length) j$('.modal_title .jCloseModal', modal).addClass('entypo').html(TVAPP.smDict('entypo.reply')); // replace close icon with return icon
+		
+		// initialize any tooltips
+		if(j$(".jTooltip", modal).length) {
+			// removed
+		}
+		
+		// initialize any chosen dropdowns
+		if(TVAPP.getInternetExplorerVersion() != 7) {
+			if(j$('.jChosen', modal).length) {
+				j$('.jChosen', modal).chosen({
+  				no_results_text: TVAPP.smDict('Chosen.no_results'),
+					placeholder_text_multiple: TVAPP.smDict('Chosen.placeholder_text_multiple'),
+					placeholder_text_single: TVAPP.smDict('Chosen.placeholder_text_single')
+				});
+			}
+		}
+		
+		// reset default colorbox escKey function to use TVAPP.modal.close();
+		j$(document).unbind('keydown.cbox');
+		if (data.escKey != false) {
+			j$(document).bind('keydown.cbox', function(e){
+				if(TVAPP.modal.state != 'closed' && e.keyCode === 27) {
+					e.preventDefault();
+					TVAPP.modal.close();
+				}
+			});
+		}
+		
+		// initialize any placeholders
+		j$("input[placeholder], textarea[placeholder]", modal).placeholder();
+
+		// if returning state has form data, restore previous form state
+		if (data.returnState && data.data) {
+			this.refreshFormData(data);
+			j$('div.error', modal).hide(); // hide any existing error messages.
+		}
+		
+		// if modal has anchor-only links give them scrollTop functionality 
+		// (does not currently work in IE7 because it converts all hrefs into absolute urls)
+		j$('a[href^="#"]', modal).filter('a[href!="#"]').click(function(event) {
+			event.preventDefault();
+			var target=j$(j$(this).attr('href'), modal),
+				scrollContainer = j$("body").hasClass("mobile") ? j$('#cboxWrapper') : j$('.modal_content', modal);
+			scrollContainer.animate({
+				scrollTop: (j$("body").hasClass("mobile") ? target.offset().top : target.position().top) + scrollContainer.scrollTop() - 15  // added for padding
+			});
+			return false;
+		});
+
+		// resize non-iframe content to fit
+		if (!data.url) {
+			j$.colorbox.resize();
+		}
+		
+		// update modal object finished loading
+		TVAPP.modal.loading = false;
+		j$(document).trigger('modal_initialized');
+	},
+
+	refreshFormData: function(data) {
+		var modal = j$('#cboxLoadedContent');
+		for(var i=0; i < data.data.length; i++) {
+			var input = j$('[name="'+data.data[i].name+'"]', modal);
+			if (input.first().attr('type') == 'radio') {
+				input.filter('[value="'+data.data[i].value+'"]').attr('checked', true).click();
+			} else if (input.attr('type') == 'checkbox') {
+				j$('[name="'+data.data[i].name+'"]', modal).attr('checked', true);
+			} else if (input.is('select')) {
+				input.find('option[value="'+data.data[i].value+'"]').attr('selected','selected');
+			} else {
+				j$('[name="'+data.data[i].name+'"]', modal).val(data.data[i].value);
+			}
+		}
+		j$('.jChosen', modal).trigger("liszt:updated"); // update any chosen picklists to reflect the data re-insertion
+	}
+};         20190128165852‘          S                                      &9      / * 	 
+   * 	 I N T R O   
+   * 	 m o d a l . j s   w a s   w r i t t e n   t o   i n c o r p o r a t e   c o l o r b o x   m o d a l   i n   a   f l e x i b l e ,   e x t e n d a b l e   w a y   a n d   r e l i e s   o n   j q u e r y . c o l o r b o x . m i n . j s 
+   * 	 
+   * 	 O P E N   A   N E W   M O D A L : 
+   * 	 ( 1 )   T o   o p e n   a   m o d a l   u s e   T V A P P . m o d a l . o p e n ( c o n t e n t ,   o p t i o n s ,   d a t a ) ; 
+   * 	 	 c o n t e n t :   ( s t r i n g )   N a m e   o f   m o d a l   t e m p l a t e   t o   l o a d 
+   * 	 	 o p t i o n s :   ( o b j e c t )   C o l o r b o x   s p e c i f i c   p a r a m e t e r s   t o   o v e r r i d e 
+   * 	 	 d a t a :   ( o b j e c t )   M o d a l   d a t a   t o   p a s s   i n   t o   t h e   m o d a l   i n i t i a l i z e   s c r i p t   o r   t o   a c t i v a t e   s p e c i a l   m o d a l   h a n d l e r s 
+   * 	 	 	 C o m m o n   ( o p t i o n a l )   d a t a   p a r a m e t e r s : 
+   * 	 	 	 	 s a v e S t a t e : 	 ( b o o l e a n )   I f   t r u e   w i l l   s a v e   t h e   e x i s t i n g   m o d a l   s t a t e   a n d   r e t u r n   t o   i t   w h e n   t h e   n e w   m o d a l   i s   c l o s e d 
+   * 	 	 	 	 u r l : 	 	 ( s t r i n g )   I f   p r e s e n t   w i l l   o v e r r i d e   t h e   m o d a l   c o n t e n t   t o   l o a d   t h e   U R L   i n t o   a n   i f r a m e   w i t h i n   t h e   m o d a l 
+   * 	 	 	 	 c o n t e n t : 	 ( h t m l   a s   s t r i n g )   I f   p r e s e n t   w i l l   o v e r r i d e   t h e   m o d a l   c o n t e n t   t o   l o a d   t h e   i n c l u d e d   H T M L   w i t h i n   t h e   m o d a l . 
+   * 	 	 	 	 c a c h e : 	 	 ( b o o l e a n )   I f   t r u e   w i l l   l o a d   t h e   c o n t e n t   u s i n g   c o n t e n t R e p o s i t o r y   i n s t e a d   o f   a j a x   t e m p l a t e . 
+   * 	 ( 2 )   E v e r y   m o d a l   w i l l   t r i g g e r   c o n t e n t + " _ i n i t "   a f t e r   l o a d i n g ,   s o   b i n d   t o   t h a t   e v e n t   f o r   i n i t i a l i z i n g   y o u r   m o d a l   i n t e r a c t i o n s 
+   * 
+   * 	 O P E N   A   M O D A L   W I T H I N   A   M O D A L : 
+   * 	 T V A P P . m o d a l . o p e n   w i l l   c h e c k   t h e   d a t a . s a v e S t a t e   p a r a m e t e r   a n d   i f   t r u e ,   w i l l   c r e a t e / a p p e n d   a   r e t u r n S t a t e   o b j e c t   t o   a l l o w 
+   * 	 t h e   m o d a l   t o   r e t u r n   t o   t h e   p r e v i o u s   s t a t e   o n c e   t h e   T V A P P . m o d a l . c l o s e ( )   i s   f i r e d .   T h i s   i n c l u d e s   s a v i n g / r e t u r n i n g   f o r m   e l e m e n t s . 
+   * 	 W e   a l s o   s t i l l   h a v e   t h e   o r i g i n a l   T V A P P . m o d a l ( )   f u n c t i o n   t o   o p e n   a   s i m p l e   d i a l o g   o v e r   t o p   o f   t h e   c o l o r b o x   m o d a l   i f   a l l   y o u 
+   * 	 n e e d   i s   a   u s e r   m e s s a g e . 
+   * 
+   * 	 C L O S E   A   M O D A L : 
+   * 	 A l t h o u g h   c o l o r b o x   h a n d l e s   c l o s i n g   w i t h   j $ . c o l o r b o x . c l o s e ( ) ,   p l e a s e   u s e   T V A P P . m o d a l . c l o s e ( )   i n s t e a d   s i n c e   i t   h a n d l e s 
+   * 	 a d d i t i o n a l   o p t i o n s   l i k e   r e t u r n i n g   t o   a   s a v e d   s t a t e ,   i n i t i a t i n g   n e x t A c t i o n ,   a n d   r e s e t t i n g   m o d a l   v a r i a b l e s   o n   c l o s e . 
+   * 	 I f   y o u   w i s h   t o   c l o s e   a   m o d a l   a n d   i g n o r e   a l l   s a v e d   s t a t e s   /   n e x t   a c t i o n   u s e   T V A P P . m o d a l . c l o s e ( t r u e )   w h i c h   w i l l   f o r c e   
+   * 	 c l o s e   i m m m e d i a t e l y   a n d   h a n d l e   r e s e t t i n g   t h e   m o d a l   v a r i a b l e s . 
+   * 
+   * 	 M O D A L   " L O A D I N G - S T A T E " : 
+   * 	 A   m o d a l   c a n   b e   p l a c e d   i n t o   a   " l o a d i n g   s t a t e "   w h i c h   h i d e s   t h e   m o d a l   c o n t e n t s   a n d   d e a c t i v a t e s   t h e   m o d a l   e s c K e y   b i n d i n g 
+   * 	 b y   c a l l i n g   T V A P P . m o d a l . l o a d i n g S t a r t ( ) .     T h i s   r e q u i r e s   a   < f o r m >   w r a p p e r   a r o u n d   t h e   p a r t   o f   t h e   m o d a l   t o   h i d e   ( g e n e r a l l y 
+   * 	 e v e r y t h i n g   b u t   t h e   m o d a l _ t i t l e ) . 
+   * 	 O n c e   t h e   b a c k g r o u n d   p r o c e s s   i s   c o m p l e t e   y o u   c a n   e i t h e r   c l o s e   t h e   m o d a l ,   o p e n   a   n e w   m o d a l   t o   r e p l a c e   i t ,   o r   c a l l 
+   * 	 T V A P P . m o d a l . l o a d i n g S t o p ( )   t o   r e t u r n   t h e   f o r m   a n d   m o d a l   f u n c t i o n a l i t y . 
+   * 
+   * 	 C A L L I N G   F O R   A   M O D A L   B E F O R E   P R O C E E D I N G   W I T H   G I V E N   A C T I O N   ( e . g .   R E G I S T R A T I O N ) : 
+   * 	 B e f o r e   c a l l i n g   y o u r   a c t i o n : 
+   * 	 	 ( 1 )   s e t   T V A P P . m o d a l . p r o c e e d   =   f a l s e 
+   * 	 	 ( 2 )   d e f i n e   T V A P P . m o d a l . n e x t A c t i o n   a s   a   f u n c t i o n   t o   r u n   o n c e   y o u r   m o d a l   i s   c o m p l e t e . 
+   * 	 	 ( 3 )   b i n d   t h e   f o l l o w i n g   f u n c t i o n   t o   a n   e x i s t i n g   e v e n t   t h a t   w i l l   t r i g g e r   o n c e   y o u   k n o w   t h e   c r i t e r i a   h a s   c h a n g e d 
+   * 	 	 	 ( r e g i s t r a t i o n   u s e s   " u s e r I n f o U p d a t e d " ) : 
+   * 	 	 	 f u n c t i o n ( )   { 
+   * 	 	 	 	 T V A P P . m o d a l . p r o c e e d   =   t r u e ; 
+   * 	 	 	 	 T V A P P . m o d a l . c l o s e ( ) ; 
+   * 	 	 	 	 j $ ( d o c u m e n t ) . u n b i n d ( T H I S B I N D I N G ) ;   < - -   r e p l a c e   w i t h   y o u r   b i n d i n g 
+   * 	 	 	 } 
+   * 	 " h a n d l e S t a t u s U p d a t e "   i n   r e f e r r a l . j s   i s   a n   e x c e l l e n t   e x a m p l e   o f   h o w   t o   f o r c e   a   u s e r   t o   r e g i s t e r / l o g i n   b e f o r e   o p e n i n g   a   m o d a l 
+   * 
+   * 	 M O D A L   T E M P L A T E S : 
+   * 	 S t a n d a r d   m o d a l   t e m p l a t e s   s h o u l d   h a v e   t h e   f o l l o w i n g   s t r u c t u r e   ( c o p y   a n d   p a s t e   t o   c r e a t e   a   n e w   t e m p l a t e ) 
+ 	 < d i v   c l a s s = " M O D A L _ I D E N T I F I E R " > 
+ 	 	 < d i v   c l a s s = " m o d a l _ t i t l e   w i t h _ c l o s e " > 
+ 	 	 	 < h 3 > # # D . A p p l y . M o d a l . t i t l e # # < / h 3 > 
+ 	 	 	 < d i v   c l a s s = " j C l o s e M o d a l   m o d a l _ c l o s e " > & t i m e s ; < / d i v > 
+ 	 	 < / d i v > 
+ 	 	 < f o r m > 
+ 	 	 	 < d i v   c l a s s = " m o d a l _ c o n t e n t " > 
+ 	 	 	 	 Y O U R _ M O D A L _ C O N T E N T 
+ 	 	 	 < / d i v > 
+ 	 	 	 < d i v   c l a s s = " m o d a l _ a c t i o n s " > < d i v   c l a s s = " a c t i o n _ b u t t o n _ h o l d e r " > < d i v   c l a s s = " a c t i o n _ b u t t o n s " > 
+ 	 	 	 	 < d i v   c l a s s = " s u b m i t _ c a n c e l   j C l o s e M o d a l " > # # D . g l o b a l . c a n c e l # # < / d i v > 
+ 	 	 	 	 < d i v   c l a s s = " g e n e r i c _ b t n   s u b m i t _ f i n i s h " > S U B M I T _ T E X T < / d i v > 
+ 	 	 	 < / d i v > < / d i v > < / d i v > 
+ 	 	 < / f o r m >   
+ 	 < / d i v > 
+   * 
+   * / 
+ 
+ T V A P P . m o d a l   =   { 
+ 	 s t a t e   :   " c l o s e d " , 
+ 	 r e t u r n S t a t e   :   n e w   A r r a y ( ) , 
+ 	 n e x t A c t i o n   :   n u l l , 
+ 	 c a c h e D a t a   :   n u l l , 
+ 	 c a c h e O p t i o n s   :   n u l l , 
+ 	 p r o c e e d :   t r u e , 
+ 	 l o a d i n g :   f a l s e , 
+ 	 r e s e t :   f u n c t i o n ( )   { 
+ 	 	 T V A P P . m o d a l . r e t u r n S t a t e . l e n g t h = 0 ; 
+ 	 	 T V A P P . m o d a l . c a c h e D a t a   =   n u l l ; 
+ 	 	 T V A P P . m o d a l . c a c h e O p t i o n s   =   n u l l ; 
+ 	 	 T V A P P . m o d a l . n e x t A c t i o n   =   n u l l ; 
+ 	 	 T V A P P . m o d a l . p r o c e e d   =   t r u e ; 
+ 	 	 j $ ( d o c u m e n t ) . u n b i n d ( ' . m o d a l ' ) ; 
+ 	 } , 
+ 	 c l o s e :   f u n c t i o n ( f o r c e )   { 
+ 	 	 / /   i f   n e x t A c t i o n ,   a n d   a u t h o r i z e d   t o   p r o c e e d ,   r u n   i t 
+ 	 	 i f   ( T V A P P . m o d a l . n e x t A c t i o n   & &   T V A P P . m o d a l . p r o c e e d   & &   ! f o r c e )   { 
+ 	 	 	 j $ . l o g ( ' M o d a l   N e x t   A c t i o n ' ) ; 
+ 	 	 	 T V A P P . m o d a l . n e x t A c t i o n ( ) ; 
+ 	 	 	 T V A P P . m o d a l . n e x t A c t i o n   =   n u l l ; 
+ 	 	 	 T V A P P . m o d a l . r e t u r n S t a t e . l e n g t h = 0 ; 
+ 	 	 / /   i f   r e t u r n S t a t e ,   l o a d   i t   i n t o   m o d a l   a n d   s e t   r e s e t   r e t u r n S t a t e   t o   n u l l 
+ 	 	 }   e l s e   i f ( T V A P P . m o d a l . r e t u r n S t a t e . l e n g t h   ! =   0   & &   ! f o r c e )   { 
+ 	 	 	 j $ . l o g ( ' M o d a l   R e t u r n   S t a t e ' ) ; 
+ 	 	 	 v a r   l a s t S t a t e   =   T V A P P . m o d a l . r e t u r n S t a t e . p o p ( ) ; 
+ 	 	 	 T V A P P . m o d a l . o p e n ( l a s t S t a t e . s t a t e ,   l a s t S t a t e . o p t i o n s ,   j $ . e x t e n d ( { } ,   l a s t S t a t e . d a t a ,   { r e t u r n S t a t e :   t r u e ,   d a t a :   l a s t S t a t e . f o r m d a t a } ) ) ; 
+ 	 	 / /   e l s e   c l o s e   a n d   r e s e t   m o d a l 
+ 	 	 }   e l s e   { 
+ 	 	 	 i f ( f o r c e )   {   j $ . l o g ( ' F o r c e d   C l o s e ' ) ; 	 } 
+ 	 	 	 e l s e   i f ( ! T V A P P . m o d a l . p r o c e e d )   {   j $ . l o g ( ' N o t   P e r m i t t e d   t o   P r o c e e d ' ) ;   } 
+ 	 	 	 e l s e   {   j $ . l o g ( ' M o d a l   C l o s e ' ) ;   } 
+ 	 	 	 T V A P P . m o d a l . r e s e t ( ) ; 
+ 	 	 	 T V A P P . m o d a l . s t a t e   =   " c l o s e d " ; 
+ 	 	 	 j $ . c o l o r b o x . c l o s e ( ) ; 
+ 	 	 } 
+ 	 } , 
+ 
+ 	 o p e n :   f u n c t i o n ( c o n t e n t ,   o p t i o n s ,   d a t a )   { 
+ 	 	 d a t a   =   d a t a   | |   { } ; 
+ 	 	 / /   l o a d i n g   d e l a y   l o o p 
+ 	 	 i f ( T V A P P . m o d a l . l o a d i n g )   { 
+ 	 	 	 j $ . l o g ( ' m o d a l   l o a d i n g ' ) ; 
+ 	 	 	 j $ ( d o c u m e n t ) . b i n d ( ' m o d a l _ i n i t i a l i z e d . d e l a y ' ,   f u n c t i o n ( )   { 
+ 	 	 	 	 T V A P P . m o d a l . l o a d i n g   =   f a l s e ; 
+ 	 	 	 	 j $ ( d o c u m e n t ) . u n b i n d ( ' m o d a l _ i n i t i a l i z e d . d e l a y ' ) ; 
+ 	 	 	 	 T V A P P . m o d a l . o p e n ( c o n t e n t , o p t i o n s , d a t a ) ; 
+ 	 	 	 } ) ; 
+ 	 	 	 r e t u r n   f a l s e ; 
+ 	 	 } 
+ 	 	 v a r   m o d a l   =   j $ ( ' # c b o x L o a d e d C o n t e n t ' ) ; 
+ 	 	 / /   i f   d a t a . c l e a r S t a t e s ,   t r u n c a t e   T V A P P . m o d a l . r e t u r n S t a t e 
+ 	 	 i f   ( d a t a . c l e a r S t a t e s   & &   T V A P P . m o d a l . r e t u r n S t a t e . l e n g t h ! = 0 )   { 
+ 	 	 	 T V A P P . m o d a l . r e t u r n S t a t e . l e n g t h = 0 ; 
+ 	 	 	 d e l e t e   d a t a . c l e a r S t a t e s ; 
+ 	 	 } 
+ 	 	 / /   i f   d a t a . s a v e S t a t e ,   s t o r e   c u r r e n t   c o n t e n t   i n   T V A P P . m o d a l . r e t u r n S t a t e 
+ 	 	 i f   ( d a t a . s a v e S t a t e   & &   T V A P P . m o d a l . s t a t e   ! =   ' c l o s e d ' )   { 
+ 	 	 	 T V A P P . m o d a l . r e t u r n S t a t e . p u s h ( { 
+ 	 	 	 	 s t a t e : T V A P P . m o d a l . s t a t e , 
+ 	 	 	 	 d a t a : T V A P P . m o d a l . c a c h e D a t a , 
+ 	 	 	 	 o p t i o n s : T V A P P . m o d a l . c a c h e O p t i o n s , 
+ 	 	 	 	 f o r m d a t a : j $ ( ' f o r m ' ,   m o d a l ) . f i r s t ( ) . s e r i a l i z e A r r a y ( ) 
+ 	 	 	 } ) ; 
+ 	 	 	 d e l e t e   d a t a . s a v e S t a t e ;   / /   d o   n o t   p e r p e t u a t e 
+ 	 	 } 
+ 	 	 / /   u p d a t e   d a t a   a n d   o p t i o n s   c a c h e   f o r   f u t u r e   r e f e r e n c e 
+ 	 	 T V A P P . m o d a l . c a c h e D a t a   =   d a t a ; 
+ 	 	 T V A P P . m o d a l . c a c h e O p t i o n s   =   o p t i o n s ; 
+ 
+ 	 	 v a r   d e f a u l t s   =   { 
+ 	 	 	 i n i t i a l W i d t h :   5 0 , 
+ 	 	 	 i n i t i a l H e i g h t :   5 0 , 
+ 	 	 	 o p a c i t y :   0 . 5 , 
+ 	 	 	 m a x W i d t h :   8 0 0 , 
+ 	 	 	 o v e r l a y C l o s e :   f a l s e , 
+ 	 	 	 e s c K e y :   f a l s e , 
+ 	 	 	 s c r o l l i n g :   f a l s e , 
+ 	 	 	 f a s t I f r a m :   t r u e , 
+ 	 	 	 c l a s s N a m e :   c o n t e n t , 
+ 	 	 	 o p e n :   t r u e , 
+ 	 	 	 c l o s e B u t t o n :   f a l s e , 
+ 	 	 	 o n C o m p l e t e :   f u n c t i o n ( )   { 
+ 	 	 	 	 j $ ( ' # c o l o r b o x ,   # c b o x W r a p p e r ,   # c b o x L o a d e d C o n t e n t ' ) . c s s ( { ' o v e r f l o w ' : ' v i s i b l e ' } ) ; 
+ 	 	 	 	 T V A P P . m o d a l . d e f a u l t M o d a l I n i t i a l i z e ( d a t a ) ; 
+ 	 	 	 	 d e l e t e   d a t a . r e t u r n S t a t e ; 
+ 	 	 	 	 j $ ( d o c u m e n t ) . t r i g g e r ( c o n t e n t + " _ i n i t " ,   d a t a ) ; 
+ 	 	 	 } , 
+ 	 	 	 o n C l e a n u p :   f u n c t i o n ( )   { 
+ 	 	 	 	 i f ( j $ ( " . u p l o a d i f y " ,   m o d a l ) . l e n g t h )   { 
+ 	 	 	 	 	 j $ ( " . u p l o a d i f y " ,   m o d a l ) . u p l o a d i f y ( ' d e s t r o y ' ) ;   / /   m u s t   d e s t r o y   u p l o a d i f y   t o   a v o i d   e r r o r s   i n   I E 
+ 	 	 	 	 } 
+ 	 	 	 } 
+ 	 	 } ; 
+ 
+ 	 	 / /   o v e r w r i t e   s e t t i n g s   f o r   m o b i l e   l a y o u t 
+ 	 	 i f   ( j $ ( " b o d y " ) . h a s C l a s s ( " m o b i l e " ) )   { 
+ 	 	 	 v a r   i n i t P o s i t i o n   =   j $ ( w i n d o w ) . s c r o l l T o p ( ) ; 
+ 	 	 	 j $ ( " h t m l ,   b o d y " ) . a n i m a t e ( {   s c r o l l T o p :   0   } ) ; 
+ 	 	 	 j $ . e x t e n d ( d e f a u l t s ,   { 
+ 	 	 	 	 t o p : ' 0 p x ' , 
+ 	 	 	 	 l e f t : ' 0 p x ' , 
+ 	 	 	 	 t r a n s i t i o n : ' n o n e ' , 
+ 	 	 	 	 o p a c i t y : 0 . 5 , 
+ 	 	 	 	 w i d t h : " 1 0 0 % " , 
+ 	 	 	 	 r e p o s i t i o n : f a l s e , 
+ 	 	 	 	 o n C o m p l e t e :   f u n c t i o n ( )   { 
+ 	 	 	 	 	 T V A P P . m o d a l . d e f a u l t M o d a l I n i t i a l i z e ( d a t a ) ; 
+ 	 	 	 	 	 j $ ( ' # c b o x W r a p p e r ' ) . a n i m a t e ( {   s c r o l l T o p :   0   } ) ;   / /   a l w a y s   l o a d   n e w   m o d a l   a t   t o p   o f   c o n t e n t 
+ 	 	 	 	 	 d e l e t e   d a t a . r e t u r n S t a t e ; 
+ 	 	 	 	 	 j $ ( d o c u m e n t ) . t r i g g e r ( c o n t e n t + " _ i n i t " ,   d a t a ) ; 
+ 	 	 	 	 	 i f ( ! j $ ( " b o d y " ) . h a s C l a s s ( " j M e n u O n " ) )   { 
+ 	 	 	 	 	 	 j $ ( " # b o d y _ w r a p p e r " ) . c s s ( { " o v e r f l o w " : " h i d d e n " , " p o s i t i o n " : " f i x e d " , " w i d t h " : " 1 0 0 % " } ) ; 
+ 	 	 	 	 	 	 j $ ( ' # f o o t e r ' ) . h i d e ( ) ; 
+ 	 	 	 	 	 } 
+ 	 	 	 	 } , 
+ 	 	 	 	 o n C l e a n u p :   f u n c t i o n ( )   { 
+ 	 	 	 	 	 i f ( j $ ( " . u p l o a d i f y " ) . l e n g t h )   { 
+ 	 	 	 	 	 	 j $ ( " . u p l o a d i f y " ) . u p l o a d i f y ( ' d e s t r o y ' ) ;   / /   m u s t   d e s t r o y   u p l o a d i f y   t o   a v o i d   e r r o r s   i n   I E 
+ 	 	 	 	 	 } 
+ 	 	 	 	 	 i f ( ! j $ ( " b o d y " ) . h a s C l a s s ( " j M e n u O n " ) )   { 
+ 	 	 	 	 	 	 j $ ( " # b o d y _ w r a p p e r " ) . c s s ( { " o v e r f l o w " : " a u t o " , " p o s i t i o n " : " s t a t i c " , " w i d t h " : " a u t o " } ) ; 
+ 	 	 	 	 	 	 j $ ( ' # f o o t e r ' ) . s h o w ( ) ; 
+ 	 	 	 	 	 } 
+ 	 	 	 	 	 j $ ( " h t m l ,   b o d y " ) . a n i m a t e ( {   s c r o l l T o p :   i n i t P o s i t i o n   } ) ; 
+ 	 	 	 	 } 
+ 	 	 	 } ) ; 
+ 	 	 } 
+ 
+ 	 	 / /   i f   m o d a l   i s   i n   f a c e b o o k   a p p   c o n t e x t   c h a n g e   s o m e   d i s p l a y   o p t i o n s 
+ 	 	 i f   ( T V A P P . p r o p e r t y . f b )   { 
+ 	 	 	 j $ . e x t e n d ( d e f a u l t s ,   { t o p : ' 5 0 p x ' , s p e e d : 5 0 , t r a n s i t i o n : ' n o n e ' ,   o p a c i t y : 0 . 9 } ) ; 
+ 	 	 } 
+ 	 	 / /   i f   m o d a l   i s   i n   T B E   i f r a m e   c h a n g e   s o m e   d i s p l a y   o p t i o n s 
+ 	 	 i f   ( T V A P P . p r o p e r t y . t b e _ i f r a m e )   { 
+ 	 	 	 j $ . e x t e n d ( d e f a u l t s ,   { t o p : ' 1 2 0 p x ' , s p e e d : 5 0 , t r a n s i t i o n : ' n o n e ' ,   o p a c i t y : 0 . 9 } ) ; 
+ 	 	 } 
+ 	 	 / /   i f   d a t a . u r l ,   l o a d   e x t e r n a l   u r l   i n s t e a d   o f   l o c a l   c o n t e n t   ( u s i n g   i f r a m e   m e t h o d ) 
+ 	 	 i f   ( d a t a . u r l )   { 
+ 	 	 	 v a r   s e t t i n g s   =   j $ . e x t e n d ( { } , d e f a u l t s ,   o p t i o n s ,   { h r e f : d a t a . u r l ,   i f r a m e : t r u e   } ) ; 
+ 	 	 / /   i f   d a t a . l o a d _ b l a n k ,   l o a d   t h e   c o n t e n t   o r   d a t a . c o n t e n t   w i t h i n   t h e   b l a n k _ m o d a l   f r a m e 
+ 	 	 }   e l s e   i f   ( d a t a . l o a d _ b l a n k )   { 
+ 	 	 	 d a t a . b l a n k   =   d a t a . b l a n k   | |   { } ; 
+ 	 	 	 v a r   m o d a l F r a m e   =   j $ ( T V A P P . a j a x I n c l u d e C o n t e n t ( { t e m p l a t e : ' b l a n k _ m o d a l ' } ) ) ; 
+ 	 	 	 i f   ( d a t a . c o n t e n t )   { 
+ 	 	 	 	 m o d a l F r a m e . f i n d ( ' . m o d a l _ c o n t e n t ' ) . a p p e n d ( d a t a . c o n t e n t ) ; 
+ 	 	 	 }   e l s e   { 
+ 	 	 	 	 j $ . e x t e n d ( d a t a ,   { ' t e m p l a t e ' : c o n t e n t } ) ; 
+ 	 	 	 	 m o d a l F r a m e . f i n d ( ' . m o d a l _ c o n t e n t ' ) . a p p e n d ( T V A P P . a j a x I n c l u d e C o n t e n t ( d a t a ) ) ; 
+ 	 	 	 } 
+ 	 	 	 m o d a l F r a m e . f i n d ( ' . b l a n k _ m o d a l ' ) . a d d C l a s s ( c o n t e n t ) ; 
+ 	 	 	 i f ( d a t a . b l a n k . t i t l e )   m o d a l F r a m e . f i n d ( ' . m o d a l _ t i t l e   h 3 ' ) . a p p e n d ( d a t a . b l a n k . t i t l e ) ; 
+ 	 	 	 i f ( d a t a . b l a n k . a c t i o n _ t e x t )   m o d a l F r a m e . f i n d ( ' . a c t i o n _ b u t t o n s   . s u b m i t _ f i n i s h ' ) . t e x t ( d a t a . b l a n k . a c t i o n _ t e x t ) ; 
+ 	 	 	 i f ( d a t a . b l a n k . a c t i o n _ c l a s s )   m o d a l F r a m e . f i n d ( ' . a c t i o n _ b u t t o n s   . s u b m i t _ f i n i s h ' ) . a d d C l a s s ( d a t a . b l a n k . a c t i o n _ c l a s s ) ; 
+ 	 	 	 i f ( d a t a . b l a n k . a c t i o n _ t e x t   | |   d a t a . b l a n k . a c t i o n _ c l a s s )   m o d a l F r a m e . f i n d ( ' . m o d a l _ a c t i o n s ' ) . s h o w ( ) ; 
+ 	 	 	 v a r   s e t t i n g s   =   j $ . e x t e n d ( { } , d e f a u l t s ,   o p t i o n s ,   { h t m l : m o d a l F r a m e } ) ; 
+ 	 	 / /   i f   d a t a . c o n t e n t ,   l o a d   i t   i n s t e a d   o f   a j a x   t e m p l a t e 
+ 	 	 }   e l s e   i f   ( d a t a . c o n t e n t )   { 
+ 	 	 	 v a r   s e t t i n g s   =   j $ . e x t e n d ( { } , d e f a u l t s ,   o p t i o n s ,   { h t m l : d a t a . c o n t e n t } ) ; 
+ 	 	 / /   i f   d a t a . c a c h e ,   l o o k   f o r   c o n t e n t   i n   c o n t e n t R e p o s i t o r y 
+ 	 	 }   e l s e   i f   ( d a t a . c a c h e )   { 
+ 	 	 	 v a r   s e t t i n g s   =   j $ . e x t e n d ( { } , d e f a u l t s ,   o p t i o n s ,   { h t m l : T V A P P . s m L o a d C o n t e n t ( c o n t e n t ,   d a t a . c o n t e x t ) } ) ; 
+ 	 	 / /   d e f a u l t   t o   l o a d i n g   c o n t e n t   f r o m   t e m p l a t e 
+ 	 	 }   e l s e   { 
+ 	 	 	 j $ . e x t e n d ( d a t a ,   { ' t e m p l a t e ' : c o n t e n t } ) ; 
+ 	 	 	 v a r   s e t t i n g s   =   j $ . e x t e n d ( { } , d e f a u l t s ,   o p t i o n s ,   { h t m l : T V A P P . a j a x I n c l u d e C o n t e n t ( d a t a ) } ) ; 
+ 	 	 } 
+ 	 	 T V A P P . m o d a l . l o a d i n g   =   t r u e ; 
+ 	 	 j $ . c o l o r b o x ( s e t t i n g s ) ; 
+ 	 	 j $ . l o g ( ' m o d a l   s t a t e :   ' + c o n t e n t ) ; 
+ 	 	 T V A P P . m o d a l . s t a t e   =   c o n t e n t ; 
+ 	 } , 
+ 	 
+ 	 l o a d i n g S t a r t :   f u n c t i o n ( d a t a )   { 
+ 	 	 i f   ( T V A P P . m o d a l . s t a t e   = =   " c l o s e d " )   r e t u r n   f a l s e ; 
+ 	 	 v a r   m o d a l   =   j $ ( ' # c b o x L o a d e d C o n t e n t ' ) ; 
+ 	 	 v a r   s e t t i n g s   =   { 
+ 	 	 	 r e p l a c e :   m o d a l . f i n d ( ' f o r m ' ) . f i r s t ( ) , 
+ 	 	 	 o p t i o n s :   { 
+ 	 	 	 	 l i n e s :   1 3 ,   / /   T h e   n u m b e r   o f   l i n e s   t o   d r a w 
+ 	 	 	 	 l e n g t h :   7 ,   / /   T h e   l e n g t h   o f   e a c h   l i n e 
+ 	 	 	 	 w i d t h :   4 ,   / /   T h e   l i n e   t h i c k n e s s 
+ 	 	 	 	 r a d i u s :   1 0 ,   / /   T h e   r a d i u s   o f   t h e   i n n e r   c i r c l e 
+ 	 	 	 	 c o l o r :   ' # 5 5 5 ' ,   / /   # r g b   o r   # r r g g b b 
+ 	 	 	 	 t r a i l :   5 0   / /   A m o u n t   o f   a f t e r g l o w 
+ 	 	 	 } 
+ 	 	 } ; 
+ 	 	 j $ . e x t e n d ( t r u e ,   s e t t i n g s ,   d a t a ) ; 
+ 	 	 s e t t i n g s . r e p l a c e . p a r e n t ( ) . a p p e n d ( j $ ( ' < d i v   c l a s s = " m o d a l _ s p i n n e r "   / > ' ) . c s s ( { ' h e i g h t ' : s e t t i n g s . r e p l a c e . h e i g h t ( ) , ' w i d t h ' : s e t t i n g s . r e p l a c e . w i d t h ( ) } ) ) ; 
+ 	 	 s e t t i n g s . r e p l a c e . f a d e O u t ( ' f a s t ' ) ; 
+ 	 	 j $ ( " . j C l o s e M o d a l " ,   m o d a l ) . h i d e ( ) ; 
+ 	 	 j $ ( ' . m o d a l _ s p i n n e r ' ,   m o d a l ) . s p i n ( s e t t i n g s . o p t i o n s ) ; 
+ 	 	 j $ ( d o c u m e n t ) . u n b i n d ( ' k e y d o w n . c b o x ' ) ; 
+ 	 } , 
+ 	 
+ 	 l o a d i n g S t o p :   f u n c t i o n ( d a t a )   { 
+ 	 	 d a t a   =   d a t a   | |   { } ; 
+ 	 	 i f   ( T V A P P . m o d a l . s t a t e   = =   " c l o s e d " )   r e t u r n   f a l s e ; 
+ 	 	 v a r   m o d a l   =   j $ ( ' # c b o x L o a d e d C o n t e n t ' ) ; 
+ 	 	 v a r   s e t t i n g s   =   { r e p l a c e :   m o d a l . f i n d ( ' f o r m ' ) . f i r s t ( ) } ; 
+ 	 	 j $ . e x t e n d ( s e t t i n g s ,   d a t a ) ; 
+ 	 	 j $ ( " . m o d a l _ s p i n n e r " ,   m o d a l ) . r e m o v e ( ) ; 
+ 	 	 s e t t i n g s . r e p l a c e . f a d e I n ( ' f a s t ' ) ; 	 	 
+ 	 	 j $ ( " . j C l o s e M o d a l " ,   m o d a l ) . s h o w ( ) ; 
+ 	 	 i f   ( d a t a . e s c K e y   ! =   f a l s e )   { 
+ 	 	 	 j $ ( d o c u m e n t ) . b i n d ( ' k e y d o w n . c b o x ' ,   f u n c t i o n ( e ) { 
+ 	 	 	 	 i f ( T V A P P . m o d a l . s t a t e   ! =   ' c l o s e d '   & &   e . k e y C o d e   = = =   2 7 )   { 
+ 	 	 	 	 	 e . p r e v e n t D e f a u l t ( ) ; 
+ 	 	 	 	 	 T V A P P . m o d a l . c l o s e ( ) ; 
+ 	 	 	 	 } 
+ 	 	 	 } ) ; 
+ 	 	 } 
+ 	 } , 
+ 	 
+ 	 d e f a u l t M o d a l I n i t i a l i z e :   f u n c t i o n ( d a t a )   { 
+ 	 	 d a t a   =   d a t a   | |   { } ; 
+ 	 	 v a r   m o d a l   =   j $ ( ' # c b o x L o a d e d C o n t e n t ' ) ; 
+ 	 	 
+ 	 	 / /   i n i t i a l i z e   c l o s e   m o d a l   b u t t o n s 
+ 	 	 j $ ( ' . j C l o s e M o d a l ' ,   m o d a l ) . c l i c k ( f u n c t i o n ( ) { 	 T V A P P . m o d a l . c l o s e ( ) ; } ) ; 
+ 	 	 i f   ( T V A P P . m o d a l . r e t u r n S t a t e . l e n g t h )   j $ ( ' . m o d a l _ t i t l e   . j C l o s e M o d a l ' ,   m o d a l ) . a d d C l a s s ( ' e n t y p o ' ) . h t m l ( T V A P P . s m D i c t ( ' e n t y p o . r e p l y ' ) ) ;   / /   r e p l a c e   c l o s e   i c o n   w i t h   r e t u r n   i c o n 
+ 	 	 
+ 	 	 / /   i n i t i a l i z e   a n y   t o o l t i p s 
+ 	 	 i f ( j $ ( " . j T o o l t i p " ,   m o d a l ) . l e n g t h )   { 
+ 	 	 	 / /   r e m o v e d 
+ 	 	 } 
+ 	 	 
+ 	 	 / /   i n i t i a l i z e   a n y   c h o s e n   d r o p d o w n s 
+ 	 	 i f ( T V A P P . g e t I n t e r n e t E x p l o r e r V e r s i o n ( )   ! =   7 )   { 
+ 	 	 	 i f ( j $ ( ' . j C h o s e n ' ,   m o d a l ) . l e n g t h )   { 
+ 	 	 	 	 j $ ( ' . j C h o s e n ' ,   m o d a l ) . c h o s e n ( { 
+     	 	 	 	 n o _ r e s u l t s _ t e x t :   T V A P P . s m D i c t ( ' C h o s e n . n o _ r e s u l t s ' ) , 
+ 	 	 	 	 	 p l a c e h o l d e r _ t e x t _ m u l t i p l e :   T V A P P . s m D i c t ( ' C h o s e n . p l a c e h o l d e r _ t e x t _ m u l t i p l e ' ) , 
+ 	 	 	 	 	 p l a c e h o l d e r _ t e x t _ s i n g l e :   T V A P P . s m D i c t ( ' C h o s e n . p l a c e h o l d e r _ t e x t _ s i n g l e ' ) 
+ 	 	 	 	 } ) ; 
+ 	 	 	 } 
+ 	 	 } 
+ 	 	 
+ 	 	 / /   r e s e t   d e f a u l t   c o l o r b o x   e s c K e y   f u n c t i o n   t o   u s e   T V A P P . m o d a l . c l o s e ( ) ; 
+ 	 	 j $ ( d o c u m e n t ) . u n b i n d ( ' k e y d o w n . c b o x ' ) ; 
+ 	 	 i f   ( d a t a . e s c K e y   ! =   f a l s e )   { 
+ 	 	 	 j $ ( d o c u m e n t ) . b i n d ( ' k e y d o w n . c b o x ' ,   f u n c t i o n ( e ) { 
+ 	 	 	 	 i f ( T V A P P . m o d a l . s t a t e   ! =   ' c l o s e d '   & &   e . k e y C o d e   = = =   2 7 )   { 
+ 	 	 	 	 	 e . p r e v e n t D e f a u l t ( ) ; 
+ 	 	 	 	 	 T V A P P . m o d a l . c l o s e ( ) ; 
+ 	 	 	 	 } 
+ 	 	 	 } ) ; 
+ 	 	 } 
+ 	 	 
+ 	 	 / /   i n i t i a l i z e   a n y   p l a c e h o l d e r s 
+ 	 	 j $ ( " i n p u t [ p l a c e h o l d e r ] ,   t e x t a r e a [ p l a c e h o l d e r ] " ,   m o d a l ) . p l a c e h o l d e r ( ) ; 
+ 
+ 	 	 / /   i f   r e t u r n i n g   s t a t e   h a s   f o r m   d a t a ,   r e s t o r e   p r e v i o u s   f o r m   s t a t e 
+ 	 	 i f   ( d a t a . r e t u r n S t a t e   & &   d a t a . d a t a )   { 
+ 	 	 	 t h i s . r e f r e s h F o r m D a t a ( d a t a ) ; 
+ 	 	 	 j $ ( ' d i v . e r r o r ' ,   m o d a l ) . h i d e ( ) ;   / /   h i d e   a n y   e x i s t i n g   e r r o r   m e s s a g e s . 
+ 	 	 } 
+ 	 	 
+ 	 	 / /   i f   m o d a l   h a s   a n c h o r - o n l y   l i n k s   g i v e   t h e m   s c r o l l T o p   f u n c t i o n a l i t y   
+ 	 	 / /   ( d o e s   n o t   c u r r e n t l y   w o r k   i n   I E 7   b e c a u s e   i t   c o n v e r t s   a l l   h r e f s   i n t o   a b s o l u t e   u r l s ) 
+ 	 	 j $ ( ' a [ h r e f ^ = " # " ] ' ,   m o d a l ) . f i l t e r ( ' a [ h r e f ! = " # " ] ' ) . c l i c k ( f u n c t i o n ( e v e n t )   { 
+ 	 	 	 e v e n t . p r e v e n t D e f a u l t ( ) ; 
+ 	 	 	 v a r   t a r g e t = j $ ( j $ ( t h i s ) . a t t r ( ' h r e f ' ) ,   m o d a l ) , 
+ 	 	 	 	 s c r o l l C o n t a i n e r   =   j $ ( " b o d y " ) . h a s C l a s s ( " m o b i l e " )   ?   j $ ( ' # c b o x W r a p p e r ' )   :   j $ ( ' . m o d a l _ c o n t e n t ' ,   m o d a l ) ; 
+ 	 	 	 s c r o l l C o n t a i n e r . a n i m a t e ( { 
+ 	 	 	 	 s c r o l l T o p :   ( j $ ( " b o d y " ) . h a s C l a s s ( " m o b i l e " )   ?   t a r g e t . o f f s e t ( ) . t o p   :   t a r g e t . p o s i t i o n ( ) . t o p )   +   s c r o l l C o n t a i n e r . s c r o l l T o p ( )   -   1 5     / /   a d d e d   f o r   p a d d i n g 
+ 	 	 	 } ) ; 
+ 	 	 	 r e t u r n   f a l s e ; 
+ 	 	 } ) ; 
+ 
+ 	 	 / /   r e s i z e   n o n - i f r a m e   c o n t e n t   t o   f i t 
+ 	 	 i f   ( ! d a t a . u r l )   { 
+ 	 	 	 j $ . c o l o r b o x . r e s i z e ( ) ; 
+ 	 	 } 
+ 	 	 
+ 	 	 / /   u p d a t e   m o d a l   o b j e c t   f i n i s h e d   l o a d i n g 
+ 	 	 T V A P P . m o d a l . l o a d i n g   =   f a l s e ; 
+ 	 	 j $ ( d o c u m e n t ) . t r i g g e r ( ' m o d a l _ i n i t i a l i z e d ' ) ; 
+ 	 } , 
+ 
+ 	 r e f r e s h F o r m D a t a :   f u n c t i o n ( d a t a )   { 
+ 	 	 v a r   m o d a l   =   j $ ( ' # c b o x L o a d e d C o n t e n t ' ) ; 
+ 	 	 f o r ( v a r   i = 0 ;   i   <   d a t a . d a t a . l e n g t h ;   i + + )   { 
+ 	 	 	 v a r   i n p u t   =   j $ ( ' [ n a m e = " ' + d a t a . d a t a [ i ] . n a m e + ' " ] ' ,   m o d a l ) ; 
+ 	 	 	 i f   ( i n p u t . f i r s t ( ) . a t t r ( ' t y p e ' )   = =   ' r a d i o ' )   { 
+ 	 	 	 	 i n p u t . f i l t e r ( ' [ v a l u e = " ' + d a t a . d a t a [ i ] . v a l u e + ' " ] ' ) . a t t r ( ' c h e c k e d ' ,   t r u e ) . c l i c k ( ) ; 
+ 	 	 	 }   e l s e   i f   ( i n p u t . a t t r ( ' t y p e ' )   = =   ' c h e c k b o x ' )   { 
+ 	 	 	 	 j $ ( ' [ n a m e = " ' + d a t a . d a t a [ i ] . n a m e + ' " ] ' ,   m o d a l ) . a t t r ( ' c h e c k e d ' ,   t r u e ) ; 
+ 	 	 	 }   e l s e   i f   ( i n p u t . i s ( ' s e l e c t ' ) )   { 
+ 	 	 	 	 i n p u t . f i n d ( ' o p t i o n [ v a l u e = " ' + d a t a . d a t a [ i ] . v a l u e + ' " ] ' ) . a t t r ( ' s e l e c t e d ' , ' s e l e c t e d ' ) ; 
+ 	 	 	 }   e l s e   { 
+ 	 	 	 	 j $ ( ' [ n a m e = " ' + d a t a . d a t a [ i ] . n a m e + ' " ] ' ,   m o d a l ) . v a l ( d a t a . d a t a [ i ] . v a l u e ) ; 
+ 	 	 	 } 
+ 	 	 } 
+ 	 	 j $ ( ' . j C h o s e n ' ,   m o d a l ) . t r i g g e r ( " l i s z t : u p d a t e d " ) ;   / /   u p d a t e   a n y   c h o s e n   p i c k l i s t s   t o   r e f l e c t   t h e   d a t a   r e - i n s e r t i o n 
+ 	 } 
+ } ;    A       https://talent.rakuten.careers/modal.js?v=apptss.2017.PRD.4.2.17     &9      &9                    š    [   =   ]   š   A,  R  ]   @]   @]   @]   C]   B]	   ‚    ]
+   ‚   ]   ‚   ]   ‚   ]   ‚   ]   ‚   ]   ‚   ]   6   Q™¨EÊ ˜Ê ˜Ê˜È ˜¦˜¦˜¦˜¦˜¦˜Ê¨U˜Ê¨l˜Ê¨€  ó˜Ê¨€ 	˜Ê¨€ ˜Ê¨€ ^˜Ð¨€ n˜    TVAPP   closed   state   Array   returnState   nextAction   cacheData   cacheOptions   proceed   loading   reset   close	   open   loadingStart   loadingStop-   defaultModalInitialize   refreshFormData   modal‡!«!ÿÿÿÿ            «+’H!«!           resetB  k  9  c  9  M             Ê5ž!«!          closeB K  È  C  È  U      p       Ê5ž!«!       	   openB Ú  ¥'  Ò  ¥'  l      0         content    options 	   data    modal    initPosition   B  ’    Š    q   8          Ê5ž    B    ó    ó  ˜             Ê5ž    B    ¦    ¦  ž              Ê5ž   B  û  ˆ  ó  ˆ  °              Ê5ž   B  ¡    ™    º      0       Ê5ž Ê5ž!«!          loadingStartB À'  Î*  ¸'  Î*  ó             Ê5ž !«!          loadingStopB è*  ù,  à*  ù,  	                B r,  ð,  j,  ð,    -           Ê5žÊ5ž!«!       -   defaultModalInitializeB -  $6  -  $6    !   ‚          modal    B  µ-  Î-  ­-  Î-  !  *          Ê5ž    B 1  š1  1  š1  7  -           Ê5ž   B Ä3  O5  ¼3  O5  J  A          Ê5ž Ê5ž!«!          refreshFormDataB A6  #9  96  #9  ^     `       Ê5ž Ž!«!       Ž!«!   state‹!«!Ž!«!   returnState‹!«!Ž!«!   nextAction‹!«!Ž!«!   cacheData‹!«!Ž!«!   cacheOptions‹!«!Ž!«!   proceed‹!«!Ž!«!   loading‹!«!Ž!«!   reset‹!«!Ž!«!   close‹!«!Ž!«!	   open‹!«!Ž!«!   loadingStart‹!«!Ž!«!   loadingStop‹!«!Ž!«!-   defaultModalInitialize‹!«!Ž!«!   refreshFormData‹!«!    š˜;ø ! ×¥‘®      '\Z¹\Z¹@5^9 ‚   A    :https://talent.rakuten.careers/modal.js?v=apptss.2017.PRD.4.2.17 necko:classified 1 strongly-framed 1 security-info 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 request-method GET response-head HTTP/1.1 200 OK
+Date: Mon, 04 Feb 2019 05:26:30 GMT
+Server: Taleo Web Server 8
+Last-Modified: Wed, 05 Sep 2018 07:18:14 GMT
+Accept-Ranges: bytes
+Content-Length: 14630
+Cache-Control: max-age=31536000
+Expires: Tue, 04 Feb 2020 05:26:30 GMT
+Content-Type: application/javascript
+ original-response-headers Date: Mon, 04 Feb 2019 05:26:30 GMT
+Server: Taleo Web Server 8
+Last-Modified: Wed, 05 Sep 2018 07:18:14 GMT
+Accept-Ranges: bytes
+Content-Length: 14630
+Cache-Control: max-age=31536000
+Expires: Tue, 04 Feb 2020 05:26:30 GMT
+Keep-Alive: timeout=5, max=98
+Connection: Keep-Alive
+Content-Type: application/javascript
+ uncompressed-len 0 net-response-time-onstart 4092 net-response-time-onstop 4306 alt-data 1;14630,javascript/moz-bytecode-20190128165852 alt-data-from-child 1   ³F

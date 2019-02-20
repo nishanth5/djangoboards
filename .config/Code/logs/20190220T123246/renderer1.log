@@ -1,0 +1,32 @@
+[2019-02-20 12:32:51.209] [renderer1] [info] no standard startup: not the explorer viewlet
+[2019-02-20 12:34:09.232] [renderer1] [error] Unable to write to Workspace Settings because no workspace is opened. Please open a workspace first and try again.: Error: Unable to write to Workspace Settings because no workspace is opened. Please open a workspace first and try again.
+    at new t (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:4499:509)
+    at e.reject (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:4503:285)
+    at e.resolveAndValidate (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:4505:950)
+    at e.doWriteConfiguration (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:4500:383)
+    at Object.factory (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:4500:121)
+    at t.e.consume (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:109:890)
+    at file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:109:677
+    at new Promise (<anonymous>)
+    at t.e.queue (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:109:601)
+    at e.writeConfiguration (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:4500:95)
+    at t.writeConfigurationValue (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:4525:543)
+    at t.updateValue (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:4515:684)
+    at e.writeConfiguration (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:3432:95)
+    at e.$updateConfigurationOption (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:3431:802)
+    at t._doInvokeHandler (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:3510:357)
+    at t._invokeHandler (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:3510:29)
+    at t._receiveRequest (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:3508:627)
+    at t._receiveOneMessage (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:3507:475)
+    at file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:3505:289
+    at e.fire (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:81:312)
+    at s (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:334:170)
+    at file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:334:224
+    at e.fire (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:81:312)
+    at a (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:335:579)
+    at Socket._socketDataListener (file:///usr/share/code/resources/app/out/vs/workbench/workbench.main.js:335:800)
+    at Socket.emit (events.js:182:13)
+    at addChunk (_stream_readable.js:279:12)
+    at readableAddChunk (_stream_readable.js:264:11)
+    at Socket.Readable.push (_stream_readable.js:219:10)
+    at Pipe.onread (net.js:636:20)

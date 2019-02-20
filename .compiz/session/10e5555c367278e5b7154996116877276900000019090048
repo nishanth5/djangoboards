@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<compiz_session id="10e5555c367278e5b7154996116877276900000019090048">
+  <window id="10e5555c367278e5b7154996125483537600000019090050" title="Count Strings | HackerRank - Mozilla Firefox" class="Firefox" name="Navigator" role="browser" command="firefox">
+    <geometry x="65" y="24" width="1160" height="426"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+</compiz_session>

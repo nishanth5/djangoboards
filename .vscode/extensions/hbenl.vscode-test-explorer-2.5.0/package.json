@@ -1,0 +1,367 @@
+{
+	"name": "vscode-test-explorer",
+	"displayName": "Test Explorer UI",
+	"description": "Run your tests in the Sidebar of Visual Studio Code",
+	"icon": "icon.png",
+	"author": "Holger Benl <hbenl@evandor.de>",
+	"publisher": "hbenl",
+	"version": "2.5.0",
+	"license": "MIT",
+	"homepage": "https://github.com/hbenl/vscode-test-explorer",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/hbenl/vscode-test-explorer.git"
+	},
+	"bugs": {
+		"url": "https://github.com/hbenl/vscode-test-explorer/issues"
+	},
+	"categories": [
+		"Other"
+	],
+	"keywords": [
+		"test",
+		"testing"
+	],
+	"main": "out/main.js",
+	"scripts": {
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"reinstall": "rimraf node_modules package-lock.json && npm install",
+		"clean": "rimraf out vscode-test-explorer-*.vsix",
+		"build": "tsc",
+		"watch": "tsc -w",
+		"rebuild": "npm run clean && npm run build",
+		"package": "vsce package",
+		"publish": "vsce publish"
+	},
+	"dependencies": {
+		"escape-string-regexp": "^1.0.5",
+		"fs-extra": "^7.0.1",
+		"tslib": "^1.9.3",
+		"vscode-test-adapter-api": "^1.3.0"
+	},
+	"devDependencies": {
+		"@types/escape-string-regexp": "1.0.0",
+		"@types/fs-extra": "^5.0.5",
+		"typescript": "^3.3.3",
+		"vsce": "^1.57.0",
+		"vscode": "^1.1.29"
+	},
+	"engines": {
+		"vscode": "^1.23.0"
+	},
+	"activationEvents": [
+		"*"
+	],
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Test Explorer",
+			"properties": {
+				"testExplorer.onStart": {
+					"description": "Retire or reset all test states whenever a test run is started",
+					"type": [
+						"string",
+						"null"
+					],
+					"enum": [
+						"retire",
+						"reset",
+						null
+					],
+					"scope": "resource"
+				},
+				"testExplorer.onReload": {
+					"description": "Retire or reset all test states whenever the test tree is reloaded",
+					"type": [
+						"string",
+						"null"
+					],
+					"enum": [
+						"retire",
+						"reset",
+						null
+					],
+					"scope": "resource"
+				},
+				"testExplorer.codeLens": {
+					"description": "Show a CodeLens above each test or suite for running or debugging the tests",
+					"type": "boolean",
+					"default": true,
+					"scope": "resource"
+				},
+				"testExplorer.gutterDecoration": {
+					"description": "Show the state of each test in the editor using Gutter Decorations",
+					"type": "boolean",
+					"default": true,
+					"scope": "resource"
+				},
+				"testExplorer.errorDecoration": {
+					"description": "Show error messages from test failures as decorations in the editor",
+					"type": "boolean",
+					"default": true,
+					"scope": "resource"
+				}
+			}
+		},
+		"views": {
+			"test": [
+				{
+					"id": "test-explorer",
+					"name": "Test Explorer"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "test-explorer.reload",
+				"title": "Test Explorer: Reload tests",
+				"icon": {
+					"dark": "./icons/reload-dark.svg",
+					"light": "./icons/reload-light.svg"
+				}
+			},
+			{
+				"command": "test-explorer.reload-collection",
+				"title": "Reload tests"
+			},
+			{
+				"command": "test-explorer.reloading",
+				"title": "Test Explorer: Reloading tests",
+				"icon": {
+					"dark": "./icons/reloading-dark.svg",
+					"light": "./icons/reloading-light.svg"
+				}
+			},
+			{
+				"command": "test-explorer.run-all",
+				"title": "Test Explorer: Run all tests",
+				"icon": {
+					"dark": "./icons/start-dark.svg",
+					"light": "./icons/start-light.svg"
+				}
+			},
+			{
+				"command": "test-explorer.run",
+				"title": "Run tests",
+				"icon": {
+					"dark": "./icons/start-dark.svg",
+					"light": "./icons/start-light.svg"
+				}
+			},
+			{
+				"command": "test-explorer.rerun",
+				"title": "Test Explorer: Repeat the last test run"
+			},
+			{
+				"command": "test-explorer.run-file",
+				"title": "Test Explorer: Run tests in current file"
+			},
+			{
+				"command": "test-explorer.run-test-at-cursor",
+				"title": "Test Explorer: Run the test at the current cursor position"
+			},
+			{
+				"command": "test-explorer.debug",
+				"title": "Debug this test",
+				"icon": {
+					"dark": "./icons/debug-dark.svg",
+					"light": "./icons/debug-light.svg"
+				}
+			},
+			{
+				"command": "test-explorer.redebug",
+				"title": "Test Explorer: Repeat the last test run in the debugger"
+			},
+			{
+				"command": "test-explorer.debug-test-at-cursor",
+				"title": "Test Explorer: Debug the test at the current cursor position"
+			},
+			{
+				"command": "test-explorer.cancel",
+				"title": "Test Explorer: Cancel running tests",
+				"icon": "./icons/stop.svg"
+			},
+			{
+				"command": "test-explorer.show-error",
+				"title": "Show error message"
+			},
+			{
+				"command": "test-explorer.show-source",
+				"title": "Show source",
+				"icon": {
+					"dark": "./icons/open-file-dark.svg",
+					"light": "./icons/open-file-light.svg"
+				}
+			},
+			{
+				"command": "test-explorer.enable-autorun",
+				"title": "Enable autorun"
+			},
+			{
+				"command": "test-explorer.disable-autorun",
+				"title": "Disable autorun"
+			},
+			{
+				"command": "test-explorer.retire",
+				"title": "Retire test states"
+			},
+			{
+				"command": "test-explorer.reset",
+				"title": "Reset test states"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "test-explorer.run-all",
+					"group": "navigation@1",
+					"when": "view == test-explorer && !testsRunning"
+				},
+				{
+					"command": "test-explorer.cancel",
+					"group": "navigation@2",
+					"when": "view == test-explorer && testsRunning"
+				},
+				{
+					"command": "test-explorer.reload",
+					"group": "navigation@3",
+					"when": "view == test-explorer && !testsLoading"
+				},
+				{
+					"command": "test-explorer.reloading",
+					"group": "navigation@4",
+					"when": "view == test-explorer && testsLoading"
+				},
+				{
+					"command": "test-explorer.enable-autorun",
+					"group": "1_autorun@1",
+					"when": "view == test-explorer"
+				},
+				{
+					"command": "test-explorer.disable-autorun",
+					"group": "1_autorun@2",
+					"when": "view == test-explorer"
+				},
+				{
+					"command": "test-explorer.retire",
+					"group": "2_state@3",
+					"when": "view == test-explorer"
+				},
+				{
+					"command": "test-explorer.reset",
+					"group": "2_state@4",
+					"when": "view == test-explorer"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "test-explorer.run",
+					"group": "inline@2",
+					"when": "view == test-explorer && viewItem != error"
+				},
+				{
+					"command": "test-explorer.debug",
+					"group": "inline@1",
+					"when": "view == test-explorer && viewItem == debuggableTestWithSource"
+				},
+				{
+					"command": "test-explorer.debug",
+					"group": "inline@1",
+					"when": "view == test-explorer && viewItem == debuggableTest"
+				},
+				{
+					"command": "test-explorer.show-source",
+					"group": "inline@3",
+					"when": "view == test-explorer && viewItem == suiteWithSource"
+				},
+				{
+					"command": "test-explorer.show-source",
+					"group": "inline@3",
+					"when": "view == test-explorer && viewItem == debuggableTestWithSource"
+				},
+				{
+					"command": "test-explorer.show-source",
+					"group": "inline@3",
+					"when": "view == test-explorer && viewItem == testWithSource"
+				},
+				{
+					"command": "test-explorer.reload-collection",
+					"group": "1_reload",
+					"when": "view == test-explorer && viewItem == collection"
+				},
+				{
+					"command": "test-explorer.reload-collection",
+					"group": "1_reload",
+					"when": "view == test-explorer && viewItem == error"
+				},
+				{
+					"command": "test-explorer.enable-autorun",
+					"group": "4_autorun@4",
+					"when": "view == test-explorer && viewItem != error"
+				},
+				{
+					"command": "test-explorer.disable-autorun",
+					"group": "4_autorun@5",
+					"when": "view == test-explorer && viewItem != error"
+				},
+				{
+					"command": "test-explorer.retire",
+					"group": "5_state@6",
+					"when": "view == test-explorer && viewItem != error"
+				},
+				{
+					"command": "test-explorer.reset",
+					"group": "5_state@7",
+					"when": "view == test-explorer && viewItem != error"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "test-explorer.reload-collection",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.reloading",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.run",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.debug",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.show-error",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.show-source",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.enable-autorun",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.disable-autorun",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.retire",
+					"when": "false"
+				},
+				{
+					"command": "test-explorer.reset",
+					"when": "false"
+				}
+			]
+		}
+	},
+	"__metadata": {
+		"id": "ff96f1b4-a4b8-45ef-8ecf-c232c0cb75c8",
+		"publisherId": "3356f11a-6798-4f03-a93f-3d929b7fca7c",
+		"publisherDisplayName": "Holger Benl"
+	}
+}

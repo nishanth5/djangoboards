@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<compiz_session id="103efe004c371258e3154994941646112200000018990049">
+  <window id="103efe004c371258e3154994947887786000000018990050" title="Ice Cream Parlor | HackerRank - Mozilla Firefox (Private Browsing)" class="Firefox" name="Navigator" role="browser" command="firefox">
+    <geometry x="65" y="24" width="500" height="537"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+  <window id="103efe004c371258e3154994947887786000000018990050" title="Server Not Found - Mozilla Firefox" class="Firefox" name="Navigator" role="browser" command="firefox">
+    <geometry x="65" y="24" width="1160" height="398"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+</compiz_session>

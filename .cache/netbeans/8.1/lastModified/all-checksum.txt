@@ -1,0 +1,12 @@
+platform=1451582195000
+cluster.nb=1457716459000
+cluster.ide=1457716483000
+cluster.java=1457716498000
+cluster.apisupport=1457716500000
+cluster.harness=1451582196000
+user=1547705283000
+crc=20
+locale=en_IN
+branding=nb
+java.version=1.8.0_191
+java.vm.version=25.191-b12

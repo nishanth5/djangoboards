@@ -1,0 +1,27 @@
+Looking for git in: git
+Using git 2.7.4 from git
+> git rev-parse --show-toplevel
+> git config --get commit.template
+Open repository: /home/divum
+> git status -z -u
+> git show :Development/myproject/myproject/myproject/urls.py
+> git ls-files --stage -- Development/myproject/myproject/myproject/
+> git check-ignore -z --stdin
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum
+git.getSCMResource.uri file:///home/divum/Development/myproject/myproject/myproject/urls.py
+repo root /home/divum

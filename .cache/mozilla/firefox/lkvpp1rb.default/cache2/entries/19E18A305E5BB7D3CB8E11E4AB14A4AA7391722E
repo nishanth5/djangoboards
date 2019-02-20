@@ -1,0 +1,973 @@
+/*! Copyright (c) 2011 Piotr Rochala (http://rocha.la)
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+ *
+ * Version: 1.3.8
+ *
+ */
+(function($) {
+
+  $.fn.extend({
+    slimScroll: function(options) {
+
+      var defaults = {
+
+        // width in pixels of the visible scroll area
+        width : 'auto',
+
+        // height in pixels of the visible scroll area
+        height : '250px',
+
+        // width in pixels of the scrollbar and rail
+        size : '7px',
+
+        // scrollbar color, accepts any hex/color value
+        color: '#000',
+
+        // scrollbar position - left/right
+        position : 'right',
+
+        // distance in pixels between the side edge and the scrollbar
+        distance : '1px',
+
+        // default scroll position on load - top / bottom / $('selector')
+        start : 'top',
+
+        // sets scrollbar opacity
+        opacity : .4,
+
+        // enables always-on mode for the scrollbar
+        alwaysVisible : false,
+
+        // check if we should hide the scrollbar when user is hovering over
+        disableFadeOut : false,
+
+        // sets visibility of the rail
+        railVisible : false,
+
+        // sets rail color
+        railColor : '#333',
+
+        // sets rail opacity
+        railOpacity : .2,
+
+        // whether  we should use jQuery UI Draggable to enable bar dragging
+        railDraggable : true,
+
+        // defautlt CSS class of the slimscroll rail
+        railClass : 'slimScrollRail',
+
+        // defautlt CSS class of the slimscroll bar
+        barClass : 'slimScrollBar',
+
+        // defautlt CSS class of the slimscroll wrapper
+        wrapperClass : 'slimScrollDiv',
+
+        // check if mousewheel should scroll the window if we reach top/bottom
+        allowPageScroll : false,
+
+        // scroll amount applied to each mouse wheel step
+        wheelStep : 20,
+
+        // scroll amount applied when user is using gestures
+        touchScrollStep : 200,
+
+        // sets border radius
+        borderRadius: '7px',
+
+        // sets border radius of the rail
+        railBorderRadius : '7px'
+      };
+
+      var o = $.extend(defaults, options);
+
+      // do it for every element that matches selector
+      this.each(function(){
+
+      var isOverPanel, isOverBar, isDragg, queueHide, touchDif,
+        barHeight, percentScroll, lastScroll,
+        divS = '<div></div>',
+        minBarHeight = 30,
+        releaseScroll = false;
+
+        // used in event handlers and for better minification
+        var me = $(this);
+
+        // ensure we are not binding it again
+        if (me.parent().hasClass(o.wrapperClass))
+        {
+            // start from last bar position
+            var offset = me.scrollTop();
+
+            // find bar and rail
+            bar = me.siblings('.' + o.barClass);
+            rail = me.siblings('.' + o.railClass);
+
+            getBarHeight();
+
+            // check if we should scroll existing instance
+            if ($.isPlainObject(options))
+            {
+              // Pass height: auto to an existing slimscroll object to force a resize after contents have changed
+              if ( 'height' in options && options.height == 'auto' ) {
+                me.parent().css('height', 'auto');
+                me.css('height', 'auto');
+                var height = me.parent().parent().height();
+                me.parent().css('height', height);
+                me.css('height', height);
+              } else if ('height' in options) {
+                var h = options.height;
+                me.parent().css('height', h);
+                me.css('height', h);
+              }
+
+              if ('scrollTo' in options)
+              {
+                // jump to a static point
+                offset = parseInt(o.scrollTo);
+              }
+              else if ('scrollBy' in options)
+              {
+                // jump by value pixels
+                offset += parseInt(o.scrollBy);
+              }
+              else if ('destroy' in options)
+              {
+                // remove slimscroll elements
+                bar.remove();
+                rail.remove();
+                me.unwrap();
+                return;
+              }
+
+              // scroll content by the given offset
+              scrollContent(offset, false, true);
+            }
+
+            return;
+        }
+        else if ($.isPlainObject(options))
+        {
+            if ('destroy' in options)
+            {
+            	return;
+            }
+        }
+
+        // optionally set height to the parent's height
+        o.height = (o.height == 'auto') ? me.parent().height() : o.height;
+
+        // wrap content
+        var wrapper = $(divS)
+          .addClass(o.wrapperClass)
+          .css({
+            position: 'relative',
+            overflow: 'hidden',
+            width: o.width,
+            height: o.height
+          });
+
+        // update style for the div
+        me.css({
+          overflow: 'hidden',
+          width: o.width,
+          height: o.height
+        });
+
+        // create scrollbar rail
+        var rail = $(divS)
+          .addClass(o.railClass)
+          .css({
+            width: o.size,
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            display: (o.alwaysVisible && o.railVisible) ? 'block' : 'none',
+            'border-radius': o.railBorderRadius,
+            background: o.railColor,
+            opacity: o.railOpacity,
+            zIndex: 90
+          });
+
+        // create scrollbar
+        var bar = $(divS)
+          .addClass(o.barClass)
+          .css({
+            background: o.color,
+            width: o.size,
+            position: 'absolute',
+            top: 0,
+            opacity: o.opacity,
+            display: o.alwaysVisible ? 'block' : 'none',
+            'border-radius' : o.borderRadius,
+            BorderRadius: o.borderRadius,
+            MozBorderRadius: o.borderRadius,
+            WebkitBorderRadius: o.borderRadius,
+            zIndex: 99
+          });
+
+        // set position
+        var posCss = (o.position == 'right') ? { right: o.distance } : { left: o.distance };
+        rail.css(posCss);
+        bar.css(posCss);
+
+        // wrap it
+        me.wrap(wrapper);
+
+        // append to parent div
+        me.parent().append(bar);
+        me.parent().append(rail);
+
+        // make it draggable and no longer dependent on the jqueryUI
+        if (o.railDraggable){
+          bar.bind("mousedown", function(e) {
+            var $doc = $(document);
+            isDragg = true;
+            t = parseFloat(bar.css('top'));
+            pageY = e.pageY;
+
+            $doc.bind("mousemove.slimscroll", function(e){
+              currTop = t + e.pageY - pageY;
+              bar.css('top', currTop);
+              scrollContent(0, bar.position().top, false);// scroll content
+            });
+
+            $doc.bind("mouseup.slimscroll", function(e) {
+              isDragg = false;hideBar();
+              $doc.unbind('.slimscroll');
+            });
+            return false;
+          }).bind("selectstart.slimscroll", function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            return false;
+          });
+        }
+
+        // on rail over
+        rail.hover(function(){
+          showBar();
+        }, function(){
+          hideBar();
+        });
+
+        // on bar over
+        bar.hover(function(){
+          isOverBar = true;
+        }, function(){
+          isOverBar = false;
+        });
+
+        // show on parent mouseover
+        me.hover(function(){
+          isOverPanel = true;
+          showBar();
+          hideBar();
+        }, function(){
+          isOverPanel = false;
+          hideBar();
+        });
+
+        // support for mobile
+        me.bind('touchstart', function(e,b){
+          if (e.originalEvent.touches.length)
+          {
+            // record where touch started
+            touchDif = e.originalEvent.touches[0].pageY;
+          }
+        });
+
+        me.bind('touchmove', function(e){
+          // prevent scrolling the page if necessary
+          if(!releaseScroll)
+          {
+  		      e.originalEvent.preventDefault();
+		      }
+          if (e.originalEvent.touches.length)
+          {
+            // see how far user swiped
+            var diff = (touchDif - e.originalEvent.touches[0].pageY) / o.touchScrollStep;
+            // scroll content
+            scrollContent(diff, true);
+            touchDif = e.originalEvent.touches[0].pageY;
+          }
+        });
+
+        // set up initial height
+        getBarHeight();
+
+        // check start position
+        if (o.start === 'bottom')
+        {
+          // scroll content to bottom
+          bar.css({ top: me.outerHeight() - bar.outerHeight() });
+          scrollContent(0, true);
+        }
+        else if (o.start !== 'top')
+        {
+          // assume jQuery selector
+          scrollContent($(o.start).position().top, null, true);
+
+          // make sure bar stays hidden
+          if (!o.alwaysVisible) { bar.hide(); }
+        }
+
+        // attach scroll events
+        attachWheel(this);
+
+        function _onWheel(e)
+        {
+          // use mouse wheel only when mouse is over
+          if (!isOverPanel) { return; }
+
+          var e = e || window.event;
+
+          var delta = 0;
+          if (e.wheelDelta) { delta = -e.wheelDelta/120; }
+          if (e.detail) { delta = e.detail / 3; }
+
+          var target = e.target || e.srcTarget || e.srcElement;
+          if ($(target).closest('.' + o.wrapperClass).is(me.parent())) {
+            // scroll content
+            scrollContent(delta, true);
+          }
+
+          // stop window scroll
+          if (e.preventDefault && !releaseScroll) { e.preventDefault(); }
+          if (!releaseScroll) { e.returnValue = false; }
+        }
+
+        function scrollContent(y, isWheel, isJump)
+        {
+          releaseScroll = false;
+          var delta = y;
+          var maxTop = me.outerHeight() - bar.outerHeight();
+
+          if (isWheel)
+          {
+            // move bar with mouse wheel
+            delta = parseInt(bar.css('top')) + y * parseInt(o.wheelStep) / 100 * bar.outerHeight();
+
+            // move bar, make sure it doesn't go out
+            delta = Math.min(Math.max(delta, 0), maxTop);
+
+            // if scrolling down, make sure a fractional change to the
+            // scroll position isn't rounded away when the scrollbar's CSS is set
+            // this flooring of delta would happened automatically when
+            // bar.css is set below, but we floor here for clarity
+            delta = (y > 0) ? Math.ceil(delta) : Math.floor(delta);
+
+            // scroll the scrollbar
+            bar.css({ top: delta + 'px' });
+          }
+
+          // calculate actual scroll amount
+          percentScroll = parseInt(bar.css('top')) / (me.outerHeight() - bar.outerHeight());
+          delta = percentScroll * (me[0].scrollHeight - me.outerHeight());
+
+          if (isJump)
+          {
+            delta = y;
+            var offsetTop = delta / me[0].scrollHeight * me.outerHeight();
+            offsetTop = Math.min(Math.max(offsetTop, 0), maxTop);
+            bar.css({ top: offsetTop + 'px' });
+          }
+
+          // scroll content
+          me.scrollTop(delta);
+
+          // fire scrolling event
+          me.trigger('slimscrolling', ~~delta);
+
+          // ensure bar is visible
+          showBar();
+
+          // trigger hide when scroll is stopped
+          hideBar();
+        }
+
+        function attachWheel(target)
+        {
+          if (window.addEventListener)
+          {
+            target.addEventListener('DOMMouseScroll', _onWheel, false );
+            target.addEventListener('mousewheel', _onWheel, false );
+          }
+          else
+          {
+            document.attachEvent("onmousewheel", _onWheel)
+          }
+        }
+
+        function getBarHeight()
+        {
+          // calculate scrollbar height and make sure it is not too small
+          barHeight = Math.max((me.outerHeight() / me[0].scrollHeight) * me.outerHeight(), minBarHeight);
+          bar.css({ height: barHeight + 'px' });
+
+          // hide scrollbar if content is not long enough
+          var display = barHeight == me.outerHeight() ? 'none' : 'block';
+          bar.css({ display: display });
+        }
+
+        function showBar()
+        {
+          // recalculate bar height
+          getBarHeight();
+          clearTimeout(queueHide);
+
+          // when bar reached top or bottom
+          if (percentScroll == ~~percentScroll)
+          {
+            //release wheel
+            releaseScroll = o.allowPageScroll;
+
+            // publish approporiate event
+            if (lastScroll != percentScroll)
+            {
+                var msg = (~~percentScroll == 0) ? 'top' : 'bottom';
+                me.trigger('slimscroll', msg);
+            }
+          }
+          else
+          {
+            releaseScroll = false;
+          }
+          lastScroll = percentScroll;
+
+          // show only when required
+          if(barHeight >= me.outerHeight()) {
+            //allow window scroll
+            releaseScroll = true;
+            return;
+          }
+          bar.stop(true,true).fadeIn('fast');
+          if (o.railVisible) { rail.stop(true,true).fadeIn('fast'); }
+        }
+
+        function hideBar()
+        {
+          // only hide when options allow it
+          if (!o.alwaysVisible)
+          {
+            queueHide = setTimeout(function(){
+              if (!(o.disableFadeOut && isOverPanel) && !isOverBar && !isDragg)
+              {
+                bar.fadeOut('slow');
+                rail.fadeOut('slow');
+              }
+            }, 1000);
+          }
+        }
+
+      });
+
+      // maintain chainability
+      return this;
+    }
+  });
+
+  $.fn.extend({
+    slimscroll: $.fn.slimScroll
+  });
+
+})(jQuery);
+         20190128165852                                                6      / * !   C o p y r i g h t   ( c )   2 0 1 1   P i o t r   R o c h a l a   ( h t t p : / / r o c h a . l a ) 
+   *   D u a l   l i c e n s e d   u n d e r   t h e   M I T   ( h t t p : / / w w w . o p e n s o u r c e . o r g / l i c e n s e s / m i t - l i c e n s e . p h p ) 
+   *   a n d   G P L   ( h t t p : / / w w w . o p e n s o u r c e . o r g / l i c e n s e s / g p l - l i c e n s e . p h p )   l i c e n s e s . 
+   * 
+   *   V e r s i o n :   1 . 3 . 8 
+   * 
+   * / 
+ ( f u n c t i o n ( $ )   { 
+ 
+     $ . f n . e x t e n d ( { 
+         s l i m S c r o l l :   f u n c t i o n ( o p t i o n s )   { 
+ 
+             v a r   d e f a u l t s   =   { 
+ 
+                 / /   w i d t h   i n   p i x e l s   o f   t h e   v i s i b l e   s c r o l l   a r e a 
+                 w i d t h   :   ' a u t o ' , 
+ 
+                 / /   h e i g h t   i n   p i x e l s   o f   t h e   v i s i b l e   s c r o l l   a r e a 
+                 h e i g h t   :   ' 2 5 0 p x ' , 
+ 
+                 / /   w i d t h   i n   p i x e l s   o f   t h e   s c r o l l b a r   a n d   r a i l 
+                 s i z e   :   ' 7 p x ' , 
+ 
+                 / /   s c r o l l b a r   c o l o r ,   a c c e p t s   a n y   h e x / c o l o r   v a l u e 
+                 c o l o r :   ' # 0 0 0 ' , 
+ 
+                 / /   s c r o l l b a r   p o s i t i o n   -   l e f t / r i g h t 
+                 p o s i t i o n   :   ' r i g h t ' , 
+ 
+                 / /   d i s t a n c e   i n   p i x e l s   b e t w e e n   t h e   s i d e   e d g e   a n d   t h e   s c r o l l b a r 
+                 d i s t a n c e   :   ' 1 p x ' , 
+ 
+                 / /   d e f a u l t   s c r o l l   p o s i t i o n   o n   l o a d   -   t o p   /   b o t t o m   /   $ ( ' s e l e c t o r ' ) 
+                 s t a r t   :   ' t o p ' , 
+ 
+                 / /   s e t s   s c r o l l b a r   o p a c i t y 
+                 o p a c i t y   :   . 4 , 
+ 
+                 / /   e n a b l e s   a l w a y s - o n   m o d e   f o r   t h e   s c r o l l b a r 
+                 a l w a y s V i s i b l e   :   f a l s e , 
+ 
+                 / /   c h e c k   i f   w e   s h o u l d   h i d e   t h e   s c r o l l b a r   w h e n   u s e r   i s   h o v e r i n g   o v e r 
+                 d i s a b l e F a d e O u t   :   f a l s e , 
+ 
+                 / /   s e t s   v i s i b i l i t y   o f   t h e   r a i l 
+                 r a i l V i s i b l e   :   f a l s e , 
+ 
+                 / /   s e t s   r a i l   c o l o r 
+                 r a i l C o l o r   :   ' # 3 3 3 ' , 
+ 
+                 / /   s e t s   r a i l   o p a c i t y 
+                 r a i l O p a c i t y   :   . 2 , 
+ 
+                 / /   w h e t h e r     w e   s h o u l d   u s e   j Q u e r y   U I   D r a g g a b l e   t o   e n a b l e   b a r   d r a g g i n g 
+                 r a i l D r a g g a b l e   :   t r u e , 
+ 
+                 / /   d e f a u t l t   C S S   c l a s s   o f   t h e   s l i m s c r o l l   r a i l 
+                 r a i l C l a s s   :   ' s l i m S c r o l l R a i l ' , 
+ 
+                 / /   d e f a u t l t   C S S   c l a s s   o f   t h e   s l i m s c r o l l   b a r 
+                 b a r C l a s s   :   ' s l i m S c r o l l B a r ' , 
+ 
+                 / /   d e f a u t l t   C S S   c l a s s   o f   t h e   s l i m s c r o l l   w r a p p e r 
+                 w r a p p e r C l a s s   :   ' s l i m S c r o l l D i v ' , 
+ 
+                 / /   c h e c k   i f   m o u s e w h e e l   s h o u l d   s c r o l l   t h e   w i n d o w   i f   w e   r e a c h   t o p / b o t t o m 
+                 a l l o w P a g e S c r o l l   :   f a l s e , 
+ 
+                 / /   s c r o l l   a m o u n t   a p p l i e d   t o   e a c h   m o u s e   w h e e l   s t e p 
+                 w h e e l S t e p   :   2 0 , 
+ 
+                 / /   s c r o l l   a m o u n t   a p p l i e d   w h e n   u s e r   i s   u s i n g   g e s t u r e s 
+                 t o u c h S c r o l l S t e p   :   2 0 0 , 
+ 
+                 / /   s e t s   b o r d e r   r a d i u s 
+                 b o r d e r R a d i u s :   ' 7 p x ' , 
+ 
+                 / /   s e t s   b o r d e r   r a d i u s   o f   t h e   r a i l 
+                 r a i l B o r d e r R a d i u s   :   ' 7 p x ' 
+             } ; 
+ 
+             v a r   o   =   $ . e x t e n d ( d e f a u l t s ,   o p t i o n s ) ; 
+ 
+             / /   d o   i t   f o r   e v e r y   e l e m e n t   t h a t   m a t c h e s   s e l e c t o r 
+             t h i s . e a c h ( f u n c t i o n ( ) { 
+ 
+             v a r   i s O v e r P a n e l ,   i s O v e r B a r ,   i s D r a g g ,   q u e u e H i d e ,   t o u c h D i f , 
+                 b a r H e i g h t ,   p e r c e n t S c r o l l ,   l a s t S c r o l l , 
+                 d i v S   =   ' < d i v > < / d i v > ' , 
+                 m i n B a r H e i g h t   =   3 0 , 
+                 r e l e a s e S c r o l l   =   f a l s e ; 
+ 
+                 / /   u s e d   i n   e v e n t   h a n d l e r s   a n d   f o r   b e t t e r   m i n i f i c a t i o n 
+                 v a r   m e   =   $ ( t h i s ) ; 
+ 
+                 / /   e n s u r e   w e   a r e   n o t   b i n d i n g   i t   a g a i n 
+                 i f   ( m e . p a r e n t ( ) . h a s C l a s s ( o . w r a p p e r C l a s s ) ) 
+                 { 
+                         / /   s t a r t   f r o m   l a s t   b a r   p o s i t i o n 
+                         v a r   o f f s e t   =   m e . s c r o l l T o p ( ) ; 
+ 
+                         / /   f i n d   b a r   a n d   r a i l 
+                         b a r   =   m e . s i b l i n g s ( ' . '   +   o . b a r C l a s s ) ; 
+                         r a i l   =   m e . s i b l i n g s ( ' . '   +   o . r a i l C l a s s ) ; 
+ 
+                         g e t B a r H e i g h t ( ) ; 
+ 
+                         / /   c h e c k   i f   w e   s h o u l d   s c r o l l   e x i s t i n g   i n s t a n c e 
+                         i f   ( $ . i s P l a i n O b j e c t ( o p t i o n s ) ) 
+                         { 
+                             / /   P a s s   h e i g h t :   a u t o   t o   a n   e x i s t i n g   s l i m s c r o l l   o b j e c t   t o   f o r c e   a   r e s i z e   a f t e r   c o n t e n t s   h a v e   c h a n g e d 
+                             i f   (   ' h e i g h t '   i n   o p t i o n s   & &   o p t i o n s . h e i g h t   = =   ' a u t o '   )   { 
+                                 m e . p a r e n t ( ) . c s s ( ' h e i g h t ' ,   ' a u t o ' ) ; 
+                                 m e . c s s ( ' h e i g h t ' ,   ' a u t o ' ) ; 
+                                 v a r   h e i g h t   =   m e . p a r e n t ( ) . p a r e n t ( ) . h e i g h t ( ) ; 
+                                 m e . p a r e n t ( ) . c s s ( ' h e i g h t ' ,   h e i g h t ) ; 
+                                 m e . c s s ( ' h e i g h t ' ,   h e i g h t ) ; 
+                             }   e l s e   i f   ( ' h e i g h t '   i n   o p t i o n s )   { 
+                                 v a r   h   =   o p t i o n s . h e i g h t ; 
+                                 m e . p a r e n t ( ) . c s s ( ' h e i g h t ' ,   h ) ; 
+                                 m e . c s s ( ' h e i g h t ' ,   h ) ; 
+                             } 
+ 
+                             i f   ( ' s c r o l l T o '   i n   o p t i o n s ) 
+                             { 
+                                 / /   j u m p   t o   a   s t a t i c   p o i n t 
+                                 o f f s e t   =   p a r s e I n t ( o . s c r o l l T o ) ; 
+                             } 
+                             e l s e   i f   ( ' s c r o l l B y '   i n   o p t i o n s ) 
+                             { 
+                                 / /   j u m p   b y   v a l u e   p i x e l s 
+                                 o f f s e t   + =   p a r s e I n t ( o . s c r o l l B y ) ; 
+                             } 
+                             e l s e   i f   ( ' d e s t r o y '   i n   o p t i o n s ) 
+                             { 
+                                 / /   r e m o v e   s l i m s c r o l l   e l e m e n t s 
+                                 b a r . r e m o v e ( ) ; 
+                                 r a i l . r e m o v e ( ) ; 
+                                 m e . u n w r a p ( ) ; 
+                                 r e t u r n ; 
+                             } 
+ 
+                             / /   s c r o l l   c o n t e n t   b y   t h e   g i v e n   o f f s e t 
+                             s c r o l l C o n t e n t ( o f f s e t ,   f a l s e ,   t r u e ) ; 
+                         } 
+ 
+                         r e t u r n ; 
+                 } 
+                 e l s e   i f   ( $ . i s P l a i n O b j e c t ( o p t i o n s ) ) 
+                 { 
+                         i f   ( ' d e s t r o y '   i n   o p t i o n s ) 
+                         { 
+                         	 r e t u r n ; 
+                         } 
+                 } 
+ 
+                 / /   o p t i o n a l l y   s e t   h e i g h t   t o   t h e   p a r e n t ' s   h e i g h t 
+                 o . h e i g h t   =   ( o . h e i g h t   = =   ' a u t o ' )   ?   m e . p a r e n t ( ) . h e i g h t ( )   :   o . h e i g h t ; 
+ 
+                 / /   w r a p   c o n t e n t 
+                 v a r   w r a p p e r   =   $ ( d i v S ) 
+                     . a d d C l a s s ( o . w r a p p e r C l a s s ) 
+                     . c s s ( { 
+                         p o s i t i o n :   ' r e l a t i v e ' , 
+                         o v e r f l o w :   ' h i d d e n ' , 
+                         w i d t h :   o . w i d t h , 
+                         h e i g h t :   o . h e i g h t 
+                     } ) ; 
+ 
+                 / /   u p d a t e   s t y l e   f o r   t h e   d i v 
+                 m e . c s s ( { 
+                     o v e r f l o w :   ' h i d d e n ' , 
+                     w i d t h :   o . w i d t h , 
+                     h e i g h t :   o . h e i g h t 
+                 } ) ; 
+ 
+                 / /   c r e a t e   s c r o l l b a r   r a i l 
+                 v a r   r a i l   =   $ ( d i v S ) 
+                     . a d d C l a s s ( o . r a i l C l a s s ) 
+                     . c s s ( { 
+                         w i d t h :   o . s i z e , 
+                         h e i g h t :   ' 1 0 0 % ' , 
+                         p o s i t i o n :   ' a b s o l u t e ' , 
+                         t o p :   0 , 
+                         d i s p l a y :   ( o . a l w a y s V i s i b l e   & &   o . r a i l V i s i b l e )   ?   ' b l o c k '   :   ' n o n e ' , 
+                         ' b o r d e r - r a d i u s ' :   o . r a i l B o r d e r R a d i u s , 
+                         b a c k g r o u n d :   o . r a i l C o l o r , 
+                         o p a c i t y :   o . r a i l O p a c i t y , 
+                         z I n d e x :   9 0 
+                     } ) ; 
+ 
+                 / /   c r e a t e   s c r o l l b a r 
+                 v a r   b a r   =   $ ( d i v S ) 
+                     . a d d C l a s s ( o . b a r C l a s s ) 
+                     . c s s ( { 
+                         b a c k g r o u n d :   o . c o l o r , 
+                         w i d t h :   o . s i z e , 
+                         p o s i t i o n :   ' a b s o l u t e ' , 
+                         t o p :   0 , 
+                         o p a c i t y :   o . o p a c i t y , 
+                         d i s p l a y :   o . a l w a y s V i s i b l e   ?   ' b l o c k '   :   ' n o n e ' , 
+                         ' b o r d e r - r a d i u s '   :   o . b o r d e r R a d i u s , 
+                         B o r d e r R a d i u s :   o . b o r d e r R a d i u s , 
+                         M o z B o r d e r R a d i u s :   o . b o r d e r R a d i u s , 
+                         W e b k i t B o r d e r R a d i u s :   o . b o r d e r R a d i u s , 
+                         z I n d e x :   9 9 
+                     } ) ; 
+ 
+                 / /   s e t   p o s i t i o n 
+                 v a r   p o s C s s   =   ( o . p o s i t i o n   = =   ' r i g h t ' )   ?   {   r i g h t :   o . d i s t a n c e   }   :   {   l e f t :   o . d i s t a n c e   } ; 
+                 r a i l . c s s ( p o s C s s ) ; 
+                 b a r . c s s ( p o s C s s ) ; 
+ 
+                 / /   w r a p   i t 
+                 m e . w r a p ( w r a p p e r ) ; 
+ 
+                 / /   a p p e n d   t o   p a r e n t   d i v 
+                 m e . p a r e n t ( ) . a p p e n d ( b a r ) ; 
+                 m e . p a r e n t ( ) . a p p e n d ( r a i l ) ; 
+ 
+                 / /   m a k e   i t   d r a g g a b l e   a n d   n o   l o n g e r   d e p e n d e n t   o n   t h e   j q u e r y U I 
+                 i f   ( o . r a i l D r a g g a b l e ) { 
+                     b a r . b i n d ( " m o u s e d o w n " ,   f u n c t i o n ( e )   { 
+                         v a r   $ d o c   =   $ ( d o c u m e n t ) ; 
+                         i s D r a g g   =   t r u e ; 
+                         t   =   p a r s e F l o a t ( b a r . c s s ( ' t o p ' ) ) ; 
+                         p a g e Y   =   e . p a g e Y ; 
+ 
+                         $ d o c . b i n d ( " m o u s e m o v e . s l i m s c r o l l " ,   f u n c t i o n ( e ) { 
+                             c u r r T o p   =   t   +   e . p a g e Y   -   p a g e Y ; 
+                             b a r . c s s ( ' t o p ' ,   c u r r T o p ) ; 
+                             s c r o l l C o n t e n t ( 0 ,   b a r . p o s i t i o n ( ) . t o p ,   f a l s e ) ; / /   s c r o l l   c o n t e n t 
+                         } ) ; 
+ 
+                         $ d o c . b i n d ( " m o u s e u p . s l i m s c r o l l " ,   f u n c t i o n ( e )   { 
+                             i s D r a g g   =   f a l s e ; h i d e B a r ( ) ; 
+                             $ d o c . u n b i n d ( ' . s l i m s c r o l l ' ) ; 
+                         } ) ; 
+                         r e t u r n   f a l s e ; 
+                     } ) . b i n d ( " s e l e c t s t a r t . s l i m s c r o l l " ,   f u n c t i o n ( e ) { 
+                         e . s t o p P r o p a g a t i o n ( ) ; 
+                         e . p r e v e n t D e f a u l t ( ) ; 
+                         r e t u r n   f a l s e ; 
+                     } ) ; 
+                 } 
+ 
+                 / /   o n   r a i l   o v e r 
+                 r a i l . h o v e r ( f u n c t i o n ( ) { 
+                     s h o w B a r ( ) ; 
+                 } ,   f u n c t i o n ( ) { 
+                     h i d e B a r ( ) ; 
+                 } ) ; 
+ 
+                 / /   o n   b a r   o v e r 
+                 b a r . h o v e r ( f u n c t i o n ( ) { 
+                     i s O v e r B a r   =   t r u e ; 
+                 } ,   f u n c t i o n ( ) { 
+                     i s O v e r B a r   =   f a l s e ; 
+                 } ) ; 
+ 
+                 / /   s h o w   o n   p a r e n t   m o u s e o v e r 
+                 m e . h o v e r ( f u n c t i o n ( ) { 
+                     i s O v e r P a n e l   =   t r u e ; 
+                     s h o w B a r ( ) ; 
+                     h i d e B a r ( ) ; 
+                 } ,   f u n c t i o n ( ) { 
+                     i s O v e r P a n e l   =   f a l s e ; 
+                     h i d e B a r ( ) ; 
+                 } ) ; 
+ 
+                 / /   s u p p o r t   f o r   m o b i l e 
+                 m e . b i n d ( ' t o u c h s t a r t ' ,   f u n c t i o n ( e , b ) { 
+                     i f   ( e . o r i g i n a l E v e n t . t o u c h e s . l e n g t h ) 
+                     { 
+                         / /   r e c o r d   w h e r e   t o u c h   s t a r t e d 
+                         t o u c h D i f   =   e . o r i g i n a l E v e n t . t o u c h e s [ 0 ] . p a g e Y ; 
+                     } 
+                 } ) ; 
+ 
+                 m e . b i n d ( ' t o u c h m o v e ' ,   f u n c t i o n ( e ) { 
+                     / /   p r e v e n t   s c r o l l i n g   t h e   p a g e   i f   n e c e s s a r y 
+                     i f ( ! r e l e a s e S c r o l l ) 
+                     { 
+     	 	             e . o r i g i n a l E v e n t . p r e v e n t D e f a u l t ( ) ; 
+ 	 	             } 
+                     i f   ( e . o r i g i n a l E v e n t . t o u c h e s . l e n g t h ) 
+                     { 
+                         / /   s e e   h o w   f a r   u s e r   s w i p e d 
+                         v a r   d i f f   =   ( t o u c h D i f   -   e . o r i g i n a l E v e n t . t o u c h e s [ 0 ] . p a g e Y )   /   o . t o u c h S c r o l l S t e p ; 
+                         / /   s c r o l l   c o n t e n t 
+                         s c r o l l C o n t e n t ( d i f f ,   t r u e ) ; 
+                         t o u c h D i f   =   e . o r i g i n a l E v e n t . t o u c h e s [ 0 ] . p a g e Y ; 
+                     } 
+                 } ) ; 
+ 
+                 / /   s e t   u p   i n i t i a l   h e i g h t 
+                 g e t B a r H e i g h t ( ) ; 
+ 
+                 / /   c h e c k   s t a r t   p o s i t i o n 
+                 i f   ( o . s t a r t   = = =   ' b o t t o m ' ) 
+                 { 
+                     / /   s c r o l l   c o n t e n t   t o   b o t t o m 
+                     b a r . c s s ( {   t o p :   m e . o u t e r H e i g h t ( )   -   b a r . o u t e r H e i g h t ( )   } ) ; 
+                     s c r o l l C o n t e n t ( 0 ,   t r u e ) ; 
+                 } 
+                 e l s e   i f   ( o . s t a r t   ! = =   ' t o p ' ) 
+                 { 
+                     / /   a s s u m e   j Q u e r y   s e l e c t o r 
+                     s c r o l l C o n t e n t ( $ ( o . s t a r t ) . p o s i t i o n ( ) . t o p ,   n u l l ,   t r u e ) ; 
+ 
+                     / /   m a k e   s u r e   b a r   s t a y s   h i d d e n 
+                     i f   ( ! o . a l w a y s V i s i b l e )   {   b a r . h i d e ( ) ;   } 
+                 } 
+ 
+                 / /   a t t a c h   s c r o l l   e v e n t s 
+                 a t t a c h W h e e l ( t h i s ) ; 
+ 
+                 f u n c t i o n   _ o n W h e e l ( e ) 
+                 { 
+                     / /   u s e   m o u s e   w h e e l   o n l y   w h e n   m o u s e   i s   o v e r 
+                     i f   ( ! i s O v e r P a n e l )   {   r e t u r n ;   } 
+ 
+                     v a r   e   =   e   | |   w i n d o w . e v e n t ; 
+ 
+                     v a r   d e l t a   =   0 ; 
+                     i f   ( e . w h e e l D e l t a )   {   d e l t a   =   - e . w h e e l D e l t a / 1 2 0 ;   } 
+                     i f   ( e . d e t a i l )   {   d e l t a   =   e . d e t a i l   /   3 ;   } 
+ 
+                     v a r   t a r g e t   =   e . t a r g e t   | |   e . s r c T a r g e t   | |   e . s r c E l e m e n t ; 
+                     i f   ( $ ( t a r g e t ) . c l o s e s t ( ' . '   +   o . w r a p p e r C l a s s ) . i s ( m e . p a r e n t ( ) ) )   { 
+                         / /   s c r o l l   c o n t e n t 
+                         s c r o l l C o n t e n t ( d e l t a ,   t r u e ) ; 
+                     } 
+ 
+                     / /   s t o p   w i n d o w   s c r o l l 
+                     i f   ( e . p r e v e n t D e f a u l t   & &   ! r e l e a s e S c r o l l )   {   e . p r e v e n t D e f a u l t ( ) ;   } 
+                     i f   ( ! r e l e a s e S c r o l l )   {   e . r e t u r n V a l u e   =   f a l s e ;   } 
+                 } 
+ 
+                 f u n c t i o n   s c r o l l C o n t e n t ( y ,   i s W h e e l ,   i s J u m p ) 
+                 { 
+                     r e l e a s e S c r o l l   =   f a l s e ; 
+                     v a r   d e l t a   =   y ; 
+                     v a r   m a x T o p   =   m e . o u t e r H e i g h t ( )   -   b a r . o u t e r H e i g h t ( ) ; 
+ 
+                     i f   ( i s W h e e l ) 
+                     { 
+                         / /   m o v e   b a r   w i t h   m o u s e   w h e e l 
+                         d e l t a   =   p a r s e I n t ( b a r . c s s ( ' t o p ' ) )   +   y   *   p a r s e I n t ( o . w h e e l S t e p )   /   1 0 0   *   b a r . o u t e r H e i g h t ( ) ; 
+ 
+                         / /   m o v e   b a r ,   m a k e   s u r e   i t   d o e s n ' t   g o   o u t 
+                         d e l t a   =   M a t h . m i n ( M a t h . m a x ( d e l t a ,   0 ) ,   m a x T o p ) ; 
+ 
+                         / /   i f   s c r o l l i n g   d o w n ,   m a k e   s u r e   a   f r a c t i o n a l   c h a n g e   t o   t h e 
+                         / /   s c r o l l   p o s i t i o n   i s n ' t   r o u n d e d   a w a y   w h e n   t h e   s c r o l l b a r ' s   C S S   i s   s e t 
+                         / /   t h i s   f l o o r i n g   o f   d e l t a   w o u l d   h a p p e n e d   a u t o m a t i c a l l y   w h e n 
+                         / /   b a r . c s s   i s   s e t   b e l o w ,   b u t   w e   f l o o r   h e r e   f o r   c l a r i t y 
+                         d e l t a   =   ( y   >   0 )   ?   M a t h . c e i l ( d e l t a )   :   M a t h . f l o o r ( d e l t a ) ; 
+ 
+                         / /   s c r o l l   t h e   s c r o l l b a r 
+                         b a r . c s s ( {   t o p :   d e l t a   +   ' p x '   } ) ; 
+                     } 
+ 
+                     / /   c a l c u l a t e   a c t u a l   s c r o l l   a m o u n t 
+                     p e r c e n t S c r o l l   =   p a r s e I n t ( b a r . c s s ( ' t o p ' ) )   /   ( m e . o u t e r H e i g h t ( )   -   b a r . o u t e r H e i g h t ( ) ) ; 
+                     d e l t a   =   p e r c e n t S c r o l l   *   ( m e [ 0 ] . s c r o l l H e i g h t   -   m e . o u t e r H e i g h t ( ) ) ; 
+ 
+                     i f   ( i s J u m p ) 
+                     { 
+                         d e l t a   =   y ; 
+                         v a r   o f f s e t T o p   =   d e l t a   /   m e [ 0 ] . s c r o l l H e i g h t   *   m e . o u t e r H e i g h t ( ) ; 
+                         o f f s e t T o p   =   M a t h . m i n ( M a t h . m a x ( o f f s e t T o p ,   0 ) ,   m a x T o p ) ; 
+                         b a r . c s s ( {   t o p :   o f f s e t T o p   +   ' p x '   } ) ; 
+                     } 
+ 
+                     / /   s c r o l l   c o n t e n t 
+                     m e . s c r o l l T o p ( d e l t a ) ; 
+ 
+                     / /   f i r e   s c r o l l i n g   e v e n t 
+                     m e . t r i g g e r ( ' s l i m s c r o l l i n g ' ,   ~ ~ d e l t a ) ; 
+ 
+                     / /   e n s u r e   b a r   i s   v i s i b l e 
+                     s h o w B a r ( ) ; 
+ 
+                     / /   t r i g g e r   h i d e   w h e n   s c r o l l   i s   s t o p p e d 
+                     h i d e B a r ( ) ; 
+                 } 
+ 
+                 f u n c t i o n   a t t a c h W h e e l ( t a r g e t ) 
+                 { 
+                     i f   ( w i n d o w . a d d E v e n t L i s t e n e r ) 
+                     { 
+                         t a r g e t . a d d E v e n t L i s t e n e r ( ' D O M M o u s e S c r o l l ' ,   _ o n W h e e l ,   f a l s e   ) ; 
+                         t a r g e t . a d d E v e n t L i s t e n e r ( ' m o u s e w h e e l ' ,   _ o n W h e e l ,   f a l s e   ) ; 
+                     } 
+                     e l s e 
+                     { 
+                         d o c u m e n t . a t t a c h E v e n t ( " o n m o u s e w h e e l " ,   _ o n W h e e l ) 
+                     } 
+                 } 
+ 
+                 f u n c t i o n   g e t B a r H e i g h t ( ) 
+                 { 
+                     / /   c a l c u l a t e   s c r o l l b a r   h e i g h t   a n d   m a k e   s u r e   i t   i s   n o t   t o o   s m a l l 
+                     b a r H e i g h t   =   M a t h . m a x ( ( m e . o u t e r H e i g h t ( )   /   m e [ 0 ] . s c r o l l H e i g h t )   *   m e . o u t e r H e i g h t ( ) ,   m i n B a r H e i g h t ) ; 
+                     b a r . c s s ( {   h e i g h t :   b a r H e i g h t   +   ' p x '   } ) ; 
+ 
+                     / /   h i d e   s c r o l l b a r   i f   c o n t e n t   i s   n o t   l o n g   e n o u g h 
+                     v a r   d i s p l a y   =   b a r H e i g h t   = =   m e . o u t e r H e i g h t ( )   ?   ' n o n e '   :   ' b l o c k ' ; 
+                     b a r . c s s ( {   d i s p l a y :   d i s p l a y   } ) ; 
+                 } 
+ 
+                 f u n c t i o n   s h o w B a r ( ) 
+                 { 
+                     / /   r e c a l c u l a t e   b a r   h e i g h t 
+                     g e t B a r H e i g h t ( ) ; 
+                     c l e a r T i m e o u t ( q u e u e H i d e ) ; 
+ 
+                     / /   w h e n   b a r   r e a c h e d   t o p   o r   b o t t o m 
+                     i f   ( p e r c e n t S c r o l l   = =   ~ ~ p e r c e n t S c r o l l ) 
+                     { 
+                         / / r e l e a s e   w h e e l 
+                         r e l e a s e S c r o l l   =   o . a l l o w P a g e S c r o l l ; 
+ 
+                         / /   p u b l i s h   a p p r o p o r i a t e   e v e n t 
+                         i f   ( l a s t S c r o l l   ! =   p e r c e n t S c r o l l ) 
+                         { 
+                                 v a r   m s g   =   ( ~ ~ p e r c e n t S c r o l l   = =   0 )   ?   ' t o p '   :   ' b o t t o m ' ; 
+                                 m e . t r i g g e r ( ' s l i m s c r o l l ' ,   m s g ) ; 
+                         } 
+                     } 
+                     e l s e 
+                     { 
+                         r e l e a s e S c r o l l   =   f a l s e ; 
+                     } 
+                     l a s t S c r o l l   =   p e r c e n t S c r o l l ; 
+ 
+                     / /   s h o w   o n l y   w h e n   r e q u i r e d 
+                     i f ( b a r H e i g h t   > =   m e . o u t e r H e i g h t ( ) )   { 
+                         / / a l l o w   w i n d o w   s c r o l l 
+                         r e l e a s e S c r o l l   =   t r u e ; 
+                         r e t u r n ; 
+                     } 
+                     b a r . s t o p ( t r u e , t r u e ) . f a d e I n ( ' f a s t ' ) ; 
+                     i f   ( o . r a i l V i s i b l e )   {   r a i l . s t o p ( t r u e , t r u e ) . f a d e I n ( ' f a s t ' ) ;   } 
+                 } 
+ 
+                 f u n c t i o n   h i d e B a r ( ) 
+                 { 
+                     / /   o n l y   h i d e   w h e n   o p t i o n s   a l l o w   i t 
+                     i f   ( ! o . a l w a y s V i s i b l e ) 
+                     { 
+                         q u e u e H i d e   =   s e t T i m e o u t ( f u n c t i o n ( ) { 
+                             i f   ( ! ( o . d i s a b l e F a d e O u t   & &   i s O v e r P a n e l )   & &   ! i s O v e r B a r   & &   ! i s D r a g g ) 
+                             { 
+                                 b a r . f a d e O u t ( ' s l o w ' ) ; 
+                                 r a i l . f a d e O u t ( ' s l o w ' ) ; 
+                             } 
+                         } ,   1 0 0 0 ) ; 
+                     } 
+                 } 
+ 
+             } ) ; 
+ 
+             / /   m a i n t a i n   c h a i n a b i l i t y 
+             r e t u r n   t h i s ; 
+         } 
+     } ) ; 
+ 
+     $ . f n . e x t e n d ( { 
+         s l i m s c r o l l :   $ . f n . s l i m S c r o l l 
+     } ) ; 
+ 
+ } ) ( j Q u e r y ) ; 
+    @       https://vtop.vit.ac.in/vtop/assets/plugins/jquery.slimscroll.js     6      6                    Ç    ö    Á Qô®òÆÄ ⁄≠ò¨Ä €    jQueryá!´!ˇˇˇˇ            ´+íHç!´!        C  T         %                                   Ä ˙   ˝5  Ú   ˝5                    Gà   5    ∏   
+[   Ç    ]   Á Qà   5    ∏   
+[   à   5    5   ]   Á Qô©
+ò÷†ò ®
+ò¨Ä ÷ò÷†ò‘®Ä ÷ò§†††    fn   extend   slimScroll   slimscrollå!´!ˇˇˇˇ      $       ´+íHç!´!           slimScrollB )  Ω5  !  Ω5        2          options    o    B  Ù  Ç5  Ï  Ç5  U               barHeight    _onWheel    showBar    releaseScroll    scrollContent    getBarHeight    minBarHeight    queueHide    percentScroll    isDragg    isOverPanel    lastScroll    me    hideBar    isOverBar    bar 	   rail    touchDif    B b  †  Z  †  ﬂ   (           	   $doc   B (  ⁄     ⁄  Â   6           5û    B   x  
+  x  Î   4           5û  5û   B …  4  ¡  4     4           5û    B  u  ó  m  ó  ¯              5û    B  °  √  ô  √  ˙              5û    B  ¯  !    !  ˇ              5û    B  +  U  #  U               5û    B  ñ  Î  é  Î               5û    B  ı  6  Ì  6  
+             5û    B ~  7  v  7    &            5û   B `  G!  X  G!    %   0        5û       _onWheel ∞#  Q&  ü#  Q&  >     p        5û       scrollContent q&  ﬁ,  [&  ﬁ,  T     0        5û      attachWheel ¸,  G.  Ë,  G.  Ö     0        5û      getBarHeight  f.  0  Q.  0  í             5û       showBar  )0  ‰3  0  ‰3  ù     `        5û       hideBar  ˛3  y5  Ó3  y5  ¿                B  è4  [5  á4  [5  ≈  +            5û 5û 5û 5ûé!´!       é!´!   slimScrollã!´!    é!´!       é!´!   slimscrollã!´!    öò;¯ 5ûöò;¯˚ï∏∑jb      
+\jSj\jSj@=¶       @    :https://vtop.vit.ac.in/vtop/assets/plugins/jquery.slimscroll.js strongly-framed 1 security-info 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 request-method GET response-head HTTP/1.1 200 
+Cache-Control: private
+Expires: Thu, 01 Jan 1970 05:30:00 IST
+Accept-Ranges: bytes
+Content-Type: application/javascript
+Content-Length: 13832
+Date: Mon, 18 Feb 2019 06:35:10 GMT
+Last-Modified: Mon, 04 Feb 2019 09:16:48 GMT
+X-Frame-Options: DENY
+ original-response-headers Cache-Control: private
+Expires: Thu, 01 Jan 1970 05:30:00 IST
+Last-Modified: Mon, 04 Feb 2019 09:16:48 GMT
+Accept-Ranges: bytes
+Content-Type: application/javascript
+Content-Length: 13832
+Date: Tue, 12 Feb 2019 10:23:29 GMT
+X-Frame-Options: DENY
+ uncompressed-len 0 net-response-time-onstart 488 net-response-time-onstop 489 necko:classified 1 alt-data 1;13832,javascript/moz-bytecode-20190128165852 alt-data-from-child 1   ™

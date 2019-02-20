@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conversion>
+  <applied-converters>
+    <converter id="PythonTestConverterProvider" />
+  </applied-converters>
+  <project-files>
+    <file path="/home/divum/mysite/.idea/workspace.xml" timestamp="1550123531000" />
+  </project-files>
+</conversion>
+

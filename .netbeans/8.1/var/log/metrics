@@ -1,0 +1,22 @@
+<record>
+  <date>2019-01-18T11:32:03</date>
+  <millis>1547791323195</millis>
+  <sequence>66</sequence>
+  <logger>org.netbeans.ui.metrics.vcs</logger>
+  <level>800</level>
+  <thread>92</thread>
+  <message>USG_VCS_CLIENT</message>
+  <param>GIT</param>
+  <param>JAVALIB</param>
+</record>
+<record>
+  <date>2019-01-18T11:32:26</date>
+  <millis>1547791346547</millis>
+  <sequence>67</sequence>
+  <logger>org.netbeans.ui.metrics.editor</logger>
+  <level>800</level>
+  <thread>32</thread>
+  <message>USG_EDITOR_MIME_TYPE</message>
+  <param>text/plain</param>
+  <param>1</param>
+</record>

@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.python.pydev.ast; singleton:=true
+Require-Bundle: org.eclipse.core.resources,org.eclipse.core.runtime,or
+ g.python.pydev.core;bundle-version="[6.3.3,6.3.4)",org.eclipse.text,o
+ rg.python.pydev.parser;bundle-version="[6.3.3,6.3.4)",org.eclipse.cor
+ e.variables,org.eclipse.debug.core
+Bundle-ManifestVersion: 2
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: Brainwy Software Ltda
+Export-Package: org.python.pydev.ast,org.python.pydev.ast.analysis,org
+ .python.pydev.ast.analysis.messages,org.python.pydev.ast.builder,org.
+ python.pydev.ast.codecompletion,org.python.pydev.ast.codecompletion.r
+ evisited,org.python.pydev.ast.codecompletion.revisited.modules,org.py
+ thon.pydev.ast.codecompletion.revisited.visitors,org.python.pydev.ast
+ .codecompletion.shell,org.python.pydev.ast.formatter,org.python.pydev
+ .ast.interpreter_managers,org.python.pydev.ast.item_pointer,org.pytho
+ n.pydev.ast.listing_utils,org.python.pydev.ast.location,org.python.py
+ dev.ast.refactoring,org.python.pydev.ast.runners,org.python.pydev.ast
+ .simpleassist,org.python.pydev.core.pep8,org.python.pydev.plugin,org.
+ python.pydev.plugin.nature
+Bundle-Name: Ast Plug-in
+Bundle-Version: 6.3.3.201805051749
+Bundle-ClassPath: ast.jar
+Bundle-Activator: org.python.pydev.ast.AstPlugin
+Eclipse-BundleShape: dir
+
+

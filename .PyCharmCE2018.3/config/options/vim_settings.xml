@@ -1,0 +1,245 @@
+<application>
+  <component name="VimSettings">
+    <state version="4" enabled="true" />
+    <globalmarks />
+    <filemarks>
+      <file name="$USER_HOME$/Development/myproject/myproject/templates/login.html" timestamp="1550560292931">
+        <mark key="[" line="14" column="2" />
+        <mark key="]" line="14" column="2" />
+        <mark key="." line="14" column="2" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/accounts/tests.py" timestamp="1550555368399">
+        <mark key="[" line="2" column="29" />
+      </file>
+      <file name="/Python Console" timestamp="1550136074165">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$APPLICATION_CONFIG_DIR$/scratches/XMLtoJSON.py" timestamp="1549365772956">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$APPLICATION_CONFIG_DIR$/scratches/merge_and_sort.py" timestamp="1549359906498">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="/a.dummy" timestamp="1549349011269">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/boards/models.py" timestamp="1550232452035">
+        <mark key="[" line="26" column="0" />
+        <mark key="]" line="26" column="0" />
+        <mark key="." line="26" column="0" />
+      </file>
+      <file name="$USER_HOME$/PycharmProjects/mysite/mysite/mysite/urls.py" timestamp="1550126306781">
+        <mark key="[" line="0" column="0" />
+        <mark key="]" line="0" column="0" />
+        <mark key="." line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/templates/home.html" timestamp="1550561030941">
+        <mark key="[" line="0" column="24" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/templates/includes/form.html" timestamp="1550564955749">
+        <mark key="[" line="0" column="1" />
+      </file>
+      <file name="$USER_HOME$/PycharmProjects/mysite/mysite/polls/tests.py" timestamp="1550142298407">
+        <mark key="[" line="18" column="69" />
+        <mark key="]" line="18" column="70" />
+        <mark key="." line="18" column="70" />
+      </file>
+      <file name="$APPLICATION_CONFIG_DIR$/scratches/daystodate.py" timestamp="1549359543838">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$APPLICATION_CONFIG_DIR$/scratches/occurance.py" timestamp="1549364688558">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/PycharmProjects/mysite/mysite/polls/static/polls/style.css" timestamp="1550146472199">
+        <mark key="[" line="2" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/accounts/tests/test_view_signup.py" timestamp="1550555593792">
+        <mark key="[" line="1" column="28" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/templates/base.html" timestamp="1550560763512">
+        <mark key="[" line="10" column="2" />
+        <mark key="]" line="10" column="2" />
+        <mark key="." line="10" column="2" />
+      </file>
+      <file name="/IpnbPython Fragment (views.py:118).py" timestamp="1549372224326">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/myproject/urls.py" timestamp="1550566202346">
+        <mark key="'" line="28" column="4" />
+        <mark key="[" line="30" column="0" />
+      </file>
+      <file name="$USER_HOME$/PycharmProjects/mysite/mysite/polls/templates/polls/index.html" timestamp="1550139810084">
+        <mark key="[" line="11" column="10" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/boards/forms.py" timestamp="1550484777767">
+        <mark key="[" line="10" column="38" />
+      </file>
+      <file name="/Dummy.txt" timestamp="1549371767825">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/templates/signup.html" timestamp="1550561022615">
+        <mark key="[" line="13" column="0" />
+        <mark key="]" line="13" column="0" />
+        <mark key="." line="13" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/boards/tests.py" timestamp="1550493318490">
+        <mark key="[" line="134" column="0" />
+        <mark key="]" line="134" column="0" />
+        <mark key="." line="134" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/templates/includes/form .html" timestamp="1550488559349">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/accounts/forms.py" timestamp="1550496143544">
+        <mark key="[" line="0" column="64" />
+      </file>
+      <file name="$APPLICATION_CONFIG_DIR$/scratches/contentsofF1toF2.py" timestamp="1549361206511">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/myproject/settings.py" timestamp="1550565986732">
+        <mark key="[" line="133" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/boards/admin.py" timestamp="1550231486104">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/accounts/tests/test_form_signup.py" timestamp="1550555688867">
+        <mark key="[" line="9" column="50" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/static/css/accounts.css" timestamp="1550556259963">
+        <mark key="[" line="1" column="40" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/accounts/views.py" timestamp="1550496188474">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/boards/views.py" timestamp="1550485032078">
+        <mark key="[" line="15" column="0" />
+        <mark key="]" line="13" column="8" />
+        <mark key="." line="13" column="8" />
+      </file>
+      <file name="$APPLICATION_CONFIG_DIR$/scratches/square_tuple.py" timestamp="1549359209786">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/boards/templatetags/form_tags.py" timestamp="1550564802958">
+        <mark key="[" line="0" column="2" />
+      </file>
+      <file name="$USER_HOME$/PycharmProjects/mysite/mysite/polls/templates/admin/base_site.html" timestamp="1550148278261">
+        <mark key="[" line="4" column="53" />
+        <mark key="]" line="4" column="53" />
+        <mark key="." line="4" column="53" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/templates/topics.html" timestamp="1550482511848">
+        <mark key="[" line="11" column="18" />
+      </file>
+      <file name="$APPLICATION_CONFIG_DIR$/scratches/int_common.py" timestamp="1549362449756">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/Development/myproject/myproject/boards/tests/tests_views.py" timestamp="1550565601265">
+        <mark key="[" line="5" column="31" />
+      </file>
+    </filemarks>
+    <jumps>
+      <jump line="0" column="0" filename="$APPLICATION_CONFIG_DIR$/scratches/file1.py" />
+      <jump line="7" column="8" filename="$APPLICATION_CONFIG_DIR$/scratches/file1.py" />
+      <jump line="1" column="4" filename="$USER_HOME$/mysite/polls/views.py" />
+      <jump line="14" column="12" filename="$USER_HOME$/mysite/manage.py" />
+      <jump line="32" column="16" filename="$USER_HOME$/PycharmProjects/mysite/mysite/mysite/settings.py" />
+      <jump line="6" column="0" filename="$USER_HOME$/PycharmProjects/mysite/mysite/polls/models.py" />
+      <jump line="4" column="4" filename="$USER_HOME$/PycharmProjects/mysite/mysite/polls/views.py" />
+      <jump line="25" column="4" filename="$USER_HOME$/Development/myproject/myproject/myproject/urls.py" />
+      <jump line="3" column="0" filename="$USER_HOME$/Development/myproject/myproject/templates/signup.html" />
+    </jumps>
+    <registers>
+      <register name="1" type="4">
+        <text encoding="base64">eyUgZm9yIGZpZWxkIGluIGZvcm0gJX0KICAgIDxkaXYgY2xhc3M9ImZvcm0tZ3JvdXAiPgogICAgICB7eyBmaWVsZC5sYWJlbF90YWcgfX0KCiAgICAgIHslIGlmIGZvcm0uaXNfYm91bmQgJX0KICAgICAgICB7JSBpZiBmaWVsZC5lcnJvcnMgJX0KCiAgICAgICAgICB7JSByZW5kZXJfZmllbGQgZmllbGQgY2xhc3M9ImZvcm0tY29udHJvbCBpcy1pbnZhbGlkIiAlfQogICAgICAgICAgeyUgZm9yIGVycm9yIGluIGZpZWxkLmVycm9ycyAlfQogICAgICAgICAgICA8ZGl2IGNsYXNzPSJpbnZhbGlkLWZlZWRiYWNrIj4KICAgICAgICAgICAgICB7eyBlcnJvciB9fQogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIHslIGVuZGZvciAlfQoKICAgICAgICB7JSBlbHNlICV9CiAgICAgICAgICB7JSByZW5kZXJfZmllbGQgZmllbGQgY2xhc3M9ImZvcm0tY29udHJvbCBpcy12YWxpZCIgJX0KICAgICAgICB7JSBlbmRpZiAlfQogICAgICB7JSBlbHNlICV9CiAgICAgICAgeyUgcmVuZGVyX2ZpZWxkIGZpZWxkIGNsYXNzPSJmb3JtLWNvbnRyb2wiICV9CiAgICAgIHslIGVuZGlmICV9CgogICAgICB7JSBpZiBmaWVsZC5oZWxwX3RleHQgJX0KICAgICAgICA8c21hbGwgY2xhc3M9ImZvcm0tdGV4dCB0ZXh0LW11dGVkIj4KICAgICAgICAgIHt7IGZpZWxkLmhlbHBfdGV4dCB9fQogICAgICAgIDwvc21hbGw+CiAgICAgIHslIGVuZGlmICV9CiAgICA8L2Rpdj4KICB7JSBlbmRmb3IgJX0=</text>
+      </register>
+      <register name="&quot;" type="4">
+        <text />
+      </register>
+      <register name="2" type="4">
+        <text encoding="base64">eyUgbG9hZCB3aWRnZXRfdHdlYWtzICV9Cgp7JSBpZiBmb3JtLm5vbl9maWVsZF9lcnJvcnMgJX0KICA8ZGl2IGNsYXNzPSJhbGVydCBhbGVydC1kYW5nZXIiIHJvbGU9ImFsZXJ0Ij4KICAgIHslIGZvciBlcnJvciBpbiBmb3JtLm5vbl9maWVsZF9lcnJvcnMgJX0KICAgICAgPHB7JSBpZiBmb3Jsb29wLmxhc3QgJX0gY2xhc3M9Im1iLTAieyUgZW5kaWYgJX0+e3sgZXJyb3IgfX08L3A+CiAgICB7JSBlbmRmb3IgJX0KICA8L2Rpdj4KeyUgZW5kaWYgJX0=</text>
+      </register>
+      <register name="3" type="4">
+        <text encoding="base64">ICB7JSBmb3IgZmllbGQgaW4gZm9ybSAlfQogICAgPGRpdiBjbGFzcz0iZm9ybS1ncm91cCI+CiAgICAgIHt7IGZpZWxkLmxhYmVsX3RhZyB9fQoKICAgICAgeyUgaWYgZm9ybS5pc19ib3VuZCAlfQogICAgICAgIHslIGlmIGZpZWxkLmVycm9ycyAlfQoKICAgICAgICAgIHslIHJlbmRlcl9maWVsZCBmaWVsZCBjbGFzcz0iZm9ybS1jb250cm9sIGlzLWludmFsaWQiICV9CiAgICAgICAgICB7JSBmb3IgZXJyb3IgaW4gZmllbGQuZXJyb3JzICV9CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImludmFsaWQtZmVlZGJhY2siPgogICAgICAgICAgICAgIHt7IGVycm9yIH19CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgeyUgZW5kZm9yICV9CgogICAgICAgIHslIGVsc2UgJX0KICAgICAgICAgIHslIHJlbmRlcl9maWVsZCBmaWVsZCBjbGFzcz0iZm9ybS1jb250cm9sIGlzLXZhbGlkIiAlfQogICAgICAgIHslIGVuZGlmICV9CiAgICAgIHslIGVsc2UgJX0KICAgICAgICB7JSByZW5kZXJfZmllbGQgZmllbGQgY2xhc3M9ImZvcm0tY29udHJvbCIgJX0KICAgICAgeyUgZW5kaWYgJX0KCiAgICAgIHslIGlmIGZpZWxkLmhlbHBfdGV4dCAlfQogICAgICAgIDxzbWFsbCBjbGFzcz0iZm9ybS10ZXh0IHRleHQtbXV0ZWQiPgogICAgICAgICAge3sgZmllbGQuaGVscF90ZXh0fHNhZmUgfX0KICAgICAgICA8L3NtYWxsPgogICAgICB7JSBlbmRpZiAlfQogICAgPC9kaXY+CiAgeyUgZW5kZm9yICV9</text>
+      </register>
+      <register name="4" type="4">
+        <text encoding="base64">eyUgbG9hZCB3aWRnZXRfdHdlYWtzICV9Cgp7JSBpZiBmb3JtLm5vbl9maWVsZF9lcnJvcnMgJX0KICA8ZGl2IGNsYXNzPSJhbGVydCBhbGVydC1kYW5nZXIiIHJvbGU9ImFsZXJ0Ij4KICAgIHslIGZvciBlcnJvciBpbiBmb3JtLm5vbl9maWVsZF9lcnJvcnMgJX0KICAgICAgPHB7JSBpZiBmb3Jsb29wLmxhc3QgJX0gY2xhc3M9Im1iLTAieyUgZW5kaWYgJX0+e3sgZXJyb3IgfX08L3A+CiAgICB7JSBlbmRmb3IgJX0KICA8L2Rpdj4KeyUgZW5kaWYgJX0=</text>
+      </register>
+      <register name="5" type="4">
+        <text encoding="base64">ICAgICAgICAgICAgPGZvcm0gbWV0aG9kPSJwb3N0IiBub3ZhbGlkYXRlPgogICAgICAgICAgICAgIHslIGNzcmZfdG9rZW4gJX0=</text>
+      </register>
+      <register name="6" type="4">
+        <text encoding="base64">CiAgICBkZWYgdGVzdF9jb250YWluc19mb3JtKHNlbGYpOiAgIyA8LSBuZXcgdGVzdAogICAgICAgIHVybCA9IHJldmVyc2UoJ25ld190b3BpYycsIGt3YXJncz17J3BrJzogMX0pCiAgICAgICAgcmVzcG9uc2UgPSBzZWxmLmNsaWVudC5nZXQodXJsKQogICAgICAgIGZvcm0gPSByZXNwb25zZS5jb250ZXh0LmdldCgnZm9ybScpCiAgICAgICAgc2VsZi5hc3NlcnRJc0luc3RhbmNlKGZvcm0sIE5ld1RvcGljRm9ybSkKCiAgICBkZWYgdGVzdF9uZXdfdG9waWNfaW52YWxpZF9wb3N0X2RhdGEoc2VsZik6ICAjIDwtIHVwZGF0ZWQgdGhpcyBvbmUKICAgICAgICAnJycKICAgICAgICBJbnZhbGlkIHBvc3QgZGF0YSBzaG91bGQgbm90IHJlZGlyZWN0CiAgICAgICAgVGhlIGV4cGVjdGVkIGJlaGF2aW9yIGlzIHRvIHNob3cgdGhlIGZvcm0gYWdhaW4gd2l0aCB2YWxpZGF0aW9uIGVycm9ycwogICAgICAgICcnJwogICAgICAgIHVybCA9IHJldmVyc2UoJ25ld190b3BpYycsIGt3YXJncz17J3BrJzogMX0pCiAgICAgICAgcmVzcG9uc2UgPSBzZWxmLmNsaWVudC5wb3N0KHVybCwge30pCiAgICAgICAgZm9ybSA9IHJlc3BvbnNlLmNvbnRleHQuZ2V0KCdmb3JtJykKICAgICAgICBzZWxmLmFzc2VydEVxdWFscyhyZXNwb25zZS5zdGF0dXNfY29kZSwgMjAwKQogICAgICAgIHNlbGYuYXNzZXJ0VHJ1ZShmb3JtLmVycm9ycyk=</text>
+      </register>
+      <register name="7" type="4">
+        <text>class SignUpTests(TestCase):
+    def test_signup_status_code(self):
+        url = reverse('signup')
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_signup_url_resolves_signup_view(self):
+        view = resolve('/signup/')
+        self.assertEquals(view.func, signup)</text>
+      </register>
+      <register name="8" type="4">
+        <text encoding="base64">ICAgIGRlZiB0ZXN0X2NvbnRhaW5zX2Zvcm0oc2VsZik6ICAjIDwtIG5ldyB0ZXN0CiAgICAgICAgdXJsID0gcmV2ZXJzZSgnbmV3X3RvcGljJywga3dhcmdzPXsncGsnOiAxfSkKICAgICAgICByZXNwb25zZSA9IHNlbGYuY2xpZW50LmdldCh1cmwpCiAgICAgICAgZm9ybSA9IHJlc3BvbnNlLmNvbnRleHQuZ2V0KCdmb3JtJykKICAgICAgICBzZWxmLmFzc2VydElzSW5zdGFuY2UoZm9ybSwgTmV3VG9waWNGb3JtKQoKICAgIGRlZiB0ZXN0X25ld190b3BpY19pbnZhbGlkX3Bvc3RfZGF0YShzZWxmKTogICMgPC0gdXBkYXRlZCB0aGlzIG9uZQogICAgICAgICcnJwogICAgICAgIEludmFsaWQgcG9zdCBkYXRhIHNob3VsZCBub3QgcmVkaXJlY3QKICAgICAgICBUaGUgZXhwZWN0ZWQgYmVoYXZpb3IgaXMgdG8gc2hvdyB0aGUgZm9ybSBhZ2FpbiB3aXRoIHZhbGlkYXRpb24gZXJyb3JzCiAgICAgICAgJycnCiAgICAgICAgdXJsID0gcmV2ZXJzZSgnbmV3X3RvcGljJywga3dhcmdzPXsncGsnOiAxfSkKICAgICAgICByZXNwb25zZSA9IHNlbGYuY2xpZW50LnBvc3QodXJsLCB7fSkKICAgICAgICBmb3JtID0gcmVzcG9uc2UuY29udGV4dC5nZXQoJ2Zvcm0nKQogICAgICAgIHNlbGYuYXNzZXJ0RXF1YWxzKHJlc3BvbnNlLnN0YXR1c19jb2RlLCAyMDApCiAgICAgICAgc2VsZi5hc3NlcnRUcnVlKGZvcm0uZXJyb3JzKQ==</text>
+      </register>
+      <register name="9" type="4">
+        <text encoding="base64">CiAgICAgICAgYm9hcmQgPSBCb2FyZC5vYmplY3RzLmdldChwaz1waykKICAgIGV4Y2VwdCBCb2FyZC5Eb2VzTm90RXhpc3Q6CiAgICAgICAgcmFpc2UgSHR0cDQwNA==</text>
+      </register>
+      <register name="-" type="4">
+        <text />
+      </register>
+      <register name="/" type="4">
+        <text encoding="base64">XDx1cmxcPg==</text>
+      </register>
+    </registers>
+    <search>
+      <last-search encoding="base64">XDx1cmxcPg==</last-search>
+      <last-offset />
+      <last-pattern encoding="base64">XDx1cmxcPg==</last-pattern>
+      <last-dir>-1</last-dir>
+      <show-last>false</show-last>
+    </search>
+    <history>
+      <history-search>
+        <entry encoding="base64">XDx1cmxcPg==</entry>
+      </history-search>
+      <history-cmd />
+      <history-expr />
+      <history-input />
+    </history>
+    <shortcut-conflicts>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed S</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed N</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed X</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="ide">
+        <text>ctrl pressed V</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="ide">
+        <text>ctrl pressed R</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed C</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed A</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed Y</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed D</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed F</text>
+      </shortcut-conflict>
+    </shortcut-conflicts>
+  </component>
+</application>

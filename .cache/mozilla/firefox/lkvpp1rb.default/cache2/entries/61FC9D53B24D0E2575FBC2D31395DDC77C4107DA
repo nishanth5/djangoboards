@@ -1,0 +1,915 @@
+//Config Function Scope
+
+
+var url="";
+var checkE = 0;
+var sitename = "";
+var access_token;
+
+function getParentUrl() {
+    var isInIframe = (parent !== window),
+        parentUrl = null;
+		
+
+    if (isInIframe) {
+        parentUrl = document.referrer;
+console.log(parentUrl);
+    }
+    
+    if (parentUrl === null || parentUrl.length <= 0)
+    {
+    parentUrl = parent.document.URL;
+//parentUrl = window.parent.location.href;
+    }
+  if (parentUrl === null){
+parentUrl = window.parent.location.href;
+
+}
+
+    return parentUrl;
+}
+
+
+var url = getParentUrl();
+console.log("URL " + url);
+
+
+
+
+/*if (window!=window.top || window.frameElement) {
+	url = document.referrer;
+	
+}
+
+else {
+		url = parent.document.URL;
+		
+	}*/
+	
+	sitename = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
+console.log("Sitename " + sitename);
+	
+
+	
+
+switch (sitename) {
+	case 'compnet.at': checkE = 1 ; break;
+	case 'firmeninfo.at': checkE = 1 ; break;
+	case 'auskunft.at': checkE = 1 ; break;
+	case 'plan.at': checkE = 1 ; break;
+	case 'schuettelreime.at': checkE = 1 ; break;
+	case 'film.tv': checkE = 1 ; break;
+	case 'm.film.tv': checkE = 1 ; break;
+	case 'mann.tv': checkE = 1 ; break;
+	case 'gameswelt.at': checkE = 1 ; break;
+	case 'chess-results.com': checkE = 1 ; break;
+	case 'fitundgesund.at': checkE = 2 ; break;
+        case 'websingles.at': checkE = 1 ; break;
+case 'm.gameswelt.at': checkE = 1 ; break;
+case 'chess-results.info': checkE = 1 ; break;
+case 'kochrezepte.at': checkE = 1 ; break;
+case 'm.kochrezepte.at': checkE = 1 ; break;
+case 'mobile.kochrezepte.at': checkE = 1 ; break;
+case 'm.mann.tv': checkE = 1 ; break;
+case 'm.compnet.at': checkE = 1 ; break;
+case 'sms.at': checkE = 1 ; break;
+case 'cmp.streetcorner.ch': checkE =1; break;
+case 'babyweb.info': checkE =1; break;
+//case 'mein-mmo.de': checkE = 1 ; break;
+//case 'gamestar.de': checkE = 1 ; break;
+//case 'gamepro.de': checkE = 1 ; break;
+//case 'filmstarts.de': checkE = 1 ; break;
+//case 'moviepilot.de': checkE = 1 ; break;
+//case 'xboxdynasty.de': checkE = 1 ; break;
+
+
+}
+
+	
+
+
+
+if (typeof (googletag) == 'undefined') {
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+}
+if (typeof(gbconfigfile120) == 'undefined' || gbconfigfile120 == false){
+    (function () {
+		
+		
+
+		
+        //global Variables
+        setgbprotocoll = 'https:' == document.location.protocol;
+        setgbprotocoll = (setgbprotocoll ? 'https:' : 'http:');
+        setgbhost = window.location.hostname;
+        setgbhref = encodeURIComponent(window.location.href);
+        setgbasync = false;
+        setgbscriptloaded = true;
+        setgbtimestamp = new Date().getTime();
+        stgbtopwindow = true;
+
+        try {
+            if (typeof (window.top.setgbtargetingobj) == 'undefined'){
+            }
+        }
+        catch (e) {
+            stgbtopwindow = false;
+        }
+
+        if (stgbtopwindow){
+            if (typeof (window.top.setgbtargetingobj) == 'undefined') {
+                window.top.setgbtargetingobj = {};
+            }
+        }
+
+        gbcheckdomain = function (domain) {
+            var s = new RegExp(domain);
+            if (s.test(setgbhost)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+
+        gbgeneratepixel = function (src) {
+            var gbgimg = new Image(1, 1); gbgimg.src = src; gbgimg.onload = function () { return; };
+        };
+
+        gbgeneratescript = function (src, async) {
+            var gbgscript = document.createElement('script'); gbgscript.async = async; gbgscript.type = 'text/javascript'; gbgscript.src = src; var node = document.getElementsByTagName('script')[0]; node.parentNode.insertBefore(gbgscript, node);
+        };
+
+        setgbtargetingobjaWindow = function () {
+            if (stgbtopwindow) { return window.top } else { return window }
+        }; 
+
+		
+		
+
+
+
+
+		
+
+
+if (checkE === 1) {
+
+
+gbconsent = function ()
+{
+        // Smart Relevance CT
+//CH
+var access_token="ab46ce55-c3d1-48c3-ac94-bcfb18042854";
+(function (){
+
+var urlJSONP="";
+
+var sitename = "";
+var sra_matching_ads = [];
+var sra_context_safety = [];
+
+function getParentUrl() {
+    var isInIframe = (parent !== window),
+        parentUrl = null;
+		
+
+    if (isInIframe) {
+        parentUrl = document.referrer;
+
+    }
+    
+    if (parentUrl === null || parentUrl.length <= 0)
+    {
+    parentUrl = parent.document.URL;
+//parentUrl = window.parent.location.href;
+   
+    }
+  if (parentUrl === null){
+parentUrl = window.parent.location.href;
+
+}
+
+    return parentUrl;
+}
+
+
+var url = getParentUrl();
+
+
+
+//get URL
+/*var isInIFrame = (window.location != window.parent.location);
+if(isInIFrame===true){
+   url = document.referrer;
+}
+else {
+    url = parent.document.URL;
+} */
+
+
+/*if (window.frameElement || window!=window.top ) {
+	url = document.referrer;
+	//url = parent.document.URL;
+
+	
+}
+
+else {
+		url = parent.document.URL;
+		
+	} */
+	
+
+	
+	sitename = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
+	
+
+
+//get Acces Token
+
+
+		
+
+
+var urlRequest = 'https://sra.moresophy.net/api/content2ad?access-token='+ access_token + '&url=' + url;
+//console.log("url request: " + urlRequest);
+	
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			
+						
+			var s = JSON.parse(this.responseText);
+					
+			
+			/*if (s.matches) {
+				//console.log("CT Match " + s.matches);
+				setgbtargetingobj.gba_ct = s.matches.toString();
+				//console.log("alt t " + s.matches.toString());
+		
+		}*/
+		
+		
+		if (s.matches) {
+		var matches = s.matches;
+		matches.forEach(function(match){                    
+		//setgbtargetingobj.gba_ct = match.toString();    
+		sra_matching_ads.push(match);		
+		});
+		
+		//console.log("sra " + sra_matching_ads); 
+		setgbtargetingobj.gba_ct = sra_matching_ads.toString();
+			
+		}
+		if(s.blacklisted)
+			{
+				
+			var blacklisted = s.blacklisted; 
+			blacklisted.forEach(function(match){  
+			sra_context_safety.push(match);	
+			});
+			setgbtargetingobj.gba_ct_b = sra_context_safety.toString();
+				
+			}
+			
+			
+	}
+			
+		};
+	request.open("GET", urlRequest, true);
+	request.send();
+			
+
+		
+	
+	
+	
+	
+
+
+
+
+
+})();
+
+
+
+// Async GPT JS Header
+gbgeneratescript(setgbprotocoll+"//www.googletagservices.com/tag/js/gpt.js", true);
+// Google tick() function
+if (typeof(tick) == 'undefined') { tick = function () { }; }
+// helper object/function
+function gbcheckcustomkey(k) {
+        var a = ["PQ_GI8njO", "PQ_x54EeE", "PQ_kcGzGG", "PQ_zJ0S0X", "PQ_IA17mL", "lpid", "crtg_targeting", "ADF160x600", "ADF250x800", "ADF300x250", "ADF300x600","CH_uid_1plusx_0", "CH_uid_1plusx_1", "ADF728x90", "ADF994x250", "ADF970x250", "Goldbach_DMP", "username", "PQ_la443y", "PQ_hD6DtU", "PQ_PHEd0H", "screensize"];
+        var f = false;
+        for (var n = 0; n < a.length; n++) {
+            if (a[n].toLowerCase() == k.toLowerCase()) {
+                f = true;
+            }
+        }
+        return f;
+    }
+// xaxis analytics pixel
+gbgeneratepixel(setgbprotocoll + "//ch-gmtdmp.mookie1.com/t/v2/learn?tagid=V2_42006&src.rand=" + setgbtimestamp + "&src.id=Goldbach");
+// 1PLUSX tagger v2
+(function () {
+    var s = "";
+    for (var key in setgbtargetingobj) {
+        s += "&" + key; s += "=" + setgbtargetingobj[key].toString();
+    }
+    // If Subclient Exists
+    var subID = '';
+    if(typeof(setgbLotameMandant) !== 'undefined'){ subID = "&subID="+setgbLotameMandant; }
+    
+    gbgeneratepixel(setgbprotocoll + '//tagger.opecloud.com/goldbach/v2/custom?type=CustomCriteria' + subID + s);
+    gbgeneratepixel(setgbprotocoll + '//tagger.opecloud.com/goldbach/v2/noscript-image.gif');
+})();
+// serach for force_gb_testing get parameter
+var agetparams = location.search.substring(1).split("&");
+for (var i = 0; i < agetparams.length; i++) {
+    if (agetparams[i] == "force_gb_testing=true") {
+        setgbtargetingobj.force_testing = "true";
+    }
+}
+// screensize
+try{
+    setgbtargetingobj.screensize = screen.width + "x" + screen.height;
+}
+catch(exe){
+        
+}
+// 1plusx uid
+(function () {
+    var xmlhttp = "";
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var o = JSON.parse(this.responseText);
+            setgbtargetingobj.CH_uid_1plusx_0 = o["part-0"];
+            setgbtargetingobj.CH_uid_1plusx_1 = o["part-1"];
+        }
+    };
+    xmlhttp.withCredentials = true;
+    xmlhttp.open("GET", "https://tagger.opecloud.com/goldbach/v2/uid", true);
+    xmlhttp.send();
+})();
+// Profile 1plusX
+var RRT_plusX = [];
+var PLX = '1plusX';
+
+
+var RRTRequest = 'https://profiles.tagger.opecloud.com/api/v1/goldbach/profile';
+console.log("url 1pluX Real Time Request: " + RRTRequest);
+
+var RRT2Request = new XMLHttpRequest();
+//RRT2Request.open('GET','https://profiles.tagger.opecloud.com/api/v1/goldbach/profile',true);Â  
+
+RRT2Request.open('GET',RRTRequest,true);
+RRT2Request.withCredentials = true;
+RRT2Request.onreadystatechange = function () {	
+		if(this.readyState == 4 && this.status == 200) {
+			var profiless = JSON.parse(this.responseText);	
+			if (profiless.s) {
+				var s= profiless.s; 
+						s.forEach(function(profilesss){
+						RRT_plusX.push(profilesss);
+						});			
+			setgbtargetingobj["1plusX"] = RRT_plusX.toString();
+			}
+		}			
+		};
+	RRT2Request.open("GET", RRTRequest, true);
+	RRT2Request.send();
+// DBM Matching Pixel
+ gbgeneratepixel(setgbprotocoll + '//cm.g.doubleclick.net/pixel?google_nid=appnexus&google_cm&google_sc&google_dbm');
+
+
+        
+};
+
+}
+else if(checkE === 2)
+{
+if(typeof(window.top.evidon.notice.consentIsGiven) === "undefined" || window.top.evidon.notice.consentIsGiven === true)
+{
+// Smart Relevance CT
+//CH
+var access_token="ab46ce55-c3d1-48c3-ac94-bcfb18042854";
+(function (){
+
+var urlJSONP="";
+
+var sitename = "";
+var sra_matching_ads = [];
+var sra_context_safety = [];
+
+function getParentUrl() {
+    var isInIframe = (parent !== window),
+        parentUrl = null;
+		
+
+    if (isInIframe) {
+        parentUrl = document.referrer;
+
+    }
+    
+    if (parentUrl === null || parentUrl.length <= 0)
+    {
+    parentUrl = parent.document.URL;
+//parentUrl = window.parent.location.href;
+   
+    }
+  if (parentUrl === null){
+parentUrl = window.parent.location.href;
+
+}
+
+    return parentUrl;
+}
+
+
+var url = getParentUrl();
+
+
+
+//get URL
+/*var isInIFrame = (window.location != window.parent.location);
+if(isInIFrame===true){
+   url = document.referrer;
+}
+else {
+    url = parent.document.URL;
+} */
+
+
+/*if (window.frameElement || window!=window.top ) {
+	url = document.referrer;
+	//url = parent.document.URL;
+
+	
+}
+
+else {
+		url = parent.document.URL;
+		
+	} */
+	
+
+	
+	sitename = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
+	
+
+
+//get Acces Token
+
+
+		
+
+
+var urlRequest = 'https://sra.moresophy.net/api/content2ad?access-token='+ access_token + '&url=' + url;
+//console.log("url request: " + urlRequest);
+	
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			
+						
+			var s = JSON.parse(this.responseText);
+					
+			
+			/*if (s.matches) {
+				//console.log("CT Match " + s.matches);
+				setgbtargetingobj.gba_ct = s.matches.toString();
+				//console.log("alt t " + s.matches.toString());
+		
+		}*/
+		
+		
+		if (s.matches) {
+		var matches = s.matches;
+		matches.forEach(function(match){                    
+		//setgbtargetingobj.gba_ct = match.toString();    
+		sra_matching_ads.push(match);		
+		});
+		
+		//console.log("sra " + sra_matching_ads); 
+		setgbtargetingobj.gba_ct = sra_matching_ads.toString();
+			
+		}
+		if(s.blacklisted)
+			{
+				
+			var blacklisted = s.blacklisted; 
+			blacklisted.forEach(function(match){  
+			sra_context_safety.push(match);	
+			});
+			setgbtargetingobj.gba_ct_b = sra_context_safety.toString();
+				
+			}
+			
+			
+	}
+			
+		};
+	request.open("GET", urlRequest, true);
+	request.send();
+			
+
+		
+	
+	
+	
+	
+
+
+
+
+
+})();
+
+
+
+// Async GPT JS Header
+gbgeneratescript(setgbprotocoll+"//www.googletagservices.com/tag/js/gpt.js", true);
+// Google tick() function
+if (typeof(tick) == 'undefined') { tick = function () { }; }
+// helper object/function
+function gbcheckcustomkey(k) {
+        var a = ["PQ_GI8njO", "PQ_x54EeE", "PQ_kcGzGG", "PQ_zJ0S0X", "PQ_IA17mL", "lpid", "crtg_targeting", "ADF160x600", "ADF250x800", "ADF300x250", "ADF300x600","CH_uid_1plusx_0", "CH_uid_1plusx_1", "ADF728x90", "ADF994x250", "ADF970x250", "Goldbach_DMP", "username", "PQ_la443y", "PQ_hD6DtU", "PQ_PHEd0H", "screensize"];
+        var f = false;
+        for (var n = 0; n < a.length; n++) {
+            if (a[n].toLowerCase() == k.toLowerCase()) {
+                f = true;
+            }
+        }
+        return f;
+    }
+// xaxis analytics pixel
+gbgeneratepixel(setgbprotocoll + "//ch-gmtdmp.mookie1.com/t/v2/learn?tagid=V2_42006&src.rand=" + setgbtimestamp + "&src.id=Goldbach");
+// 1PLUSX tagger v2
+(function () {
+    var s = "";
+    for (var key in setgbtargetingobj) {
+        s += "&" + key; s += "=" + setgbtargetingobj[key].toString();
+    }
+    // If Subclient Exists
+    var subID = '';
+    if(typeof(setgbLotameMandant) !== 'undefined'){ subID = "&subID="+setgbLotameMandant; }
+    
+    gbgeneratepixel(setgbprotocoll + '//tagger.opecloud.com/goldbach/v2/custom?type=CustomCriteria' + subID + s);
+    gbgeneratepixel(setgbprotocoll + '//tagger.opecloud.com/goldbach/v2/noscript-image.gif');
+})();
+// serach for force_gb_testing get parameter
+var agetparams = location.search.substring(1).split("&");
+for (var i = 0; i < agetparams.length; i++) {
+    if (agetparams[i] == "force_gb_testing=true") {
+        setgbtargetingobj.force_testing = "true";
+    }
+}
+// screensize
+try{
+    setgbtargetingobj.screensize = screen.width + "x" + screen.height;
+}
+catch(exe){
+        
+}
+// 1plusx uid
+(function () {
+    var xmlhttp = "";
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var o = JSON.parse(this.responseText);
+            setgbtargetingobj.CH_uid_1plusx_0 = o["part-0"];
+            setgbtargetingobj.CH_uid_1plusx_1 = o["part-1"];
+        }
+    };
+    xmlhttp.withCredentials = true;
+    xmlhttp.open("GET", "https://tagger.opecloud.com/goldbach/v2/uid", true);
+    xmlhttp.send();
+})();
+// Profile 1plusX
+var RRT_plusX = [];
+var PLX = '1plusX';
+
+
+var RRTRequest = 'https://profiles.tagger.opecloud.com/api/v1/goldbach/profile';
+console.log("url 1pluX Real Time Request: " + RRTRequest);
+
+var RRT2Request = new XMLHttpRequest();
+//RRT2Request.open('GET','https://profiles.tagger.opecloud.com/api/v1/goldbach/profile',true);Â  
+
+RRT2Request.open('GET',RRTRequest,true);
+RRT2Request.withCredentials = true;
+RRT2Request.onreadystatechange = function () {	
+		if(this.readyState == 4 && this.status == 200) {
+			var profiless = JSON.parse(this.responseText);	
+			if (profiless.s) {
+				var s= profiless.s; 
+						s.forEach(function(profilesss){
+						RRT_plusX.push(profilesss);
+						});			
+			setgbtargetingobj["1plusX"] = RRT_plusX.toString();
+			}
+		}			
+		};
+	RRT2Request.open("GET", RRTRequest, true);
+	RRT2Request.send();
+// DBM Matching Pixel
+ gbgeneratepixel(setgbprotocoll + '//cm.g.doubleclick.net/pixel?google_nid=appnexus&google_cm&google_sc&google_dbm');
+
+
+        window.addEventListener("load", function (event) {
+            
+            });
+}
+else
+{
+console.log("gb evidon preload: no consent");
+}
+}
+else { 
+
+
+
+// Smart Relevance CT
+//CH
+var access_token="ab46ce55-c3d1-48c3-ac94-bcfb18042854";
+(function (){
+
+var urlJSONP="";
+
+var sitename = "";
+var sra_matching_ads = [];
+var sra_context_safety = [];
+
+function getParentUrl() {
+    var isInIframe = (parent !== window),
+        parentUrl = null;
+		
+
+    if (isInIframe) {
+        parentUrl = document.referrer;
+
+    }
+    
+    if (parentUrl === null || parentUrl.length <= 0)
+    {
+    parentUrl = parent.document.URL;
+//parentUrl = window.parent.location.href;
+   
+    }
+  if (parentUrl === null){
+parentUrl = window.parent.location.href;
+
+}
+
+    return parentUrl;
+}
+
+
+var url = getParentUrl();
+
+
+
+//get URL
+/*var isInIFrame = (window.location != window.parent.location);
+if(isInIFrame===true){
+   url = document.referrer;
+}
+else {
+    url = parent.document.URL;
+} */
+
+
+/*if (window.frameElement || window!=window.top ) {
+	url = document.referrer;
+	//url = parent.document.URL;
+
+	
+}
+
+else {
+		url = parent.document.URL;
+		
+	} */
+	
+
+	
+	sitename = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
+	
+
+
+//get Acces Token
+
+
+		
+
+
+var urlRequest = 'https://sra.moresophy.net/api/content2ad?access-token='+ access_token + '&url=' + url;
+//console.log("url request: " + urlRequest);
+	
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function () {
+		if(this.readyState == 4 && this.status == 200) {
+			
+						
+			var s = JSON.parse(this.responseText);
+					
+			
+			/*if (s.matches) {
+				//console.log("CT Match " + s.matches);
+				setgbtargetingobj.gba_ct = s.matches.toString();
+				//console.log("alt t " + s.matches.toString());
+		
+		}*/
+		
+		
+		if (s.matches) {
+		var matches = s.matches;
+		matches.forEach(function(match){                    
+		//setgbtargetingobj.gba_ct = match.toString();    
+		sra_matching_ads.push(match);		
+		});
+		
+		//console.log("sra " + sra_matching_ads); 
+		setgbtargetingobj.gba_ct = sra_matching_ads.toString();
+			
+		}
+		if(s.blacklisted)
+			{
+				
+			var blacklisted = s.blacklisted; 
+			blacklisted.forEach(function(match){  
+			sra_context_safety.push(match);	
+			});
+			setgbtargetingobj.gba_ct_b = sra_context_safety.toString();
+				
+			}
+			
+			
+	}
+			
+		};
+	request.open("GET", urlRequest, true);
+	request.send();
+			
+
+		
+	
+	
+	
+	
+
+
+
+
+
+})();
+
+
+
+// Async GPT JS Header
+gbgeneratescript(setgbprotocoll+"//www.googletagservices.com/tag/js/gpt.js", true);
+// Google tick() function
+if (typeof(tick) == 'undefined') { tick = function () { }; }
+// helper object/function
+function gbcheckcustomkey(k) {
+        var a = ["PQ_GI8njO", "PQ_x54EeE", "PQ_kcGzGG", "PQ_zJ0S0X", "PQ_IA17mL", "lpid", "crtg_targeting", "ADF160x600", "ADF250x800", "ADF300x250", "ADF300x600","CH_uid_1plusx_0", "CH_uid_1plusx_1", "ADF728x90", "ADF994x250", "ADF970x250", "Goldbach_DMP", "username", "PQ_la443y", "PQ_hD6DtU", "PQ_PHEd0H", "screensize"];
+        var f = false;
+        for (var n = 0; n < a.length; n++) {
+            if (a[n].toLowerCase() == k.toLowerCase()) {
+                f = true;
+            }
+        }
+        return f;
+    }
+// xaxis analytics pixel
+gbgeneratepixel(setgbprotocoll + "//ch-gmtdmp.mookie1.com/t/v2/learn?tagid=V2_42006&src.rand=" + setgbtimestamp + "&src.id=Goldbach");
+// 1PLUSX tagger v2
+(function () {
+    var s = "";
+    for (var key in setgbtargetingobj) {
+        s += "&" + key; s += "=" + setgbtargetingobj[key].toString();
+    }
+    // If Subclient Exists
+    var subID = '';
+    if(typeof(setgbLotameMandant) !== 'undefined'){ subID = "&subID="+setgbLotameMandant; }
+    
+    gbgeneratepixel(setgbprotocoll + '//tagger.opecloud.com/goldbach/v2/custom?type=CustomCriteria' + subID + s);
+    gbgeneratepixel(setgbprotocoll + '//tagger.opecloud.com/goldbach/v2/noscript-image.gif');
+})();
+// serach for force_gb_testing get parameter
+var agetparams = location.search.substring(1).split("&");
+for (var i = 0; i < agetparams.length; i++) {
+    if (agetparams[i] == "force_gb_testing=true") {
+        setgbtargetingobj.force_testing = "true";
+    }
+}
+// screensize
+try{
+    setgbtargetingobj.screensize = screen.width + "x" + screen.height;
+}
+catch(exe){
+        
+}
+// 1plusx uid
+(function () {
+    var xmlhttp = "";
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var o = JSON.parse(this.responseText);
+            setgbtargetingobj.CH_uid_1plusx_0 = o["part-0"];
+            setgbtargetingobj.CH_uid_1plusx_1 = o["part-1"];
+        }
+    };
+    xmlhttp.withCredentials = true;
+    xmlhttp.open("GET", "https://tagger.opecloud.com/goldbach/v2/uid", true);
+    xmlhttp.send();
+})();
+// Profile 1plusX
+var RRT_plusX = [];
+var PLX = '1plusX';
+
+
+var RRTRequest = 'https://profiles.tagger.opecloud.com/api/v1/goldbach/profile';
+console.log("url 1pluX Real Time Request: " + RRTRequest);
+
+var RRT2Request = new XMLHttpRequest();
+//RRT2Request.open('GET','https://profiles.tagger.opecloud.com/api/v1/goldbach/profile',true);Â  
+
+RRT2Request.open('GET',RRTRequest,true);
+RRT2Request.withCredentials = true;
+RRT2Request.onreadystatechange = function () {	
+		if(this.readyState == 4 && this.status == 200) {
+			var profiless = JSON.parse(this.responseText);	
+			if (profiless.s) {
+				var s= profiless.s; 
+						s.forEach(function(profilesss){
+						RRT_plusX.push(profilesss);
+						});			
+			setgbtargetingobj["1plusX"] = RRT_plusX.toString();
+			}
+		}			
+		};
+	RRT2Request.open("GET", RRTRequest, true);
+	RRT2Request.send();
+// DBM Matching Pixel
+ gbgeneratepixel(setgbprotocoll + '//cm.g.doubleclick.net/pixel?google_nid=appnexus&google_cm&google_sc&google_dbm');
+
+
+        window.addEventListener("load", function (event) {
+            
+            });	
+}
+
+
+
+
+    })();
+}
+gbconfigfile120 = true;‚È®0|      \c×w\c×w@
+5\dWÿ   +    :https://gbucket.ch/CH/ch_config_desktop.js necko:classified 1 strongly-framed 1 security-info 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 request-method GET response-head HTTP/2.0 200 OK
+content-type: application/javascript
+content-length: 21927
+date: Tue, 12 Feb 2019 17:46:39 GMT
+cache-control: max-age=86400
+last-modified: Mon, 04 Feb 2019 15:05:29 GMT
+x-amz-version-id: sMt.SCuMcEfR2o6YLFtrlGHAWZ8sTgqs
+etag: "c891f7282edd8cc7197546349df37f76"
+server: AmazonS3
+x-cache: Hit from cloudfront
+via: 1.1 9284c66b76d02817071db4ac5242ee72.cloudfront.net (CloudFront)
+x-amz-cf-id: Bg843j5CnS9gx0gjsz6QG47KV6MEXrsqYVNWfEbgpYN8i9OMlnSeUg==
+X-Firefox-Spdy: h2
+ original-response-headers content-type: application/javascript
+content-length: 21927
+date: Tue, 12 Feb 2019 17:46:39 GMT
+cache-control: max-age=86400
+last-modified: Mon, 04 Feb 2019 15:05:29 GMT
+x-amz-version-id: sMt.SCuMcEfR2o6YLFtrlGHAWZ8sTgqs
+etag: "c891f7282edd8cc7197546349df37f76"
+server: AmazonS3
+x-cache: Hit from cloudfront
+via: 1.1 9284c66b76d02817071db4ac5242ee72.cloudfront.net (CloudFront)
+x-amz-cf-id: Bg843j5CnS9gx0gjsz6QG47KV6MEXrsqYVNWfEbgpYN8i9OMlnSeUg==
+X-Firefox-Spdy: h2
+ uncompressed-len 0 net-response-time-onstart 604 net-response-time-onstop 614   U§

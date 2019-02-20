@@ -1,0 +1,60 @@
+init__.pycliescprober.pybig5prober.pysjisprober.pylanghungarianmodel.pylangturkishmodel.pyeucjpprober.pylanggreekmodel.pycharsetprober.pylangthaimodel.pybig5freq.pyescsm.pyeuctwfreq.pymbcsgroupprober.pyeuckrprober.pysbcharsetprober.pylangcyrillicmodel.pycodingstatemachine.pyuniversaldetector.pyutf8prober.py	compat.pychardistribution.pylanghebrewmodel.pychardetect.py__init__.py
+t32.exe
+w64.exe
+scripts.py
+util.pyindex.pywheel.pydatabase.py
+markers.pyresources.py
+version.py
+w32.exemetadata.py	_backport
+t64.exemanifest.py__init__.py	compat.py
+tarfile.pysysconfig.pysysconfig.cfg	shutil.py
+misc.py__init__.pyexceptions.py_version.pyfallback.py__init__.py_collections.pylocators.pyexceptions.pyresponse.py	fields.pypackages
+contribconnection.pypoolmanager.pyutilconnectionpool.pyfilepost.py
+request.py__init__.pyqueue.pyconnection.py
+ssl_.pyretry.py	url.py
+timeout.pyresponse.py
+wait.py
+request.py__init__.py_securetransportntlmpool.py_appengine_environ.pysocks.pysecuretransport.py__init__.pyappengine.pypyopenssl.pybindings.pylow_level.py__init__.pyordered_dict.py	six.py	backports__init__.pyssl_match_hostnamemakefile.py__init__.py_implementation.py__init__.py
+ansi.pyansitowin32.py
+winterm.pywin32.pyinitialise.py__init__.py_tokenizer.pytreewalkers_ihatexml.py_trie_inputstream.py
+filters	_utils.pyconstants.pytreeadaptershtml5parser.py__init__.pytreebuilderspy.py_base.py	datrie.py__init__.pysanitizer.py
+lint.pyalphabeticalattributes.pywhitespace.pyoptionaltags.pyinject_meta_charset.py
+base.py__init__.py	dom.py	genshi.pyetree_lxml.pyetree.py
+base.py__init__.py	sax.py	genshi.py__init__.py	dom.pyetree_lxml.pyetree.py
+base.py__init__.pylinklockfile.pysqlitelockfile.pysymlinklockfile.py__init__.pypidlockfile.pymkdirlockfile.py
+helpers.py	bar.py
+counter.py
+spinner.py__init__.pycerts.pyadapters.pyexceptions.py_internal_utils.py
+cookies.pysessions.pystatus_codes.pyserializer.pypackages.py
+help.pyutils.pyhooks.py	models.py__version__.py
+auth.py	api.py__init__.py	compat.pystructures.pyspecifiers.py
+markers.pyutils.pyrequirements.py
+version.py
+_compat.py_structures.py__init__.py__about__.pyserialize.py	cachesheuristics.py
+wrapper.py
+_cmd.pycontroller.pyfilewrapper.py
+adapter.pycache.py__init__.py	compat.pyredis_cache.pyfile_cache.py__init__.pytests.pyx_user_defined.py	labels.pymklabels.py__init__.pypy31compat.py__init__.pydownload.pycli	modelspyproject.pyexceptions.pyvcslocations.py
+resolve.pyindex.pywheel.pybuild_env.py
+operationspep425tags.pyutilsconfiguration.pycache.pycommands__init__.pystatus_codes.py	parser.pycmdoptions.pymain_parser.pyautocompletion.py__init__.pybase_command.pyreq_tracker.pyreq_file.pyreq_install.pyconstructors.py
+req_set.pyreq_uninstall.py__init__.py	git.pymercurial.pysubversion.py	bazaar.py__init__.pyui.pytemp_dir.pypackaging.pyglibc.pysetuptools_build.py
+appdirs.pyoutdated.py	typing.py
+logging.pydeprecation.pyreq	models.pyencoding.py	hashes.py
+misc.pyfilesystem.py__init__.py	compat.py
+link.pyformat_control.pyindex.pycandidate.py__init__.pydownload.pycompletion.py
+show.py
+list.py
+help.pywheel.py	search.pycheck.pyuninstall.py
+install.pyconfiguration.py
+hash.py	freeze.py__init__.pycheck.py
+prepare.py	freeze.py__init__.pyWHEELentry_points.txttop_level.txt	RECORDLICENSE.txt	INSTALLERMETADATA	mysite	manage.py	mysitesettings.py
+wsgi.py
+urls.py__init__.py
+db.sqlite3pollsadmin.pytests.py
+migrations	models.pyviews.py__init__.py
+apps.py__init__.py.urls.py.swp
+urls.py0001_initial.py17d937aaefc70ea4.txt
+index.htmlpolls	templatesdetail.htmlresults.html	staticpolls	style.cssadminbase_site.htmlmodules.xmlencodings.xmlsettings.py.imlworkspace.xmlsettings.pyR_User_Library.xmlmisc.xmlmodules.xmlencodings.xmlmodels.py.imlworkspace.xml	models.pyR_User_Library.xmlmisc.xmlProject_Default.xmlurls.py.imlworkspace.xmlmodules.xmlencodings.xml
+urls.pyR_User_Library.xmlmisc.xmlforms.py
+apps.py__init__.pyadmin.py	models.pytests.pyforms.py
+.wget-hsts
+get-pip.pymodules.xmlencodings.xmltests.py.imlworkspace.xmltests.pyR_User_Library.xmlmisc.xmlencodings.xmlform_tags.py.imlworkspace.xmlmodules.xmlform_tags.pyR_User_Library.xmlmisc.xmlmodules.xmlencodings.xml"test_view_password_reset.py.imlworkspace.xmltest_view_password_reset.pyR_User_Library.xmlmodules.xmlencodings.xmlurls.py.imlworkspace.xmlR_User_Library.xmlmisc.xmlmanage.py.imlworkspace.xmlmodules.xmlencodings.xml	manage.pyR_User_Library.xmlmisc.xmlmodules.xmlencodings.xmlmodels.py.imlworkspace.xmlR_User_Library.xmlmodules.xmlencodings.xmlmodels.py.imlworkspace.xml	models.pyR_User_Library.xmlmodules.xmlencodings.xmlviews.py.imlworkspace.xmlviews.pyR_User_Library.xmlencodings.xmlmodels.py.imlworkspace.xmlmodules.xmlR_User_Library.xml

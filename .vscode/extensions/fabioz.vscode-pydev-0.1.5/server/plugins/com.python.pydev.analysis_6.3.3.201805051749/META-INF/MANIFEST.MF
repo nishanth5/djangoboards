@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: com.python.pydev.analysis; singleton:=true
+Require-Bundle: org.eclipse.core.runtime,org.junit;bundle-version="4.0
+ ";resolution:=optional,org.eclipse.text,org.python.pydev.ast;bundle-v
+ ersion="[6.3.3,6.3.4)",org.python.pydev.core;bundle-version="[6.3.3,6
+ .3.4)",org.python.pydev.parser;bundle-version="[6.3.3,6.3.4)",org.ecl
+ ipse.core.resources,org.eclipse.ltk.core.refactoring,org.eclipse.core
+ .filebuffers
+Bundle-ManifestVersion: 2
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: Brainwy Software Ltda
+Export-Package: com.python.pydev.analysis,com.python.pydev.analysis.ad
+ ditionalinfo,com.python.pydev.analysis.additionalinfo.builders,com.py
+ thon.pydev.analysis.additionalinfo.dependencies,com.python.pydev.anal
+ ysis.pep8,com.python.pydev.analysis.pylint,com.python.pydev.analysis.
+ refactoring.changes,com.python.pydev.analysis.refactoring.quick_fixes
+ ,com.python.pydev.analysis.refactoring.refactorer,com.python.pydev.an
+ alysis.refactoring.wizards,com.python.pydev.analysis.refactoring.wiza
+ rds.rename,com.python.pydev.analysis.refactoring.wizards.rename.visit
+ ors,com.python.pydev.analysis.scopeanalysis,com.python.pydev.analysis
+ .system_info_builder,com.python.pydev.analysis.tabnanny,com.python.py
+ dev.analysis.visitors,com.python.pydev.codecompletion.ctxinsensitive,
+ com.python.pydev.codecompletion.participant,com.python.pydev.codecomp
+ letion.simpleassist
+Bundle-Name: Analysis Plug-in
+Bundle-Version: 6.3.3.201805051749
+Bundle-ClassPath: analysis.jar
+Bundle-Activator: com.python.pydev.analysis.AnalysisPlugin
+Eclipse-BundleShape: dir
+
+

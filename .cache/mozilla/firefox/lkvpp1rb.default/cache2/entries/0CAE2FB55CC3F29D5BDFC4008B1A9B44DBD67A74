@@ -1,0 +1,716 @@
+/*	
+ *	INTRO 
+ *	video.js was written to abstract many of the common functions for handling management of external video service data and api access
+ *	
+ *	The following utilities are available for dealing with youtube and vimeo video urls. Please note that many of the functions
+ *	rely on a certain html markup stucture to properly handle the video preview and the video generation. Use templates/ajax/job_video.shtml
+ *	as an example for the expected html. The following fields should always be included:
+ *	.jVidPreview 		-- wrapper that holds the video preview area
+ *	#jVideoPreviewThumb -- holds the video preview image as a background image
+ *	#jVideoPreviewTitle -- holds the video preview title text
+ *	#jVideoPreviewAuthor-- holds the video preview html for the author name as a link to the authors video channel page
+ *	#data-url 			-- holds the video url data for the current video
+ *	#data-title 		-- holds the title for the current video
+ *	#data-description 	-- holds the description for the current video
+ *	#data-thumbnail-url -- holds the external thumbnail url from the video source for the current video
+ *	#data-author 		-- holds the author name 
+ *	#data-author-url	-- holds the authors video channel url
+ *	#data-source		-- holds the source name
+ *	#data-source-id		-- holds the source video id
+ *
+ */
+
+TVAPP.video = {
+	extractVideoData: function(url) {
+	/*	Use this to get the source and source_id from a url (returns object with source, source_id, and original url)
+	 *	url: (string) the url of the video as specified by the user
+	 *	return: (object) { source, source_id, video_url }
+	 *		source:		(string) "youtube" or "vimeo"
+	 *		source_id:	(string) the source's unique identifier of the video
+	 *		video_url:	(string) the original user supplied url is included for posterity.
+	 */
+		var videoData = {
+			source: false,	
+			source_id: false,
+			video_url: url
+		};
+		if (url.indexOf("youtube")!=-1 ) {
+			var id_start = url.indexOf("v=") + 2;
+			videoData.source = "youtube";
+		} else if (url.indexOf('youtu.be/')!=-1) {
+			var id_start = url.indexOf('.be/') + 4;
+			videoData.source = "youtube";
+		} else if (url.indexOf("vimeo.com/")!=-1) {
+			var id_start = url.indexOf("vimeo.com/") + 10;
+			videoData.source = "vimeo";
+		}
+		videoData.source_id = url.substring(id_start);
+		var end_chars = ['&','#','?'];
+		for (var i = 0; i < end_chars.length; i++) {
+	        if (videoData.source_id.indexOf(end_chars[i]) != -1) {
+				videoData.source_id = videoData.source_id.substring(0,videoData.source_id.indexOf(end_chars[i]));
+	        }
+	    }
+		return videoData;
+	},
+	extractVideoId: function(url,source) {
+	/*	Use this to get the source_id from a url and a known source
+	 *	url: 	(string) the url of the video as specified by the user
+	 *	source:	(string) "youtube" or "vimeo"
+	 *	return: (string) the source_id of the video (not always reliable for vimeo due to vanity urls)
+	 */
+		switch(source) {
+		case "youtube":
+			if(url.indexOf('youtube') != -1) {
+				var id_start = url.indexOf("v=") + 2;
+			} else if (url.indexOf('youtu.be/' != -1)) {
+				var id_start = url.indexOf('.be/') + 4;
+			}
+			break;
+		case "vimeo":
+			var id_start = url.indexOf("vimeo.com/") + 10;
+			break;
+		}
+		var video_id = url.substring(id_start);
+		var end_chars = ['&','#','?'];
+		for (var i = 0; i < end_chars.length; i++) {
+	        if (video_id.indexOf(end_chars[i]) != -1) {
+				video_id = video_id.substring(0,video_id.indexOf(end_chars[i]));
+	        }
+	    }
+		return video_id;
+	},
+	apiUrl: function(data) {
+	/*	Use this to get the api url to get the full video data from the service provider
+	 *	data:	(object) should be passed in the output of TVAPP.video.extractVideoData;
+	 *	returns:(string) the url for making an api request to get all of the video data
+	 */
+		data = data || {};
+		if (data.source == "youtube") {
+			return "https://www.googleapis.com/youtube/v3/videos?id=" + data.source_id + "&key=AIzaSyCZ-n9dieTMC3flvC4X0E1il3l8rg9zQz8&part=snippet";
+		} else if (data.source == "vimeo") {
+			return window.location.protocol+"//vimeo.com/api/oembed.json?url="+encodeURIComponent(data.video_url)+"&callback=vimeoFeedCallback";
+		} else {
+			return false;
+		}
+	},
+	apiDataRequest: function(api_url, callback, errorCallback) {
+	/*	Use this to make the api request for the video data for any video
+	 *	api_url:	(string) should be the output of TVAPP.apiUrl;
+	 *	callback:	(string)(optional) the name of the callback function wrapper for the jsonp request (the url should have this already included)
+	 *	errorCallback: (function) pass in an anonymous function to handle error display if this api request fails for some reason
+	 *	returns:	none
+	 */
+		j$.ajax({
+			url: api_url,
+			dataType: 'jsonp',
+			jsonpCallback: callback,
+			timeout: 5000,
+			error: function(xhr, textStatus, error) {
+				if(errorCallback) errorCallback();
+			}
+		});		
+	},
+	embedUrl: function(data) {
+	/*	Use this to get the embed url to use within the iframe for the video
+	 *	data:	(object) should be the output of TVAPP.extractVideoData;
+	 *	returns:(string) the url to use in the iframe display of the video
+	 */
+		data = data || {};
+		// if url exists but no source or source_id (backward compatibility)
+		if (data.video_url && (!data.source || !data.source_id)) data = TVAPP.video.extractVideoData(data.video_url);
+		// create embedUrl based on video source and source_id
+		if (data.source == "youtube") {
+			return window.location.protocol+'//www.youtube.com/embed/'+data.source_id+'?autoplay=1&rel=0&color=white&iv_load_policy=3';
+		} else if (data.source == "vimeo") {
+			return window.location.protocol+'//player.vimeo.com/video/'+data.source_id+'?autoplay=1&portrait=0&title=0&byline=0&color=e7ac1d';
+		} else {
+			return false;
+		}
+	},
+	generateVideo: function(url, options) {
+	/*	Use this to insert the video iframe and overlay markup when a user clicks "play"
+	 *	url:	(string) should be the output of TVAPP.embedUrl;
+	 *	options:(object)(optional) use this to override the default video options including the target element to append the video to, the dimensions of the video, 
+	 *		and whether the video is closed via clicking on the overlay or not
+	 *	return:	none
+	 */	
+		var defaults = {
+			target: j$('#jVidHolder'),
+			dims: {width:596,height:335},
+			overlay: true,
+			overlayClose: true
+		};
+		options = j$.extend({},defaults,options);
+		// create video overlay
+		if(options.overlay) {
+			var overlay = j$("<div id='jNotifyOverlay' class='notify_overlay'></div>");
+			j$('body').append(overlay);
+			overlay.fadeTo(1000,0.75);
+		}
+		// add the video holder and animate it
+		options.target.append('<div class="video_container" id="jVideoContainer"><div id="video_spot"></div></div>').data('height', options.target.height()).animate({height: options.dims.height}, 500);
+		j$('#jVideoContainer').animate({width: options.dims.width, height: options.dims.height}, 500, function() {
+			// embed the iframe video player
+			j$("#video_spot").append('<iframe src="'+url+'" width="'+options.dims.width+'" height="'+options.dims.height+'" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
+		});
+		// bind video close to overlay
+		if(options.overlay && options.overlayClose) {
+			j$("#jNotifyOverlay").click(function(){
+				options.target.animate({height: options.target.data('height')});
+				j$("#jNotifyOverlay, #jVideoContainer").fadeOut(function() {
+					j$(this).remove();
+				});
+			});
+		}
+	},
+	previewVideo: function(elem) {
+	/*	Use this to handle updating the preview and the hidden video form data
+	 *	elem:	(jQuery element object)(optional) the element that is to be used as the video_url defining input -- default is j$('#jVidUrl')
+	 *	return: none
+	 */
+	 	elem = elem || j$('#jVidUrl');
+		// get video_url
+		var video_url = elem.val();
+		// if blank url make sure form will not submit and hide the preview
+		if (!video_url) {
+			elem.siblings('.refresh_icn').hide();
+			j$('.jVidNext, .jAddVidSubmit').addClass('disabled');
+			j$('.jVidPreview').slideUp();
+			return false;
+		// parse youtube video id and set api url
+		} else {
+			var video = TVAPP.video.extractVideoData(video_url);
+			var	api_url = TVAPP.video.apiUrl(video);
+		}
+		// handle unexpected urls
+		if (!api_url) {
+			j$('body').modal({text:TVAPP.smDict('Job.VideoForm.url_error')});
+			j$('.jVidPreview').slideUp();
+			j$('.jVidNext, .jAddVidSubmit').addClass('disabled');
+			return false;
+		}
+		elem.siblings('.refresh_icn').hide();
+		elem.parent().spin({left:elem.outerWidth()-27});
+		elem.prop('disabled', true);
+		// get the video data from the api and redirect to correct callback function
+		TVAPP.video.apiDataRequest(api_url, video.source+'FeedCallback', function() {
+			j$('.spinner').remove();
+			elem.removeAttr('disabled');
+			j$('.jVidPreview').slideUp();
+			j$('.jVidNext, .jAddVidSubmit').addClass('disabled');
+			j$('body').modal({text:TVAPP.smDict('Job.VideoForm.api_error')});				
+		});
+	},
+	saveVideo: function(form) {
+	/*	Use this to handle video add form submissions and error handling
+	 *	form:	(jQuery element object) the 'form' element that holds the video preview data
+	 *	return: none
+	 */
+		j$.ajax({
+			url: form.attr('action'),
+			type: "POST",
+			data: j$.param(form.serializeArray()),
+			dataType: 'json',
+			error: function(xhr, textStatus, error) {
+				j$('body').modal({text:TVAPP.smDict('Job.VideoForm.save_error')});
+			},
+			success: function(response) {
+				j$.log('Video Added');
+				j$('#jVideoRefreshContextId').val(response.Result["VideoLink.id"]);
+				j$('body').modal({
+					text:TVAPP.smDict('Job.VideoForm.success_message'),
+					onClose: function() {
+						j$(document).trigger('refreshVideoArea');
+					}
+				});
+			}
+		});
+	},
+	removeVideo: function(form) {
+	/*	Use this to handle video remove form submissions and error handling
+	 *	form:	(jQuery element object) the 'form' element that holds the video deletion data
+	 *	return: none
+	 */
+		j$.ajax({
+			url: form.attr('action'),
+			data: j$.param(form.serializeArray()),
+			dataType: 'json',
+			error: function(xhr, textStatus, error) {
+				j$('body').modal({text:TVAPP.smDict('Job.VideoForm.Remove.save_error')});
+			},
+			success: function(response) {
+				j$.log('Video Removed');
+				j$('#jVideoRefreshContextId').val('');
+				j$('body').modal({
+					text:TVAPP.smDict('Job.VideoForm.Remove.success_message'),
+					onClose: function() {
+						j$(document).trigger('refreshVideoArea');
+					}
+				});
+			}
+		});
+	},
+	refreshVideoArea: function () {
+	// this function is called whenever 'refreshVideoArea' is triggered to reload the ajax content similar to jUserRefreshArea
+		j$(".jVideoRefresh").each(function(){
+			var context_info = "";
+			// add video_link context if available
+			j$('.jContextData',this).each(function(i) {
+				if(j$(this).val()) {
+					context_info += (i==0 ? '' :'&') + j$(this).attr('data-name') + '=' + j$(this).val();				
+				}
+			});
+			var contentHTML = TVAPP.ajaxIncludeContent({
+				template:j$(this).attr("id"),
+				job_id: (TVAPP.property.job ? TVAPP.property.job.id : ''),
+				context:context_info
+			});
+			j$(this).empty().html(contentHTML);
+		});
+		j$(document).trigger("refreshVideoBindings");		
+	}
+
+};
+j$(document).bind('refreshVideoArea', TVAPP.video.refreshVideoArea);
+j$(document).bind('refreshUserBindings', TVAPP.video.refreshVideoArea);
+
+//	This is the default jsonp callback for updating the video data based on the youtube api response	
+function youtubeFeedCallback(data) {
+	j$('.spinner').remove();
+	j$('#jVidUrl').removeAttr('disabled');
+	var source_id = TVAPP.video.extractVideoId(j$('#jVidUrl').val(),"youtube");
+	// set up video preview
+	j$("#jVideoPreviewThumb").css({'background-image':"url('http://i1.ytimg.com/vi/"+source_id+"/default.jpg')"});
+	j$("#jVideoPreviewTitle").text(data.items[0].snippet["title"]);
+	var channel_id = data.items[0].snippet["channelId"];
+	j$("#jVideoPreviewAuthor").text(data.items[0].snippet["channelTitle"]).attr('href','http://www.youtube.com/channel/'+channel_id);
+	// store data in hidden inputs
+	j$('#data-url').val(j$('#jVidUrl').val());
+	j$('#data-title').val(data.items[0].snippet["title"]);
+	j$('#data-description').val(data.items[0].snippet["description"]);
+	j$('#data-author').val(data.items[0].snippet["channelTitle"]);
+	j$('#data-author-url').val(data.items[0].snippet["channelTitle"]).attr('href','http://www.youtube.com/channel/'+channel_id);
+	j$('#data-source').val("youtube");
+	j$('#data-source-id').val(source_id);
+
+	// look up video thumbnail image with fallbacks in decreasing order of resolution
+	j$('#thumbnail_test').attr('src','http://i1.ytimg.com/vi/'+source_id+'/maxresdefault.jpg').load(function() {
+		if(j$('#thumbnail_test').width() == 120) {
+			j$.log('max res thumb unavailable -> try medium');
+			j$('#thumbnail_test').attr('src','http://i1.ytimg.com/vi/'+source_id+'/hqdefault.jpg').load(function() {			
+				if(j$('#thumbnail_test').width() == 120) {
+					j$.log('medium quality thumb unavailable -> use lowest');
+					j$('#data-thumbnail-url').val('http://i1.ytimg.com/vi/'+source_id+'/0.jpg');
+				} else {
+					j$('#data-thumbnail-url').val('http://i1.ytimg.com/vi/'+source_id+'/hqdefault.jpg');
+				}
+			});
+		} else {
+			j$('#data-thumbnail-url').val('http://i1.ytimg.com/vi/'+source_id+'/maxresdefault.jpg');			
+		}
+	});
+
+	// show the preview
+	j$('.jVidPreview').slideDown();
+	// activate the save button
+	j$('.jVidNext, .jAddVidSubmit').removeClass('disabled');
+
+}
+
+//	This is the default jsonp callback for updating the video data based on the vimeo api response	
+function vimeoFeedCallback(data) {
+	j$('.spinner').remove();
+	j$('#jVidUrl').removeAttr('disabled');
+	// set up video preview
+	j$("#jVideoPreviewThumb").css({'background-image':"url('"+data.thumbnail_url+"')"});
+	j$("#jVideoPreviewTitle").text(data.title);
+	j$("#jVideoPreviewAuthor").text(data.author_name).attr('href',data.author_url);
+	// store data in hidden inputs
+	j$('#data-url').val(j$('#jVidUrl').val());
+	j$('#data-title').val(data.title);
+	j$('#data-description').val(data.description);
+	j$('#data-thumbnail-url').val(data.thumbnail_url);
+	j$('#data-author').val(data.author_name);
+	j$('#data-author-url').val(data.author_url);
+	j$('#data-source').val("vimeo");
+	j$('#data-source-id').val(data.video_id);
+	// show the preview
+	j$('.jVidPreview').slideDown();
+	// activate the save button
+	j$('.jVidNext, .jAddVidSubmit').removeClass('disabled');
+}         20190128165852„         X                                      8      / * 	 
+   * 	 I N T R O   
+   * 	 v i d e o . j s   w a s   w r i t t e n   t o   a b s t r a c t   m a n y   o f   t h e   c o m m o n   f u n c t i o n s   f o r   h a n d l i n g   m a n a g e m e n t   o f   e x t e r n a l   v i d e o   s e r v i c e   d a t a   a n d   a p i   a c c e s s 
+   * 	 
+   * 	 T h e   f o l l o w i n g   u t i l i t i e s   a r e   a v a i l a b l e   f o r   d e a l i n g   w i t h   y o u t u b e   a n d   v i m e o   v i d e o   u r l s .   P l e a s e   n o t e   t h a t   m a n y   o f   t h e   f u n c t i o n s 
+   * 	 r e l y   o n   a   c e r t a i n   h t m l   m a r k u p   s t u c t u r e   t o   p r o p e r l y   h a n d l e   t h e   v i d e o   p r e v i e w   a n d   t h e   v i d e o   g e n e r a t i o n .   U s e   t e m p l a t e s / a j a x / j o b _ v i d e o . s h t m l 
+   * 	 a s   a n   e x a m p l e   f o r   t h e   e x p e c t e d   h t m l .   T h e   f o l l o w i n g   f i e l d s   s h o u l d   a l w a y s   b e   i n c l u d e d : 
+   * 	 . j V i d P r e v i e w   	 	 - -   w r a p p e r   t h a t   h o l d s   t h e   v i d e o   p r e v i e w   a r e a 
+   * 	 # j V i d e o P r e v i e w T h u m b   - -   h o l d s   t h e   v i d e o   p r e v i e w   i m a g e   a s   a   b a c k g r o u n d   i m a g e 
+   * 	 # j V i d e o P r e v i e w T i t l e   - -   h o l d s   t h e   v i d e o   p r e v i e w   t i t l e   t e x t 
+   * 	 # j V i d e o P r e v i e w A u t h o r - -   h o l d s   t h e   v i d e o   p r e v i e w   h t m l   f o r   t h e   a u t h o r   n a m e   a s   a   l i n k   t o   t h e   a u t h o r s   v i d e o   c h a n n e l   p a g e 
+   * 	 # d a t a - u r l   	 	 	 - -   h o l d s   t h e   v i d e o   u r l   d a t a   f o r   t h e   c u r r e n t   v i d e o 
+   * 	 # d a t a - t i t l e   	 	 - -   h o l d s   t h e   t i t l e   f o r   t h e   c u r r e n t   v i d e o 
+   * 	 # d a t a - d e s c r i p t i o n   	 - -   h o l d s   t h e   d e s c r i p t i o n   f o r   t h e   c u r r e n t   v i d e o 
+   * 	 # d a t a - t h u m b n a i l - u r l   - -   h o l d s   t h e   e x t e r n a l   t h u m b n a i l   u r l   f r o m   t h e   v i d e o   s o u r c e   f o r   t h e   c u r r e n t   v i d e o 
+   * 	 # d a t a - a u t h o r   	 	 - -   h o l d s   t h e   a u t h o r   n a m e   
+   * 	 # d a t a - a u t h o r - u r l 	 - -   h o l d s   t h e   a u t h o r s   v i d e o   c h a n n e l   u r l 
+   * 	 # d a t a - s o u r c e 	 	 - -   h o l d s   t h e   s o u r c e   n a m e 
+   * 	 # d a t a - s o u r c e - i d 	 	 - -   h o l d s   t h e   s o u r c e   v i d e o   i d 
+   * 
+   * / 
+ 
+ T V A P P . v i d e o   =   { 
+ 	 e x t r a c t V i d e o D a t a :   f u n c t i o n ( u r l )   { 
+ 	 / * 	 U s e   t h i s   t o   g e t   t h e   s o u r c e   a n d   s o u r c e _ i d   f r o m   a   u r l   ( r e t u r n s   o b j e c t   w i t h   s o u r c e ,   s o u r c e _ i d ,   a n d   o r i g i n a l   u r l ) 
+ 	   * 	 u r l :   ( s t r i n g )   t h e   u r l   o f   t h e   v i d e o   a s   s p e c i f i e d   b y   t h e   u s e r 
+ 	   * 	 r e t u r n :   ( o b j e c t )   {   s o u r c e ,   s o u r c e _ i d ,   v i d e o _ u r l   } 
+ 	   * 	 	 s o u r c e : 	 	 ( s t r i n g )   " y o u t u b e "   o r   " v i m e o " 
+ 	   * 	 	 s o u r c e _ i d : 	 ( s t r i n g )   t h e   s o u r c e ' s   u n i q u e   i d e n t i f i e r   o f   t h e   v i d e o 
+ 	   * 	 	 v i d e o _ u r l : 	 ( s t r i n g )   t h e   o r i g i n a l   u s e r   s u p p l i e d   u r l   i s   i n c l u d e d   f o r   p o s t e r i t y . 
+ 	   * / 
+ 	 	 v a r   v i d e o D a t a   =   { 
+ 	 	 	 s o u r c e :   f a l s e , 	 
+ 	 	 	 s o u r c e _ i d :   f a l s e , 
+ 	 	 	 v i d e o _ u r l :   u r l 
+ 	 	 } ; 
+ 	 	 i f   ( u r l . i n d e x O f ( " y o u t u b e " ) ! = - 1   )   { 
+ 	 	 	 v a r   i d _ s t a r t   =   u r l . i n d e x O f ( " v = " )   +   2 ; 
+ 	 	 	 v i d e o D a t a . s o u r c e   =   " y o u t u b e " ; 
+ 	 	 }   e l s e   i f   ( u r l . i n d e x O f ( ' y o u t u . b e / ' ) ! = - 1 )   { 
+ 	 	 	 v a r   i d _ s t a r t   =   u r l . i n d e x O f ( ' . b e / ' )   +   4 ; 
+ 	 	 	 v i d e o D a t a . s o u r c e   =   " y o u t u b e " ; 
+ 	 	 }   e l s e   i f   ( u r l . i n d e x O f ( " v i m e o . c o m / " ) ! = - 1 )   { 
+ 	 	 	 v a r   i d _ s t a r t   =   u r l . i n d e x O f ( " v i m e o . c o m / " )   +   1 0 ; 
+ 	 	 	 v i d e o D a t a . s o u r c e   =   " v i m e o " ; 
+ 	 	 } 
+ 	 	 v i d e o D a t a . s o u r c e _ i d   =   u r l . s u b s t r i n g ( i d _ s t a r t ) ; 
+ 	 	 v a r   e n d _ c h a r s   =   [ ' & ' , ' # ' , ' ? ' ] ; 
+ 	 	 f o r   ( v a r   i   =   0 ;   i   <   e n d _ c h a r s . l e n g t h ;   i + + )   { 
+ 	                 i f   ( v i d e o D a t a . s o u r c e _ i d . i n d e x O f ( e n d _ c h a r s [ i ] )   ! =   - 1 )   { 
+ 	 	 	 	 v i d e o D a t a . s o u r c e _ i d   =   v i d e o D a t a . s o u r c e _ i d . s u b s t r i n g ( 0 , v i d e o D a t a . s o u r c e _ i d . i n d e x O f ( e n d _ c h a r s [ i ] ) ) ; 
+ 	                 } 
+ 	         } 
+ 	 	 r e t u r n   v i d e o D a t a ; 
+ 	 } , 
+ 	 e x t r a c t V i d e o I d :   f u n c t i o n ( u r l , s o u r c e )   { 
+ 	 / * 	 U s e   t h i s   t o   g e t   t h e   s o u r c e _ i d   f r o m   a   u r l   a n d   a   k n o w n   s o u r c e 
+ 	   * 	 u r l :   	 ( s t r i n g )   t h e   u r l   o f   t h e   v i d e o   a s   s p e c i f i e d   b y   t h e   u s e r 
+ 	   * 	 s o u r c e : 	 ( s t r i n g )   " y o u t u b e "   o r   " v i m e o " 
+ 	   * 	 r e t u r n :   ( s t r i n g )   t h e   s o u r c e _ i d   o f   t h e   v i d e o   ( n o t   a l w a y s   r e l i a b l e   f o r   v i m e o   d u e   t o   v a n i t y   u r l s ) 
+ 	   * / 
+ 	 	 s w i t c h ( s o u r c e )   { 
+ 	 	 c a s e   " y o u t u b e " : 
+ 	 	 	 i f ( u r l . i n d e x O f ( ' y o u t u b e ' )   ! =   - 1 )   { 
+ 	 	 	 	 v a r   i d _ s t a r t   =   u r l . i n d e x O f ( " v = " )   +   2 ; 
+ 	 	 	 }   e l s e   i f   ( u r l . i n d e x O f ( ' y o u t u . b e / '   ! =   - 1 ) )   { 
+ 	 	 	 	 v a r   i d _ s t a r t   =   u r l . i n d e x O f ( ' . b e / ' )   +   4 ; 
+ 	 	 	 } 
+ 	 	 	 b r e a k ; 
+ 	 	 c a s e   " v i m e o " : 
+ 	 	 	 v a r   i d _ s t a r t   =   u r l . i n d e x O f ( " v i m e o . c o m / " )   +   1 0 ; 
+ 	 	 	 b r e a k ; 
+ 	 	 } 
+ 	 	 v a r   v i d e o _ i d   =   u r l . s u b s t r i n g ( i d _ s t a r t ) ; 
+ 	 	 v a r   e n d _ c h a r s   =   [ ' & ' , ' # ' , ' ? ' ] ; 
+ 	 	 f o r   ( v a r   i   =   0 ;   i   <   e n d _ c h a r s . l e n g t h ;   i + + )   { 
+ 	                 i f   ( v i d e o _ i d . i n d e x O f ( e n d _ c h a r s [ i ] )   ! =   - 1 )   { 
+ 	 	 	 	 v i d e o _ i d   =   v i d e o _ i d . s u b s t r i n g ( 0 , v i d e o _ i d . i n d e x O f ( e n d _ c h a r s [ i ] ) ) ; 
+ 	                 } 
+ 	         } 
+ 	 	 r e t u r n   v i d e o _ i d ; 
+ 	 } , 
+ 	 a p i U r l :   f u n c t i o n ( d a t a )   { 
+ 	 / * 	 U s e   t h i s   t o   g e t   t h e   a p i   u r l   t o   g e t   t h e   f u l l   v i d e o   d a t a   f r o m   t h e   s e r v i c e   p r o v i d e r 
+ 	   * 	 d a t a : 	 ( o b j e c t )   s h o u l d   b e   p a s s e d   i n   t h e   o u t p u t   o f   T V A P P . v i d e o . e x t r a c t V i d e o D a t a ; 
+ 	   * 	 r e t u r n s : ( s t r i n g )   t h e   u r l   f o r   m a k i n g   a n   a p i   r e q u e s t   t o   g e t   a l l   o f   t h e   v i d e o   d a t a 
+ 	   * / 
+ 	 	 d a t a   =   d a t a   | |   { } ; 
+ 	 	 i f   ( d a t a . s o u r c e   = =   " y o u t u b e " )   { 
+ 	 	 	 r e t u r n   " h t t p s : / / w w w . g o o g l e a p i s . c o m / y o u t u b e / v 3 / v i d e o s ? i d = "   +   d a t a . s o u r c e _ i d   +   " & k e y = A I z a S y C Z - n 9 d i e T M C 3 f l v C 4 X 0 E 1 i l 3 l 8 r g 9 z Q z 8 & p a r t = s n i p p e t " ; 
+ 	 	 }   e l s e   i f   ( d a t a . s o u r c e   = =   " v i m e o " )   { 
+ 	 	 	 r e t u r n   w i n d o w . l o c a t i o n . p r o t o c o l + " / / v i m e o . c o m / a p i / o e m b e d . j s o n ? u r l = " + e n c o d e U R I C o m p o n e n t ( d a t a . v i d e o _ u r l ) + " & c a l l b a c k = v i m e o F e e d C a l l b a c k " ; 
+ 	 	 }   e l s e   { 
+ 	 	 	 r e t u r n   f a l s e ; 
+ 	 	 } 
+ 	 } , 
+ 	 a p i D a t a R e q u e s t :   f u n c t i o n ( a p i _ u r l ,   c a l l b a c k ,   e r r o r C a l l b a c k )   { 
+ 	 / * 	 U s e   t h i s   t o   m a k e   t h e   a p i   r e q u e s t   f o r   t h e   v i d e o   d a t a   f o r   a n y   v i d e o 
+ 	   * 	 a p i _ u r l : 	 ( s t r i n g )   s h o u l d   b e   t h e   o u t p u t   o f   T V A P P . a p i U r l ; 
+ 	   * 	 c a l l b a c k : 	 ( s t r i n g ) ( o p t i o n a l )   t h e   n a m e   o f   t h e   c a l l b a c k   f u n c t i o n   w r a p p e r   f o r   t h e   j s o n p   r e q u e s t   ( t h e   u r l   s h o u l d   h a v e   t h i s   a l r e a d y   i n c l u d e d ) 
+ 	   * 	 e r r o r C a l l b a c k :   ( f u n c t i o n )   p a s s   i n   a n   a n o n y m o u s   f u n c t i o n   t o   h a n d l e   e r r o r   d i s p l a y   i f   t h i s   a p i   r e q u e s t   f a i l s   f o r   s o m e   r e a s o n 
+ 	   * 	 r e t u r n s : 	 n o n e 
+ 	   * / 
+ 	 	 j $ . a j a x ( { 
+ 	 	 	 u r l :   a p i _ u r l , 
+ 	 	 	 d a t a T y p e :   ' j s o n p ' , 
+ 	 	 	 j s o n p C a l l b a c k :   c a l l b a c k , 
+ 	 	 	 t i m e o u t :   5 0 0 0 , 
+ 	 	 	 e r r o r :   f u n c t i o n ( x h r ,   t e x t S t a t u s ,   e r r o r )   { 
+ 	 	 	 	 i f ( e r r o r C a l l b a c k )   e r r o r C a l l b a c k ( ) ; 
+ 	 	 	 } 
+ 	 	 } ) ; 	 	 
+ 	 } , 
+ 	 e m b e d U r l :   f u n c t i o n ( d a t a )   { 
+ 	 / * 	 U s e   t h i s   t o   g e t   t h e   e m b e d   u r l   t o   u s e   w i t h i n   t h e   i f r a m e   f o r   t h e   v i d e o 
+ 	   * 	 d a t a : 	 ( o b j e c t )   s h o u l d   b e   t h e   o u t p u t   o f   T V A P P . e x t r a c t V i d e o D a t a ; 
+ 	   * 	 r e t u r n s : ( s t r i n g )   t h e   u r l   t o   u s e   i n   t h e   i f r a m e   d i s p l a y   o f   t h e   v i d e o 
+ 	   * / 
+ 	 	 d a t a   =   d a t a   | |   { } ; 
+ 	 	 / /   i f   u r l   e x i s t s   b u t   n o   s o u r c e   o r   s o u r c e _ i d   ( b a c k w a r d   c o m p a t i b i l i t y ) 
+ 	 	 i f   ( d a t a . v i d e o _ u r l   & &   ( ! d a t a . s o u r c e   | |   ! d a t a . s o u r c e _ i d ) )   d a t a   =   T V A P P . v i d e o . e x t r a c t V i d e o D a t a ( d a t a . v i d e o _ u r l ) ; 
+ 	 	 / /   c r e a t e   e m b e d U r l   b a s e d   o n   v i d e o   s o u r c e   a n d   s o u r c e _ i d 
+ 	 	 i f   ( d a t a . s o u r c e   = =   " y o u t u b e " )   { 
+ 	 	 	 r e t u r n   w i n d o w . l o c a t i o n . p r o t o c o l + ' / / w w w . y o u t u b e . c o m / e m b e d / ' + d a t a . s o u r c e _ i d + ' ? a u t o p l a y = 1 & r e l = 0 & c o l o r = w h i t e & i v _ l o a d _ p o l i c y = 3 ' ; 
+ 	 	 }   e l s e   i f   ( d a t a . s o u r c e   = =   " v i m e o " )   { 
+ 	 	 	 r e t u r n   w i n d o w . l o c a t i o n . p r o t o c o l + ' / / p l a y e r . v i m e o . c o m / v i d e o / ' + d a t a . s o u r c e _ i d + ' ? a u t o p l a y = 1 & p o r t r a i t = 0 & t i t l e = 0 & b y l i n e = 0 & c o l o r = e 7 a c 1 d ' ; 
+ 	 	 }   e l s e   { 
+ 	 	 	 r e t u r n   f a l s e ; 
+ 	 	 } 
+ 	 } , 
+ 	 g e n e r a t e V i d e o :   f u n c t i o n ( u r l ,   o p t i o n s )   { 
+ 	 / * 	 U s e   t h i s   t o   i n s e r t   t h e   v i d e o   i f r a m e   a n d   o v e r l a y   m a r k u p   w h e n   a   u s e r   c l i c k s   " p l a y " 
+ 	   * 	 u r l : 	 ( s t r i n g )   s h o u l d   b e   t h e   o u t p u t   o f   T V A P P . e m b e d U r l ; 
+ 	   * 	 o p t i o n s : ( o b j e c t ) ( o p t i o n a l )   u s e   t h i s   t o   o v e r r i d e   t h e   d e f a u l t   v i d e o   o p t i o n s   i n c l u d i n g   t h e   t a r g e t   e l e m e n t   t o   a p p e n d   t h e   v i d e o   t o ,   t h e   d i m e n s i o n s   o f   t h e   v i d e o ,   
+ 	   * 	 	 a n d   w h e t h e r   t h e   v i d e o   i s   c l o s e d   v i a   c l i c k i n g   o n   t h e   o v e r l a y   o r   n o t 
+ 	   * 	 r e t u r n : 	 n o n e 
+ 	   * / 	 
+ 	 	 v a r   d e f a u l t s   =   { 
+ 	 	 	 t a r g e t :   j $ ( ' # j V i d H o l d e r ' ) , 
+ 	 	 	 d i m s :   { w i d t h : 5 9 6 , h e i g h t : 3 3 5 } , 
+ 	 	 	 o v e r l a y :   t r u e , 
+ 	 	 	 o v e r l a y C l o s e :   t r u e 
+ 	 	 } ; 
+ 	 	 o p t i o n s   =   j $ . e x t e n d ( { } , d e f a u l t s , o p t i o n s ) ; 
+ 	 	 / /   c r e a t e   v i d e o   o v e r l a y 
+ 	 	 i f ( o p t i o n s . o v e r l a y )   { 
+ 	 	 	 v a r   o v e r l a y   =   j $ ( " < d i v   i d = ' j N o t i f y O v e r l a y '   c l a s s = ' n o t i f y _ o v e r l a y ' > < / d i v > " ) ; 
+ 	 	 	 j $ ( ' b o d y ' ) . a p p e n d ( o v e r l a y ) ; 
+ 	 	 	 o v e r l a y . f a d e T o ( 1 0 0 0 , 0 . 7 5 ) ; 
+ 	 	 } 
+ 	 	 / /   a d d   t h e   v i d e o   h o l d e r   a n d   a n i m a t e   i t 
+ 	 	 o p t i o n s . t a r g e t . a p p e n d ( ' < d i v   c l a s s = " v i d e o _ c o n t a i n e r "   i d = " j V i d e o C o n t a i n e r " > < d i v   i d = " v i d e o _ s p o t " > < / d i v > < / d i v > ' ) . d a t a ( ' h e i g h t ' ,   o p t i o n s . t a r g e t . h e i g h t ( ) ) . a n i m a t e ( { h e i g h t :   o p t i o n s . d i m s . h e i g h t } ,   5 0 0 ) ; 
+ 	 	 j $ ( ' # j V i d e o C o n t a i n e r ' ) . a n i m a t e ( { w i d t h :   o p t i o n s . d i m s . w i d t h ,   h e i g h t :   o p t i o n s . d i m s . h e i g h t } ,   5 0 0 ,   f u n c t i o n ( )   { 
+ 	 	 	 / /   e m b e d   t h e   i f r a m e   v i d e o   p l a y e r 
+ 	 	 	 j $ ( " # v i d e o _ s p o t " ) . a p p e n d ( ' < i f r a m e   s r c = " ' + u r l + ' "   w i d t h = " ' + o p t i o n s . d i m s . w i d t h + ' "   h e i g h t = " ' + o p t i o n s . d i m s . h e i g h t + ' "   f r a m e b o r d e r = " 0 "   w e b k i t A l l o w F u l l S c r e e n   m o z a l l o w f u l l s c r e e n   a l l o w F u l l S c r e e n > < / i f r a m e > ' ) ; 
+ 	 	 } ) ; 
+ 	 	 / /   b i n d   v i d e o   c l o s e   t o   o v e r l a y 
+ 	 	 i f ( o p t i o n s . o v e r l a y   & &   o p t i o n s . o v e r l a y C l o s e )   { 
+ 	 	 	 j $ ( " # j N o t i f y O v e r l a y " ) . c l i c k ( f u n c t i o n ( ) { 
+ 	 	 	 	 o p t i o n s . t a r g e t . a n i m a t e ( { h e i g h t :   o p t i o n s . t a r g e t . d a t a ( ' h e i g h t ' ) } ) ; 
+ 	 	 	 	 j $ ( " # j N o t i f y O v e r l a y ,   # j V i d e o C o n t a i n e r " ) . f a d e O u t ( f u n c t i o n ( )   { 
+ 	 	 	 	 	 j $ ( t h i s ) . r e m o v e ( ) ; 
+ 	 	 	 	 } ) ; 
+ 	 	 	 } ) ; 
+ 	 	 } 
+ 	 } , 
+ 	 p r e v i e w V i d e o :   f u n c t i o n ( e l e m )   { 
+ 	 / * 	 U s e   t h i s   t o   h a n d l e   u p d a t i n g   t h e   p r e v i e w   a n d   t h e   h i d d e n   v i d e o   f o r m   d a t a 
+ 	   * 	 e l e m : 	 ( j Q u e r y   e l e m e n t   o b j e c t ) ( o p t i o n a l )   t h e   e l e m e n t   t h a t   i s   t o   b e   u s e d   a s   t h e   v i d e o _ u r l   d e f i n i n g   i n p u t   - -   d e f a u l t   i s   j $ ( ' # j V i d U r l ' ) 
+ 	   * 	 r e t u r n :   n o n e 
+ 	   * / 
+ 	   	 e l e m   =   e l e m   | |   j $ ( ' # j V i d U r l ' ) ; 
+ 	 	 / /   g e t   v i d e o _ u r l 
+ 	 	 v a r   v i d e o _ u r l   =   e l e m . v a l ( ) ; 
+ 	 	 / /   i f   b l a n k   u r l   m a k e   s u r e   f o r m   w i l l   n o t   s u b m i t   a n d   h i d e   t h e   p r e v i e w 
+ 	 	 i f   ( ! v i d e o _ u r l )   { 
+ 	 	 	 e l e m . s i b l i n g s ( ' . r e f r e s h _ i c n ' ) . h i d e ( ) ; 
+ 	 	 	 j $ ( ' . j V i d N e x t ,   . j A d d V i d S u b m i t ' ) . a d d C l a s s ( ' d i s a b l e d ' ) ; 
+ 	 	 	 j $ ( ' . j V i d P r e v i e w ' ) . s l i d e U p ( ) ; 
+ 	 	 	 r e t u r n   f a l s e ; 
+ 	 	 / /   p a r s e   y o u t u b e   v i d e o   i d   a n d   s e t   a p i   u r l 
+ 	 	 }   e l s e   { 
+ 	 	 	 v a r   v i d e o   =   T V A P P . v i d e o . e x t r a c t V i d e o D a t a ( v i d e o _ u r l ) ; 
+ 	 	 	 v a r 	 a p i _ u r l   =   T V A P P . v i d e o . a p i U r l ( v i d e o ) ; 
+ 	 	 } 
+ 	 	 / /   h a n d l e   u n e x p e c t e d   u r l s 
+ 	 	 i f   ( ! a p i _ u r l )   { 
+ 	 	 	 j $ ( ' b o d y ' ) . m o d a l ( { t e x t : T V A P P . s m D i c t ( ' J o b . V i d e o F o r m . u r l _ e r r o r ' ) } ) ; 
+ 	 	 	 j $ ( ' . j V i d P r e v i e w ' ) . s l i d e U p ( ) ; 
+ 	 	 	 j $ ( ' . j V i d N e x t ,   . j A d d V i d S u b m i t ' ) . a d d C l a s s ( ' d i s a b l e d ' ) ; 
+ 	 	 	 r e t u r n   f a l s e ; 
+ 	 	 } 
+ 	 	 e l e m . s i b l i n g s ( ' . r e f r e s h _ i c n ' ) . h i d e ( ) ; 
+ 	 	 e l e m . p a r e n t ( ) . s p i n ( { l e f t : e l e m . o u t e r W i d t h ( ) - 2 7 } ) ; 
+ 	 	 e l e m . p r o p ( ' d i s a b l e d ' ,   t r u e ) ; 
+ 	 	 / /   g e t   t h e   v i d e o   d a t a   f r o m   t h e   a p i   a n d   r e d i r e c t   t o   c o r r e c t   c a l l b a c k   f u n c t i o n 
+ 	 	 T V A P P . v i d e o . a p i D a t a R e q u e s t ( a p i _ u r l ,   v i d e o . s o u r c e + ' F e e d C a l l b a c k ' ,   f u n c t i o n ( )   { 
+ 	 	 	 j $ ( ' . s p i n n e r ' ) . r e m o v e ( ) ; 
+ 	 	 	 e l e m . r e m o v e A t t r ( ' d i s a b l e d ' ) ; 
+ 	 	 	 j $ ( ' . j V i d P r e v i e w ' ) . s l i d e U p ( ) ; 
+ 	 	 	 j $ ( ' . j V i d N e x t ,   . j A d d V i d S u b m i t ' ) . a d d C l a s s ( ' d i s a b l e d ' ) ; 
+ 	 	 	 j $ ( ' b o d y ' ) . m o d a l ( { t e x t : T V A P P . s m D i c t ( ' J o b . V i d e o F o r m . a p i _ e r r o r ' ) } ) ; 	 	 	 	 
+ 	 	 } ) ; 
+ 	 } , 
+ 	 s a v e V i d e o :   f u n c t i o n ( f o r m )   { 
+ 	 / * 	 U s e   t h i s   t o   h a n d l e   v i d e o   a d d   f o r m   s u b m i s s i o n s   a n d   e r r o r   h a n d l i n g 
+ 	   * 	 f o r m : 	 ( j Q u e r y   e l e m e n t   o b j e c t )   t h e   ' f o r m '   e l e m e n t   t h a t   h o l d s   t h e   v i d e o   p r e v i e w   d a t a 
+ 	   * 	 r e t u r n :   n o n e 
+ 	   * / 
+ 	 	 j $ . a j a x ( { 
+ 	 	 	 u r l :   f o r m . a t t r ( ' a c t i o n ' ) , 
+ 	 	 	 t y p e :   " P O S T " , 
+ 	 	 	 d a t a :   j $ . p a r a m ( f o r m . s e r i a l i z e A r r a y ( ) ) , 
+ 	 	 	 d a t a T y p e :   ' j s o n ' , 
+ 	 	 	 e r r o r :   f u n c t i o n ( x h r ,   t e x t S t a t u s ,   e r r o r )   { 
+ 	 	 	 	 j $ ( ' b o d y ' ) . m o d a l ( { t e x t : T V A P P . s m D i c t ( ' J o b . V i d e o F o r m . s a v e _ e r r o r ' ) } ) ; 
+ 	 	 	 } , 
+ 	 	 	 s u c c e s s :   f u n c t i o n ( r e s p o n s e )   { 
+ 	 	 	 	 j $ . l o g ( ' V i d e o   A d d e d ' ) ; 
+ 	 	 	 	 j $ ( ' # j V i d e o R e f r e s h C o n t e x t I d ' ) . v a l ( r e s p o n s e . R e s u l t [ " V i d e o L i n k . i d " ] ) ; 
+ 	 	 	 	 j $ ( ' b o d y ' ) . m o d a l ( { 
+ 	 	 	 	 	 t e x t : T V A P P . s m D i c t ( ' J o b . V i d e o F o r m . s u c c e s s _ m e s s a g e ' ) , 
+ 	 	 	 	 	 o n C l o s e :   f u n c t i o n ( )   { 
+ 	 	 	 	 	 	 j $ ( d o c u m e n t ) . t r i g g e r ( ' r e f r e s h V i d e o A r e a ' ) ; 
+ 	 	 	 	 	 } 
+ 	 	 	 	 } ) ; 
+ 	 	 	 } 
+ 	 	 } ) ; 
+ 	 } , 
+ 	 r e m o v e V i d e o :   f u n c t i o n ( f o r m )   { 
+ 	 / * 	 U s e   t h i s   t o   h a n d l e   v i d e o   r e m o v e   f o r m   s u b m i s s i o n s   a n d   e r r o r   h a n d l i n g 
+ 	   * 	 f o r m : 	 ( j Q u e r y   e l e m e n t   o b j e c t )   t h e   ' f o r m '   e l e m e n t   t h a t   h o l d s   t h e   v i d e o   d e l e t i o n   d a t a 
+ 	   * 	 r e t u r n :   n o n e 
+ 	   * / 
+ 	 	 j $ . a j a x ( { 
+ 	 	 	 u r l :   f o r m . a t t r ( ' a c t i o n ' ) , 
+ 	 	 	 d a t a :   j $ . p a r a m ( f o r m . s e r i a l i z e A r r a y ( ) ) , 
+ 	 	 	 d a t a T y p e :   ' j s o n ' , 
+ 	 	 	 e r r o r :   f u n c t i o n ( x h r ,   t e x t S t a t u s ,   e r r o r )   { 
+ 	 	 	 	 j $ ( ' b o d y ' ) . m o d a l ( { t e x t : T V A P P . s m D i c t ( ' J o b . V i d e o F o r m . R e m o v e . s a v e _ e r r o r ' ) } ) ; 
+ 	 	 	 } , 
+ 	 	 	 s u c c e s s :   f u n c t i o n ( r e s p o n s e )   { 
+ 	 	 	 	 j $ . l o g ( ' V i d e o   R e m o v e d ' ) ; 
+ 	 	 	 	 j $ ( ' # j V i d e o R e f r e s h C o n t e x t I d ' ) . v a l ( ' ' ) ; 
+ 	 	 	 	 j $ ( ' b o d y ' ) . m o d a l ( { 
+ 	 	 	 	 	 t e x t : T V A P P . s m D i c t ( ' J o b . V i d e o F o r m . R e m o v e . s u c c e s s _ m e s s a g e ' ) , 
+ 	 	 	 	 	 o n C l o s e :   f u n c t i o n ( )   { 
+ 	 	 	 	 	 	 j $ ( d o c u m e n t ) . t r i g g e r ( ' r e f r e s h V i d e o A r e a ' ) ; 
+ 	 	 	 	 	 } 
+ 	 	 	 	 } ) ; 
+ 	 	 	 } 
+ 	 	 } ) ; 
+ 	 } , 
+ 	 r e f r e s h V i d e o A r e a :   f u n c t i o n   ( )   { 
+ 	 / /   t h i s   f u n c t i o n   i s   c a l l e d   w h e n e v e r   ' r e f r e s h V i d e o A r e a '   i s   t r i g g e r e d   t o   r e l o a d   t h e   a j a x   c o n t e n t   s i m i l a r   t o   j U s e r R e f r e s h A r e a 
+ 	 	 j $ ( " . j V i d e o R e f r e s h " ) . e a c h ( f u n c t i o n ( ) { 
+ 	 	 	 v a r   c o n t e x t _ i n f o   =   " " ; 
+ 	 	 	 / /   a d d   v i d e o _ l i n k   c o n t e x t   i f   a v a i l a b l e 
+ 	 	 	 j $ ( ' . j C o n t e x t D a t a ' , t h i s ) . e a c h ( f u n c t i o n ( i )   { 
+ 	 	 	 	 i f ( j $ ( t h i s ) . v a l ( ) )   { 
+ 	 	 	 	 	 c o n t e x t _ i n f o   + =   ( i = = 0   ?   ' '   : ' & ' )   +   j $ ( t h i s ) . a t t r ( ' d a t a - n a m e ' )   +   ' = '   +   j $ ( t h i s ) . v a l ( ) ; 	 	 	 	 
+ 	 	 	 	 } 
+ 	 	 	 } ) ; 
+ 	 	 	 v a r   c o n t e n t H T M L   =   T V A P P . a j a x I n c l u d e C o n t e n t ( { 
+ 	 	 	 	 t e m p l a t e : j $ ( t h i s ) . a t t r ( " i d " ) , 
+ 	 	 	 	 j o b _ i d :   ( T V A P P . p r o p e r t y . j o b   ?   T V A P P . p r o p e r t y . j o b . i d   :   ' ' ) , 
+ 	 	 	 	 c o n t e x t : c o n t e x t _ i n f o 
+ 	 	 	 } ) ; 
+ 	 	 	 j $ ( t h i s ) . e m p t y ( ) . h t m l ( c o n t e n t H T M L ) ; 
+ 	 	 } ) ; 
+ 	 	 j $ ( d o c u m e n t ) . t r i g g e r ( " r e f r e s h V i d e o B i n d i n g s " ) ; 	 	 
+ 	 } 
+ 
+ } ; 
+ j $ ( d o c u m e n t ) . b i n d ( ' r e f r e s h V i d e o A r e a ' ,   T V A P P . v i d e o . r e f r e s h V i d e o A r e a ) ; 
+ j $ ( d o c u m e n t ) . b i n d ( ' r e f r e s h U s e r B i n d i n g s ' ,   T V A P P . v i d e o . r e f r e s h V i d e o A r e a ) ; 
+ 
+ / / 	 T h i s   i s   t h e   d e f a u l t   j s o n p   c a l l b a c k   f o r   u p d a t i n g   t h e   v i d e o   d a t a   b a s e d   o n   t h e   y o u t u b e   a p i   r e s p o n s e 	 
+ f u n c t i o n   y o u t u b e F e e d C a l l b a c k ( d a t a )   { 
+ 	 j $ ( ' . s p i n n e r ' ) . r e m o v e ( ) ; 
+ 	 j $ ( ' # j V i d U r l ' ) . r e m o v e A t t r ( ' d i s a b l e d ' ) ; 
+ 	 v a r   s o u r c e _ i d   =   T V A P P . v i d e o . e x t r a c t V i d e o I d ( j $ ( ' # j V i d U r l ' ) . v a l ( ) , " y o u t u b e " ) ; 
+ 	 / /   s e t   u p   v i d e o   p r e v i e w 
+ 	 j $ ( " # j V i d e o P r e v i e w T h u m b " ) . c s s ( { ' b a c k g r o u n d - i m a g e ' : " u r l ( ' h t t p : / / i 1 . y t i m g . c o m / v i / " + s o u r c e _ i d + " / d e f a u l t . j p g ' ) " } ) ; 
+ 	 j $ ( " # j V i d e o P r e v i e w T i t l e " ) . t e x t ( d a t a . i t e m s [ 0 ] . s n i p p e t [ " t i t l e " ] ) ; 
+ 	 v a r   c h a n n e l _ i d   =   d a t a . i t e m s [ 0 ] . s n i p p e t [ " c h a n n e l I d " ] ; 
+ 	 j $ ( " # j V i d e o P r e v i e w A u t h o r " ) . t e x t ( d a t a . i t e m s [ 0 ] . s n i p p e t [ " c h a n n e l T i t l e " ] ) . a t t r ( ' h r e f ' , ' h t t p : / / w w w . y o u t u b e . c o m / c h a n n e l / ' + c h a n n e l _ i d ) ; 
+ 	 / /   s t o r e   d a t a   i n   h i d d e n   i n p u t s 
+ 	 j $ ( ' # d a t a - u r l ' ) . v a l ( j $ ( ' # j V i d U r l ' ) . v a l ( ) ) ; 
+ 	 j $ ( ' # d a t a - t i t l e ' ) . v a l ( d a t a . i t e m s [ 0 ] . s n i p p e t [ " t i t l e " ] ) ; 
+ 	 j $ ( ' # d a t a - d e s c r i p t i o n ' ) . v a l ( d a t a . i t e m s [ 0 ] . s n i p p e t [ " d e s c r i p t i o n " ] ) ; 
+ 	 j $ ( ' # d a t a - a u t h o r ' ) . v a l ( d a t a . i t e m s [ 0 ] . s n i p p e t [ " c h a n n e l T i t l e " ] ) ; 
+ 	 j $ ( ' # d a t a - a u t h o r - u r l ' ) . v a l ( d a t a . i t e m s [ 0 ] . s n i p p e t [ " c h a n n e l T i t l e " ] ) . a t t r ( ' h r e f ' , ' h t t p : / / w w w . y o u t u b e . c o m / c h a n n e l / ' + c h a n n e l _ i d ) ; 
+ 	 j $ ( ' # d a t a - s o u r c e ' ) . v a l ( " y o u t u b e " ) ; 
+ 	 j $ ( ' # d a t a - s o u r c e - i d ' ) . v a l ( s o u r c e _ i d ) ; 
+ 
+ 	 / /   l o o k   u p   v i d e o   t h u m b n a i l   i m a g e   w i t h   f a l l b a c k s   i n   d e c r e a s i n g   o r d e r   o f   r e s o l u t i o n 
+ 	 j $ ( ' # t h u m b n a i l _ t e s t ' ) . a t t r ( ' s r c ' , ' h t t p : / / i 1 . y t i m g . c o m / v i / ' + s o u r c e _ i d + ' / m a x r e s d e f a u l t . j p g ' ) . l o a d ( f u n c t i o n ( )   { 
+ 	 	 i f ( j $ ( ' # t h u m b n a i l _ t e s t ' ) . w i d t h ( )   = =   1 2 0 )   { 
+ 	 	 	 j $ . l o g ( ' m a x   r e s   t h u m b   u n a v a i l a b l e   - >   t r y   m e d i u m ' ) ; 
+ 	 	 	 j $ ( ' # t h u m b n a i l _ t e s t ' ) . a t t r ( ' s r c ' , ' h t t p : / / i 1 . y t i m g . c o m / v i / ' + s o u r c e _ i d + ' / h q d e f a u l t . j p g ' ) . l o a d ( f u n c t i o n ( )   { 	 	 	 
+ 	 	 	 	 i f ( j $ ( ' # t h u m b n a i l _ t e s t ' ) . w i d t h ( )   = =   1 2 0 )   { 
+ 	 	 	 	 	 j $ . l o g ( ' m e d i u m   q u a l i t y   t h u m b   u n a v a i l a b l e   - >   u s e   l o w e s t ' ) ; 
+ 	 	 	 	 	 j $ ( ' # d a t a - t h u m b n a i l - u r l ' ) . v a l ( ' h t t p : / / i 1 . y t i m g . c o m / v i / ' + s o u r c e _ i d + ' / 0 . j p g ' ) ; 
+ 	 	 	 	 }   e l s e   { 
+ 	 	 	 	 	 j $ ( ' # d a t a - t h u m b n a i l - u r l ' ) . v a l ( ' h t t p : / / i 1 . y t i m g . c o m / v i / ' + s o u r c e _ i d + ' / h q d e f a u l t . j p g ' ) ; 
+ 	 	 	 	 } 
+ 	 	 	 } ) ; 
+ 	 	 }   e l s e   { 
+ 	 	 	 j $ ( ' # d a t a - t h u m b n a i l - u r l ' ) . v a l ( ' h t t p : / / i 1 . y t i m g . c o m / v i / ' + s o u r c e _ i d + ' / m a x r e s d e f a u l t . j p g ' ) ; 	 	 	 
+ 	 	 } 
+ 	 } ) ; 
+ 
+ 	 / /   s h o w   t h e   p r e v i e w 
+ 	 j $ ( ' . j V i d P r e v i e w ' ) . s l i d e D o w n ( ) ; 
+ 	 / /   a c t i v a t e   t h e   s a v e   b u t t o n 
+ 	 j $ ( ' . j V i d N e x t ,   . j A d d V i d S u b m i t ' ) . r e m o v e C l a s s ( ' d i s a b l e d ' ) ; 
+ 
+ } 
+ 
+ / / 	 T h i s   i s   t h e   d e f a u l t   j s o n p   c a l l b a c k   f o r   u p d a t i n g   t h e   v i d e o   d a t a   b a s e d   o n   t h e   v i m e o   a p i   r e s p o n s e 	 
+ f u n c t i o n   v i m e o F e e d C a l l b a c k ( d a t a )   { 
+ 	 j $ ( ' . s p i n n e r ' ) . r e m o v e ( ) ; 
+ 	 j $ ( ' # j V i d U r l ' ) . r e m o v e A t t r ( ' d i s a b l e d ' ) ; 
+ 	 / /   s e t   u p   v i d e o   p r e v i e w 
+ 	 j $ ( " # j V i d e o P r e v i e w T h u m b " ) . c s s ( { ' b a c k g r o u n d - i m a g e ' : " u r l ( ' " + d a t a . t h u m b n a i l _ u r l + " ' ) " } ) ; 
+ 	 j $ ( " # j V i d e o P r e v i e w T i t l e " ) . t e x t ( d a t a . t i t l e ) ; 
+ 	 j $ ( " # j V i d e o P r e v i e w A u t h o r " ) . t e x t ( d a t a . a u t h o r _ n a m e ) . a t t r ( ' h r e f ' , d a t a . a u t h o r _ u r l ) ; 
+ 	 / /   s t o r e   d a t a   i n   h i d d e n   i n p u t s 
+ 	 j $ ( ' # d a t a - u r l ' ) . v a l ( j $ ( ' # j V i d U r l ' ) . v a l ( ) ) ; 
+ 	 j $ ( ' # d a t a - t i t l e ' ) . v a l ( d a t a . t i t l e ) ; 
+ 	 j $ ( ' # d a t a - d e s c r i p t i o n ' ) . v a l ( d a t a . d e s c r i p t i o n ) ; 
+ 	 j $ ( ' # d a t a - t h u m b n a i l - u r l ' ) . v a l ( d a t a . t h u m b n a i l _ u r l ) ; 
+ 	 j $ ( ' # d a t a - a u t h o r ' ) . v a l ( d a t a . a u t h o r _ n a m e ) ; 
+ 	 j $ ( ' # d a t a - a u t h o r - u r l ' ) . v a l ( d a t a . a u t h o r _ u r l ) ; 
+ 	 j $ ( ' # d a t a - s o u r c e ' ) . v a l ( " v i m e o " ) ; 
+ 	 j $ ( ' # d a t a - s o u r c e - i d ' ) . v a l ( d a t a . v i d e o _ i d ) ; 
+ 	 / /   s h o w   t h e   p r e v i e w 
+ 	 j $ ( ' . j V i d P r e v i e w ' ) . s l i d e D o w n ( ) ; 
+ 	 / /   a c t i v a t e   t h e   s a v e   b u t t o n 
+ 	 j $ ( ' . j V i d N e x t ,   . j A d d V i d S u b m i t ' ) . r e m o v e C l a s s ( ' d i s a b l e d ' ) ; 
+ }    A       https://talent.rakuten.careers/video.js?v=apptss.2017.PRD.4.2.17     8      8                    Ç   Ç   ö    [
+   Ç    ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]	   Ç	   ]
+   6   Qö   ù   ö   : ∏   
+=
+   ö    5   5
+   Á Qö   ù   ö   : ∏   
+=   ö    5   5
+   Á Qô≈Ø †ò ®8ò ®Sò ®aò ®rò ®Ä  Éò ®Ä  ßò ®Ä  Õò ®Ä  Êò ®Ä  ˛ò–®Ä Ìò§Ìò¨Ä Vò    TVAPP!   extractVideoData   extractVideoId   apiUrl   apiDataRequest   embedUrl   generateVideo   previewVideo   saveVideo   removeVideo!   refreshVideoArea   video   j$   document	   bind'   refreshUserBindingsá!´!ˇˇˇˇ   '   youtubeFeedCallback#   vimeoFeedCallback      ´+íHç!´!       !   extractVideoDataB Z   
+  R   
+        `        5ûç!´!          extractVideoIdB ;
+  ®  3
+  ®  8      `        5ûç!´!          apiUrlB ª  Z  ≥  Z  S      @        5ûç!´!          apiDataRequestB u    m    a                 errorCallback    B ±  ˜  ©  ˜  m              5û  5ûç!´!    	      embedUrlC Ê          B                                       m    m  r                 T  D   ÊQ[    ÊU  QT  5    E    ÊQT  5    D   ÊQT  5    Ê&   Êö   5   ∏   
+T  5    : U  QÊT  5   =   0   Êö   5   5	   =
+   T  5   =   G   ÊT  5   =   0   Êö   5   5	   =   T  5   =      ÊBÊô®wò‘®yòœò–ò ûŸò»®{òŒ¶ò‰®Ä  ÇòØ}ò	Œ¶ò‰††††òØ†ò°†ò    video_url   source   source_id   TVAPP   video!   extractVideoData   youtube   window   location   protocol1   //www.youtube.com/embed/]   ?autoplay=1&rel=0&color=white&iv_load_policy=3   vimeo3   //player.vimeo.com/video/i   ?autoplay=1&portrait=0&title=0&byline=0&color=e7ac1då!´!ˇˇˇˇ   	   data        ´+íHé!´!            öò;¯@       5ûç!´!          generateVideoB á        É      P          url    options   B  È  ﬁ  ·  ﬁ  ô   h           5û    B  Y    Q    ü   '             B  ﬁ     ÷     °   <           5û  5û 5ûç!´!          previewVideoB )  ›"  !  ›"  ß      P       	   elem    B  Ò!  ÿ"  È!  ÿ"  ≈   K           5û  5ûç!´!          saveVideoB Û"  ‹%  Î"  ‹%  Õ               B 9$  ü$  1$  ü$  ◊              5û    B µ$  ”%  ≠$  ”%  ⁄                B  ã%  ∆%  É%  ∆%  ﬂ              5û  5û 5ûç!´!          removeVideoB Ù%  √(  Ï%  √(  Ê               B -'  ö'  %'  ö'  Ô              5û    B ∞'  ∫(  ®'  ∫(  Ú                B  r(  ≠(  j(  ≠(  ˜              5û  5û 5ûç!´!       !   refreshVideoAreaB  ·(  î+  ÿ(  î+  ˛                B  Ü)  ]+  ~)  ]+     $   "          context_info   B ˜)  *  Ô)  *    )   "        5û 5û 5ûé!´!    
+   é!´!!   extractVideoDataã!´!é!´!   extractVideoIdã!´!é!´!   apiUrlã!´!é!´!   apiDataRequestã!´!é!´!   embedUrlã!´!é!´!   generateVideoã!´!é!´!   previewVideoã!´!é!´!   saveVideoã!´!é!´!   removeVideoã!´!é!´!!   refreshVideoAreaã!´!    ç!´!        '   youtubeFeedCallback ®,  _4  å,  _4                  source_id   B  Q1  Ã3  I1  Ã3  *  i   0          B   2  Y3  2  Y3  -  g   0        5û  5û 5ûç!´!       #   vimeoFeedCallback ﬁ4  8  ƒ4  8  B             5ûöò;¯Ñ¸∑∞q∏      \Zπ\Zπ@Bz^9 ç   A    :https://talent.rakuten.careers/video.js?v=apptss.2017.PRD.4.2.17 necko:classified 1 strongly-framed 1 security-info FnhllAKWRHGAlo+ESXykKAAAAAAAAAAAwAAAAAAAAEaphjojH6pBabDSgSnsfLHeAAgAAgAAAAAAAAAAAAAAAAAAAAEAMQFmCjImkVxP+7sgiYWmMt8FvcOXmlQiTNWFiWlrbpbqgwAAAAAAAAZAMIIGPDCCBSSgAwIBAgIQB/pm/dSvXuj5Adu+/C9X4TANBgkqhkiG9w0BAQsFADBNMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMScwJQYDVQQDEx5EaWdpQ2VydCBTSEEyIFNlY3VyZSBTZXJ2ZXIgQ0EwHhcNMTgxMTIyMDAwMDAwWhcNMjAwMTA2MTIwMDAwWjB1MQswCQYDVQQGEwJKUDEOMAwGA1UECBMFVG9reW8xFDASBgNVBAcTC1NldGFnYXlhLWt1MRUwEwYDVQQKEwxSYWt1dGVuLEluYy4xDTALBgNVBAsTBENJVEQxGjAYBgNVBAMMESoucmFrdXRlbi5jYXJlZXJzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxeHugPfU3JO2axjpuBJr0RrxmRWEajOhx9i27irXtE6VQoxYml5svlrsiIYPwcMGNKuqYmHgTsXxX+sphadF6XHXRnjaH9QXNkCKgbnbH+bw/n+wdzZ17ZjGy/FfZf7urqqxMIexQIo21MKB7GZYXwt4PtfUcxqSjvsSfwJmvvCRr0uZwUKI6PmL6DdflyjuI/3vkiDxQk9W11lfDGSMqxOBeKlaSgTdnOvj8IGv4xuGfPL8Mmbf4b752oEwi4dg3RJawS8X0TYer/gzVzmff2J1rApA13zVTfggQINI3L2yzzfg5O6Diw8JSm/heZ41EDARfG7oAfHMbPN7/x0TCwIDAQABo4IC7jCCAuowHwYDVR0jBBgwFoAUD4BhHIIxYdUvKOeNRji0LOHG2eIwHQYDVR0OBBYEFDOQomj7Z0poRHuY5Xe2RmPoix/YMC0GA1UdEQQmMCSCD3Jha3V0ZW4uY2FyZWVyc4IRKi5yYWt1dGVuLmNhcmVlcnMwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBrBgNVHR8EZDBiMC+gLaArhilodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vc3NjYS1zaGEyLWc2LmNybDAvoC2gK4YpaHR0cDovL2NybDQuZGlnaWNlcnQuY29tL3NzY2Etc2hhMi1nNi5jcmwwTAYDVR0gBEUwQzA3BglghkgBhv1sAQEwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzAIBgZngQwBAgIwfAYIKwYBBQUHAQEEcDBuMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wRgYIKwYBBQUHMAKGOmh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFNIQTJTZWN1cmVTZXJ2ZXJDQS5jcnQwCQYDVR0TBAIwADCCAQQGCisGAQQB1nkCBAIEgfUEgfIA8AB1ALvZ37wfinG1k5Qjl6qSe0c4V5UKq1LoGpCWZDaOHtGFAAABZzr6TN8AAAQDAEYwRAIgXD5HHs1YcEXRsrJd8QRbHA2vh5/9RNUTetSdUgTutJgCIFk0lw7vNar52y1W6gKON4NsqHJrJ2dCdQigtdlFkCyaAHcAh3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8AAAFnOvpOEQAABAMASDBGAiEAoOZYmUeHjk2V2fc7M2HTEEe1d5mESePI9qOjWyd/mAMCIQCZV4QeIrRXI0ydCNSaiJoUTnrOnVdbxbdxpXYnjP2ulTANBgkqhkiG9w0BAQsFAAOCAQEAZ9Pb21lrMiU28mrfmlpVPsJwbclKbwIAWFOOHqoTbD7VZ+oWI8BpROp9cHqfP404c42iFLyqqDMofEYLKbgKus7k7TEUAxdaf8vS6pSZfDTtBE90QZ5QLL8Y2pq58CoPU3G7PDb3vJPeUK2zvpuXrqd9qullk1mLn4hctVAhf30a9zCWzfx3DBNQrdifcZF1zvK4WWti/UAjWOYN8fswH9cXFd+dGATtbmXrEGmKmWaxtHMGr5+X03j+FbZW56VxVqqyitZDJQ/r4oshBbuu2/lmPy+Lw1qILPAEZuYKfVPcyF5HdVC6JZraCm//XVheqMO9/ZSpANiE475uD8vzk8AwAAMAAAAAAQEAAAAAAAAEbm9uZQAAAA5SU0EtUEtDUzEtU0hBMQGVn7FlZRdIf6ub2JE75TGXrnTNpc0vRz+W9fC3//YsaAAAAANmCjImkVxP+7sgiYWmMt8FvcOXmlQiTNWFiWlrbpbqgwAAAAAAAAZAMIIGPDCCBSSgAwIBAgIQB/pm/dSvXuj5Adu+/C9X4TANBgkqhkiG9w0BAQsFADBNMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMScwJQYDVQQDEx5EaWdpQ2VydCBTSEEyIFNlY3VyZSBTZXJ2ZXIgQ0EwHhcNMTgxMTIyMDAwMDAwWhcNMjAwMTA2MTIwMDAwWjB1MQswCQYDVQQGEwJKUDEOMAwGA1UECBMFVG9reW8xFDASBgNVBAcTC1NldGFnYXlhLWt1MRUwEwYDVQQKEwxSYWt1dGVuLEluYy4xDTALBgNVBAsTBENJVEQxGjAYBgNVBAMMESoucmFrdXRlbi5jYXJlZXJzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxeHugPfU3JO2axjpuBJr0RrxmRWEajOhx9i27irXtE6VQoxYml5svlrsiIYPwcMGNKuqYmHgTsXxX+sphadF6XHXRnjaH9QXNkCKgbnbH+bw/n+wdzZ17ZjGy/FfZf7urqqxMIexQIo21MKB7GZYXwt4PtfUcxqSjvsSfwJmvvCRr0uZwUKI6PmL6DdflyjuI/3vkiDxQk9W11lfDGSMqxOBeKlaSgTdnOvj8IGv4xuGfPL8Mmbf4b752oEwi4dg3RJawS8X0TYer/gzVzmff2J1rApA13zVTfggQINI3L2yzzfg5O6Diw8JSm/heZ41EDARfG7oAfHMbPN7/x0TCwIDAQABo4IC7jCCAuowHwYDVR0jBBgwFoAUD4BhHIIxYdUvKOeNRji0LOHG2eIwHQYDVR0OBBYEFDOQomj7Z0poRHuY5Xe2RmPoix/YMC0GA1UdEQQmMCSCD3Jha3V0ZW4uY2FyZWVyc4IRKi5yYWt1dGVuLmNhcmVlcnMwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBrBgNVHR8EZDBiMC+gLaArhilodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vc3NjYS1zaGEyLWc2LmNybDAvoC2gK4YpaHR0cDovL2NybDQuZGlnaWNlcnQuY29tL3NzY2Etc2hhMi1nNi5jcmwwTAYDVR0gBEUwQzA3BglghkgBhv1sAQEwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzAIBgZngQwBAgIwfAYIKwYBBQUHAQEEcDBuMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wRgYIKwYBBQUHMAKGOmh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFNIQTJTZWN1cmVTZXJ2ZXJDQS5jcnQwCQYDVR0TBAIwADCCAQQGCisGAQQB1nkCBAIEgfUEgfIA8AB1ALvZ37wfinG1k5Qjl6qSe0c4V5UKq1LoGpCWZDaOHtGFAAABZzr6TN8AAAQDAEYwRAIgXD5HHs1YcEXRsrJd8QRbHA2vh5/9RNUTetSdUgTutJgCIFk0lw7vNar52y1W6gKON4NsqHJrJ2dCdQigtdlFkCyaAHcAh3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8AAAFnOvpOEQAABAMASDBGAiEAoOZYmUeHjk2V2fc7M2HTEEe1d5mESePI9qOjWyd/mAMCIQCZV4QeIrRXI0ydCNSaiJoUTnrOnVdbxbdxpXYnjP2ulTANBgkqhkiG9w0BAQsFAAOCAQEAZ9Pb21lrMiU28mrfmlpVPsJwbclKbwIAWFOOHqoTbD7VZ+oWI8BpROp9cHqfP404c42iFLyqqDMofEYLKbgKus7k7TEUAxdaf8vS6pSZfDTtBE90QZ5QLL8Y2pq58CoPU3G7PDb3vJPeUK2zvpuXrqd9qullk1mLn4hctVAhf30a9zCWzfx3DBNQrdifcZF1zvK4WWti/UAjWOYN8fswH9cXFd+dGATtbmXrEGmKmWaxtHMGr5+X03j+FbZW56VxVqqyitZDJQ/r4oshBbuu2/lmPy+Lw1qILPAEZuYKfVPcyF5HdVC6JZraCm//XVheqMO9/ZSpANiE475uD8vzk2YKMiaRXE/7uyCJhaYy3wW9w5eaVCJM1YWJaWtuluqDAAAAAAAABJgwggSUMIIDfKADAgECAhAB/aPrbsp1yIhDi3JLz7yRMA0GCSqGSIb3DQEBCwUAMGExCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMB4XDTEzMDMwODEyMDAwMFoXDTIzMDMwODEyMDAwMFowTTELMAkGA1UEBhMCVVMxFTATBgNVBAoTDERpZ2lDZXJ0IEluYzEnMCUGA1UEAxMeRGlnaUNlcnQgU0hBMiBTZWN1cmUgU2VydmVyIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3K5YkE3BxDAVkDVbbjyCFfUsXL3j2/9xQ/pkJYDU7hiiTfBm0ApzbhGYNhdkrzed/fpBhK/Hr4z+GnNNzzOXkKKWh1ODK7mmdUgtHVY3e9oxMhrXrKsG9KpdS7dHRt0qk8OQLnmAgO8TBGoUO7Wbkr7CB2VO/Nr8/3qu3Fx+VTEM6DkHpNe+L9MLatKx31/+V3RTOzWA3a6ORJiznw7T2uDX9Gspq0SnS1iEbZJLgcPac4sSl0iQBEV1Gt03MZeS6M1UDTvkwT85Xi6481x+EI6GQQCNRWZHsKFlzqCqKQlO85fr6C6rD3KnMA76x/T9FHfDpFsoV8Kz+YL9t0VYmwIDAQABo4IBWjCCAVYwEgYDVR0TAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMCAYYwNAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wewYDVR0fBHQwcjA3oDWgM4YxaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0R2xvYmFsUm9vdENBLmNybDA3oDWgM4YxaHR0cDovL2NybDQuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0R2xvYmFsUm9vdENBLmNybDA9BgNVHSAENjA0MDIGBFUdIAAwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzAdBgNVHQ4EFgQUD4BhHIIxYdUvKOeNRji0LOHG2eIwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUwDQYJKoZIhvcNAQELBQADggEBACM+30vSMUKltn5CXBpEzGnRaLRdS+AEIWxL4m3MseCXj6ZTCc2qKmXlOU8eg6VuXJiiJCbm+6Htk8cuAsZNSr+wQt942rOo+W3/IYVTNmBMds7sONzWUYDwxdbl1E0nZKubxz5x+0iXuDNtyRMH7paiGxgV9lxMQO2zwuz/ccHjR//UuQC0N0LaIMnqboruFAaufaJZmIioG28t9PLJFF8mzyyNfu03wKnVObmCvxkM6jSvACFo+K1z4sky2jglC1XTmh3waIbtLkE073ylUB2/OvnTwQgM5u0eilgl5Lh3rS1u9VLdtHSPq0kunTuTNCgfeM6U6se908ltHN5cMvNmCjImkVxP+7sgiYWmMt8FvcOXmlQiTNWFiWlrbpbqgwAAAAAAAAOzMIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBhMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBDQTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsBCSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7PT19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAOBgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbRTLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUwDQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/EsrhMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJFPnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0lsYSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQkCAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4A request-method GET response-head HTTP/1.1 200 OK
+Date: Mon, 04 Feb 2019 05:26:37 GMT
+Server: Taleo Web Server 8
+Last-Modified: Wed, 05 Sep 2018 07:18:14 GMT
+Accept-Ranges: bytes
+Content-Length: 14366
+Cache-Control: max-age=31536000
+Expires: Tue, 04 Feb 2020 05:26:37 GMT
+Content-Type: application/javascript
+ original-response-headers Date: Mon, 04 Feb 2019 05:26:37 GMT
+Server: Taleo Web Server 8
+Last-Modified: Wed, 05 Sep 2018 07:18:14 GMT
+Accept-Ranges: bytes
+Content-Length: 14366
+Cache-Control: max-age=31536000
+Expires: Tue, 04 Feb 2020 05:26:37 GMT
+Keep-Alive: timeout=5, max=93
+Connection: Keep-Alive
+Content-Type: application/javascript
+ uncompressed-len 0 net-response-time-onstart 229 net-response-time-onstop 230 alt-data 1;14366,javascript/moz-bytecode-20190128165852 alt-data-from-child 1   µ∂

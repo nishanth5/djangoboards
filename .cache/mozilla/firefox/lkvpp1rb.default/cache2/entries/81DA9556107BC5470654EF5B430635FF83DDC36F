@@ -1,0 +1,989 @@
+/*
+    http://www.JSON.org/json2.js
+    2010-03-20
+
+    Public Domain.
+
+    NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+
+    See http://www.JSON.org/js.html
+
+
+    This code should be minified before deployment.
+    See http://javascript.crockford.com/jsmin.html
+
+    USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
+    NOT CONTROL.
+
+
+    This file creates a global JSON object containing two methods: stringify
+    and parse.
+
+        JSON.stringify(value, replacer, space)
+            value       any JavaScript value, usually an object or array.
+
+            replacer    an optional parameter that determines how object
+                        values are stringified for objects. It can be a
+                        function or an array of strings.
+
+            space       an optional parameter that specifies the indentation
+                        of nested structures. If it is omitted, the text will
+                        be packed without extra whitespace. If it is a number,
+                        it will specify the number of spaces to indent at each
+                        level. If it is a string (such as '\t' or '&nbsp;'),
+                        it contains the characters used to indent at each level.
+
+            This method produces a JSON text from a JavaScript value.
+
+            When an object value is found, if the object contains a toJSON
+            method, its toJSON method will be called and the result will be
+            stringified. A toJSON method does not serialize: it returns the
+            value represented by the name/value pair that should be serialized,
+            or undefined if nothing should be serialized. The toJSON method
+            will be passed the key associated with the value, and this will be
+            bound to the value
+
+            For example, this would serialize Dates as ISO strings.
+
+                Date.prototype.toJSON = function (key) {
+                    function f(n) {
+                        // Format integers to have at least two digits.
+                        return n < 10 ? '0' + n : n;
+                    }
+
+                    return this.getUTCFullYear()   + '-' +
+                         f(this.getUTCMonth() + 1) + '-' +
+                         f(this.getUTCDate())      + 'T' +
+                         f(this.getUTCHours())     + ':' +
+                         f(this.getUTCMinutes())   + ':' +
+                         f(this.getUTCSeconds())   + 'Z';
+                };
+
+            You can provide an optional replacer method. It will be passed the
+            key and value of each member, with this bound to the containing
+            object. The value that is returned from your method will be
+            serialized. If your method returns undefined, then the member will
+            be excluded from the serialization.
+
+            If the replacer parameter is an array of strings, then it will be
+            used to select the members to be serialized. It filters the results
+            such that only members with keys listed in the replacer array are
+            stringified.
+
+            Values that do not have JSON representations, such as undefined or
+            functions, will not be serialized. Such values in objects will be
+            dropped; in arrays they will be replaced with null. You can use
+            a replacer function to replace those with JSON values.
+            JSON.stringify(undefined) returns undefined.
+
+            The optional space parameter produces a stringification of the
+            value that is filled with line breaks and indentation to make it
+            easier to read.
+
+            If the space parameter is a non-empty string, then that string will
+            be used for indentation. If the space parameter is a number, then
+            the indentation will be that many spaces.
+
+            Example:
+
+            text = JSON.stringify(['e', {pluribus: 'unum'}]);
+            // text is '["e",{"pluribus":"unum"}]'
+
+
+            text = JSON.stringify(['e', {pluribus: 'unum'}], null, '\t');
+            // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
+
+            text = JSON.stringify([new Date()], function (key, value) {
+                return this[key] instanceof Date ?
+                    'Date(' + this[key] + ')' : value;
+            });
+            // text is '["Date(---current time---)"]'
+
+
+        JSON.parse(text, reviver)
+            This method parses a JSON text to produce an object or array.
+            It can throw a SyntaxError exception.
+
+            The optional reviver parameter is a function that can filter and
+            transform the results. It receives each of the keys and values,
+            and its return value is used instead of the original value.
+            If it returns what it received, then the structure is not modified.
+            If it returns undefined then the member is deleted.
+
+            Example:
+
+            // Parse the text. Values that look like ISO date strings will
+            // be converted to Date objects.
+
+            myData = JSON.parse(text, function (key, value) {
+                var a;
+                if (typeof value === 'string') {
+                    a =
+/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                    if (a) {
+                        return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4],
+                            +a[5], +a[6]));
+                    }
+                }
+                return value;
+            });
+
+            myData = JSON.parse('["Date(09/09/2001)"]', function (key, value) {
+                var d;
+                if (typeof value === 'string' &&
+                        value.slice(0, 5) === 'Date(' &&
+                        value.slice(-1) === ')') {
+                    d = new Date(value.slice(5, -1));
+                    if (d) {
+                        return d;
+                    }
+                }
+                return value;
+            });
+
+
+    This is a reference implementation. You are free to copy, modify, or
+    redistribute.
+*/
+
+/*jslint evil: true, strict: false */
+
+/*members "", "\b", "\t", "\n", "\f", "\r", "\"", JSON, "\\", apply,
+    call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
+    getUTCMinutes, getUTCMonth, getUTCSeconds, hasOwnProperty, join,
+    lastIndex, length, parse, prototype, push, replace, slice, stringify,
+    test, toJSON, toString, valueOf
+*/
+
+
+// Create a JSON object only if one does not already exist. We create the
+// methods in a closure to avoid creating global variables.
+
+if (!this.JSON) {
+    this.JSON = {};
+}
+
+(function () {
+
+    function f(n) {
+        // Format integers to have at least two digits.
+        return n < 10 ? '0' + n : n;
+    }
+
+    if (typeof Date.prototype.toJSON !== 'function') {
+
+        Date.prototype.toJSON = function (key) {
+
+            return isFinite(this.valueOf()) ?
+                   this.getUTCFullYear()   + '-' +
+                 f(this.getUTCMonth() + 1) + '-' +
+                 f(this.getUTCDate())      + 'T' +
+                 f(this.getUTCHours())     + ':' +
+                 f(this.getUTCMinutes())   + ':' +
+                 f(this.getUTCSeconds())   + 'Z' : null;
+        };
+
+        String.prototype.toJSON =
+        Number.prototype.toJSON =
+        Boolean.prototype.toJSON = function (key) {
+            return this.valueOf();
+        };
+    }
+
+    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        gap,
+        indent,
+        meta = {    // table of character substitutions
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"' : '\\"',
+            '\\': '\\\\'
+        },
+        rep;
+
+
+    function quote(string) {
+
+// If the string contains no control characters, no quote characters, and no
+// backslash characters, then we can safely slap some quotes around it.
+// Otherwise we must also replace the offending characters with safe escape
+// sequences.
+
+        escapable.lastIndex = 0;
+        return escapable.test(string) ?
+            '"' + string.replace(escapable, function (a) {
+                var c = meta[a];
+                return typeof c === 'string' ? c :
+                    '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '"' :
+            '"' + string + '"';
+    }
+
+
+    function str(key, holder) {
+
+// Produce a string from holder[key].
+
+        var i,          // The loop counter.
+            k,          // The member key.
+            v,          // The member value.
+            length,
+            mind = gap,
+            partial,
+            value = holder[key];
+
+// If the value has a toJSON method, call it to obtain a replacement value.
+
+        if (value && typeof value === 'object' &&
+                typeof value.toJSON === 'function') {
+            value = value.toJSON(key);
+        }
+
+// If we were called with a replacer function, then call the replacer to
+// obtain a replacement value.
+
+        if (typeof rep === 'function') {
+            value = rep.call(holder, key, value);
+        }
+
+// What happens next depends on the value's type.
+
+        switch (typeof value) {
+        case 'string':
+            return quote(value);
+
+        case 'number':
+
+// JSON numbers must be finite. Encode non-finite numbers as null.
+
+            return isFinite(value) ? String(value) : 'null';
+
+        case 'boolean':
+        case 'null':
+
+// If the value is a boolean or null, convert it to a string. Note:
+// typeof null does not produce 'null'. The case is included here in
+// the remote chance that this gets fixed someday.
+
+            return String(value);
+
+// If the type is 'object', we might be dealing with an object or an array or
+// null.
+
+        case 'object':
+
+// Due to a specification blunder in ECMAScript, typeof null is 'object',
+// so watch out for that case.
+
+            if (!value) {
+                return 'null';
+            }
+
+// Make an array to hold the partial results of stringifying this object value.
+
+            gap += indent;
+            partial = [];
+
+// Is the value an array?
+
+            if (Object.prototype.toString.apply(value) === '[object Array]') {
+
+// The value is an array. Stringify every element. Use null as a placeholder
+// for non-JSON values.
+
+                length = value.length;
+                for (i = 0; i < length; i += 1) {
+                    partial[i] = str(i, value) || 'null';
+                }
+
+// Join all of the elements together, separated with commas, and wrap them in
+// brackets.
+
+                v = partial.length === 0 ? '[]' :
+                    gap ? '[\n' + gap +
+                            partial.join(',\n' + gap) + '\n' +
+                                mind + ']' :
+                          '[' + partial.join(',') + ']';
+                gap = mind;
+                return v;
+            }
+
+// If the replacer is an array, use it to select the members to be stringified.
+
+            if (rep && typeof rep === 'object') {
+                length = rep.length;
+                for (i = 0; i < length; i += 1) {
+                    k = rep[i];
+                    if (typeof k === 'string') {
+                        v = str(k, value);
+                        if (v) {
+                            partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                        }
+                    }
+                }
+            } else {
+
+// Otherwise, iterate through all of the keys in the object.
+
+                for (k in value) {
+                    if (Object.hasOwnProperty.call(value, k)) {
+                        v = str(k, value);
+                        if (v) {
+                            partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                        }
+                    }
+                }
+            }
+
+// Join all of the member texts together, separated with commas,
+// and wrap them in braces.
+
+            v = partial.length === 0 ? '{}' :
+                gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
+                        mind + '}' : '{' + partial.join(',') + '}';
+            gap = mind;
+            return v;
+        }
+    }
+
+// If the JSON object does not yet have a stringify method, give it one.
+
+    if (typeof JSON.stringify !== 'function') {
+        JSON.stringify = function (value, replacer, space) {
+
+// The stringify method takes a value and an optional replacer, and an optional
+// space parameter, and returns a JSON text. The replacer can be a function
+// that can replace values, or an array of strings that will select the keys.
+// A default replacer method can be provided. Use of the space parameter can
+// produce text that is more easily readable.
+
+            var i;
+            gap = '';
+            indent = '';
+
+// If the space parameter is a number, make an indent string containing that
+// many spaces.
+
+            if (typeof space === 'number') {
+                for (i = 0; i < space; i += 1) {
+                    indent += ' ';
+                }
+
+// If the space parameter is a string, it will be used as the indent string.
+
+            } else if (typeof space === 'string') {
+                indent = space;
+            }
+
+// If there is a replacer, it must be a function or an array.
+// Otherwise, throw an error.
+
+            rep = replacer;
+            if (replacer && typeof replacer !== 'function' &&
+                    (typeof replacer !== 'object' ||
+                     typeof replacer.length !== 'number')) {
+                throw new Error('JSON.stringify');
+            }
+
+// Make a fake root object containing our value under the key of ''.
+// Return the result of stringifying the value.
+
+            return str('', {'': value});
+        };
+    }
+
+
+// If the JSON object does not yet have a parse method, give it one.
+
+    if (typeof JSON.parse !== 'function') {
+        JSON.parse = function (text, reviver) {
+
+// The parse method takes a text and an optional reviver function, and returns
+// a JavaScript value if the text is a valid JSON text.
+
+            var j;
+
+            function walk(holder, key) {
+
+// The walk method is used to recursively walk the resulting structure so
+// that modifications can be made.
+
+                var k, v, value = holder[key];
+                if (value && typeof value === 'object') {
+                    for (k in value) {
+                        if (Object.hasOwnProperty.call(value, k)) {
+                            v = walk(value, k);
+                            if (v !== undefined) {
+                                value[k] = v;
+                            } else {
+                                delete value[k];
+                            }
+                        }
+                    }
+                }
+                return reviver.call(holder, key, value);
+            }
+
+
+// Parsing happens in four stages. In the first stage, we replace certain
+// Unicode characters with escape sequences. JavaScript handles many characters
+// incorrectly, either silently deleting them, or treating them as line endings.
+
+            text = String(text);
+            cx.lastIndex = 0;
+            if (cx.test(text)) {
+                text = text.replace(cx, function (a) {
+                    return '\\u' +
+                        ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                });
+            }
+
+// In the second stage, we run the text against regular expressions that look
+// for non-JSON patterns. We are especially concerned with '()' and 'new'
+// because they can cause invocation, and '=' because it can cause mutation.
+// But just to be safe, we want to reject all unexpected forms.
+
+// We split the second stage into 4 regexp operations in order to work around
+// crippling inefficiencies in IE's and Safari's regexp engines. First we
+// replace the JSON backslash pairs with '@' (a non-JSON character). Second, we
+// replace all simple value tokens with ']' characters. Third, we delete all
+// open brackets that follow a colon or comma or that begin the text. Finally,
+// we look to see that the remaining characters are only whitespace or ']' or
+// ',' or ':' or '{' or '}'. If that is so, then the text is safe for eval.
+
+            if (/^[\],:{}\s]*$/.
+test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
+replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+// In the third stage we use the eval function to compile the text into a
+// JavaScript structure. The '{' operator is subject to a syntactic ambiguity
+// in JavaScript: it can begin a block or an object literal. We wrap the text
+// in parens to eliminate the ambiguity.
+
+                j = eval('(' + text + ')');
+
+// In the optional fourth stage, we recursively walk the new structure, passing
+// each name/value pair to a reviver function for possible transformation.
+
+                return typeof reviver === 'function' ?
+                    walk({'': j}, '') : j;
+            }
+
+// If the text is not JSON parseable, then a SyntaxError is thrown.
+
+            throw new SyntaxError('JSON.parse');
+        };
+    }
+}());
+         20190128165852%                                             !   æC      / * 
+         h t t p : / / w w w . J S O N . o r g / j s o n 2 . j s 
+         2 0 1 0 - 0 3 - 2 0 
+ 
+         P u b l i c   D o m a i n . 
+ 
+         N O   W A R R A N T Y   E X P R E S S E D   O R   I M P L I E D .   U S E   A T   Y O U R   O W N   R I S K . 
+ 
+         S e e   h t t p : / / w w w . J S O N . o r g / j s . h t m l 
+ 
+ 
+         T h i s   c o d e   s h o u l d   b e   m i n i f i e d   b e f o r e   d e p l o y m e n t . 
+         S e e   h t t p : / / j a v a s c r i p t . c r o c k f o r d . c o m / j s m i n . h t m l 
+ 
+         U S E   Y O U R   O W N   C O P Y .   I T   I S   E X T R E M E L Y   U N W I S E   T O   L O A D   C O D E   F R O M   S E R V E R S   Y O U   D O 
+         N O T   C O N T R O L . 
+ 
+ 
+         T h i s   f i l e   c r e a t e s   a   g l o b a l   J S O N   o b j e c t   c o n t a i n i n g   t w o   m e t h o d s :   s t r i n g i f y 
+         a n d   p a r s e . 
+ 
+                 J S O N . s t r i n g i f y ( v a l u e ,   r e p l a c e r ,   s p a c e ) 
+                         v a l u e               a n y   J a v a S c r i p t   v a l u e ,   u s u a l l y   a n   o b j e c t   o r   a r r a y . 
+ 
+                         r e p l a c e r         a n   o p t i o n a l   p a r a m e t e r   t h a t   d e t e r m i n e s   h o w   o b j e c t 
+                                                 v a l u e s   a r e   s t r i n g i f i e d   f o r   o b j e c t s .   I t   c a n   b e   a 
+                                                 f u n c t i o n   o r   a n   a r r a y   o f   s t r i n g s . 
+ 
+                         s p a c e               a n   o p t i o n a l   p a r a m e t e r   t h a t   s p e c i f i e s   t h e   i n d e n t a t i o n 
+                                                 o f   n e s t e d   s t r u c t u r e s .   I f   i t   i s   o m i t t e d ,   t h e   t e x t   w i l l 
+                                                 b e   p a c k e d   w i t h o u t   e x t r a   w h i t e s p a c e .   I f   i t   i s   a   n u m b e r , 
+                                                 i t   w i l l   s p e c i f y   t h e   n u m b e r   o f   s p a c e s   t o   i n d e n t   a t   e a c h 
+                                                 l e v e l .   I f   i t   i s   a   s t r i n g   ( s u c h   a s   ' \ t '   o r   ' & n b s p ; ' ) , 
+                                                 i t   c o n t a i n s   t h e   c h a r a c t e r s   u s e d   t o   i n d e n t   a t   e a c h   l e v e l . 
+ 
+                         T h i s   m e t h o d   p r o d u c e s   a   J S O N   t e x t   f r o m   a   J a v a S c r i p t   v a l u e . 
+ 
+                         W h e n   a n   o b j e c t   v a l u e   i s   f o u n d ,   i f   t h e   o b j e c t   c o n t a i n s   a   t o J S O N 
+                         m e t h o d ,   i t s   t o J S O N   m e t h o d   w i l l   b e   c a l l e d   a n d   t h e   r e s u l t   w i l l   b e 
+                         s t r i n g i f i e d .   A   t o J S O N   m e t h o d   d o e s   n o t   s e r i a l i z e :   i t   r e t u r n s   t h e 
+                         v a l u e   r e p r e s e n t e d   b y   t h e   n a m e / v a l u e   p a i r   t h a t   s h o u l d   b e   s e r i a l i z e d , 
+                         o r   u n d e f i n e d   i f   n o t h i n g   s h o u l d   b e   s e r i a l i z e d .   T h e   t o J S O N   m e t h o d 
+                         w i l l   b e   p a s s e d   t h e   k e y   a s s o c i a t e d   w i t h   t h e   v a l u e ,   a n d   t h i s   w i l l   b e 
+                         b o u n d   t o   t h e   v a l u e 
+ 
+                         F o r   e x a m p l e ,   t h i s   w o u l d   s e r i a l i z e   D a t e s   a s   I S O   s t r i n g s . 
+ 
+                                 D a t e . p r o t o t y p e . t o J S O N   =   f u n c t i o n   ( k e y )   { 
+                                         f u n c t i o n   f ( n )   { 
+                                                 / /   F o r m a t   i n t e g e r s   t o   h a v e   a t   l e a s t   t w o   d i g i t s . 
+                                                 r e t u r n   n   <   1 0   ?   ' 0 '   +   n   :   n ; 
+                                         } 
+ 
+                                         r e t u r n   t h i s . g e t U T C F u l l Y e a r ( )       +   ' - '   + 
+                                                   f ( t h i s . g e t U T C M o n t h ( )   +   1 )   +   ' - '   + 
+                                                   f ( t h i s . g e t U T C D a t e ( ) )             +   ' T '   + 
+                                                   f ( t h i s . g e t U T C H o u r s ( ) )           +   ' : '   + 
+                                                   f ( t h i s . g e t U T C M i n u t e s ( ) )       +   ' : '   + 
+                                                   f ( t h i s . g e t U T C S e c o n d s ( ) )       +   ' Z ' ; 
+                                 } ; 
+ 
+                         Y o u   c a n   p r o v i d e   a n   o p t i o n a l   r e p l a c e r   m e t h o d .   I t   w i l l   b e   p a s s e d   t h e 
+                         k e y   a n d   v a l u e   o f   e a c h   m e m b e r ,   w i t h   t h i s   b o u n d   t o   t h e   c o n t a i n i n g 
+                         o b j e c t .   T h e   v a l u e   t h a t   i s   r e t u r n e d   f r o m   y o u r   m e t h o d   w i l l   b e 
+                         s e r i a l i z e d .   I f   y o u r   m e t h o d   r e t u r n s   u n d e f i n e d ,   t h e n   t h e   m e m b e r   w i l l 
+                         b e   e x c l u d e d   f r o m   t h e   s e r i a l i z a t i o n . 
+ 
+                         I f   t h e   r e p l a c e r   p a r a m e t e r   i s   a n   a r r a y   o f   s t r i n g s ,   t h e n   i t   w i l l   b e 
+                         u s e d   t o   s e l e c t   t h e   m e m b e r s   t o   b e   s e r i a l i z e d .   I t   f i l t e r s   t h e   r e s u l t s 
+                         s u c h   t h a t   o n l y   m e m b e r s   w i t h   k e y s   l i s t e d   i n   t h e   r e p l a c e r   a r r a y   a r e 
+                         s t r i n g i f i e d . 
+ 
+                         V a l u e s   t h a t   d o   n o t   h a v e   J S O N   r e p r e s e n t a t i o n s ,   s u c h   a s   u n d e f i n e d   o r 
+                         f u n c t i o n s ,   w i l l   n o t   b e   s e r i a l i z e d .   S u c h   v a l u e s   i n   o b j e c t s   w i l l   b e 
+                         d r o p p e d ;   i n   a r r a y s   t h e y   w i l l   b e   r e p l a c e d   w i t h   n u l l .   Y o u   c a n   u s e 
+                         a   r e p l a c e r   f u n c t i o n   t o   r e p l a c e   t h o s e   w i t h   J S O N   v a l u e s . 
+                         J S O N . s t r i n g i f y ( u n d e f i n e d )   r e t u r n s   u n d e f i n e d . 
+ 
+                         T h e   o p t i o n a l   s p a c e   p a r a m e t e r   p r o d u c e s   a   s t r i n g i f i c a t i o n   o f   t h e 
+                         v a l u e   t h a t   i s   f i l l e d   w i t h   l i n e   b r e a k s   a n d   i n d e n t a t i o n   t o   m a k e   i t 
+                         e a s i e r   t o   r e a d . 
+ 
+                         I f   t h e   s p a c e   p a r a m e t e r   i s   a   n o n - e m p t y   s t r i n g ,   t h e n   t h a t   s t r i n g   w i l l 
+                         b e   u s e d   f o r   i n d e n t a t i o n .   I f   t h e   s p a c e   p a r a m e t e r   i s   a   n u m b e r ,   t h e n 
+                         t h e   i n d e n t a t i o n   w i l l   b e   t h a t   m a n y   s p a c e s . 
+ 
+                         E x a m p l e : 
+ 
+                         t e x t   =   J S O N . s t r i n g i f y ( [ ' e ' ,   { p l u r i b u s :   ' u n u m ' } ] ) ; 
+                         / /   t e x t   i s   ' [ " e " , { " p l u r i b u s " : " u n u m " } ] ' 
+ 
+ 
+                         t e x t   =   J S O N . s t r i n g i f y ( [ ' e ' ,   { p l u r i b u s :   ' u n u m ' } ] ,   n u l l ,   ' \ t ' ) ; 
+                         / /   t e x t   i s   ' [ \ n \ t " e " , \ n \ t { \ n \ t \ t " p l u r i b u s " :   " u n u m " \ n \ t } \ n ] ' 
+ 
+                         t e x t   =   J S O N . s t r i n g i f y ( [ n e w   D a t e ( ) ] ,   f u n c t i o n   ( k e y ,   v a l u e )   { 
+                                 r e t u r n   t h i s [ k e y ]   i n s t a n c e o f   D a t e   ? 
+                                         ' D a t e ( '   +   t h i s [ k e y ]   +   ' ) '   :   v a l u e ; 
+                         } ) ; 
+                         / /   t e x t   i s   ' [ " D a t e ( - - - c u r r e n t   t i m e - - - ) " ] ' 
+ 
+ 
+                 J S O N . p a r s e ( t e x t ,   r e v i v e r ) 
+                         T h i s   m e t h o d   p a r s e s   a   J S O N   t e x t   t o   p r o d u c e   a n   o b j e c t   o r   a r r a y . 
+                         I t   c a n   t h r o w   a   S y n t a x E r r o r   e x c e p t i o n . 
+ 
+                         T h e   o p t i o n a l   r e v i v e r   p a r a m e t e r   i s   a   f u n c t i o n   t h a t   c a n   f i l t e r   a n d 
+                         t r a n s f o r m   t h e   r e s u l t s .   I t   r e c e i v e s   e a c h   o f   t h e   k e y s   a n d   v a l u e s , 
+                         a n d   i t s   r e t u r n   v a l u e   i s   u s e d   i n s t e a d   o f   t h e   o r i g i n a l   v a l u e . 
+                         I f   i t   r e t u r n s   w h a t   i t   r e c e i v e d ,   t h e n   t h e   s t r u c t u r e   i s   n o t   m o d i f i e d . 
+                         I f   i t   r e t u r n s   u n d e f i n e d   t h e n   t h e   m e m b e r   i s   d e l e t e d . 
+ 
+                         E x a m p l e : 
+ 
+                         / /   P a r s e   t h e   t e x t .   V a l u e s   t h a t   l o o k   l i k e   I S O   d a t e   s t r i n g s   w i l l 
+                         / /   b e   c o n v e r t e d   t o   D a t e   o b j e c t s . 
+ 
+                         m y D a t a   =   J S O N . p a r s e ( t e x t ,   f u n c t i o n   ( k e y ,   v a l u e )   { 
+                                 v a r   a ; 
+                                 i f   ( t y p e o f   v a l u e   = = =   ' s t r i n g ' )   { 
+                                         a   = 
+ / ^ ( \ d { 4 } ) - ( \ d { 2 } ) - ( \ d { 2 } ) T ( \ d { 2 } ) : ( \ d { 2 } ) : ( \ d { 2 } ( ? : \ . \ d * ) ? ) Z $ / . e x e c ( v a l u e ) ; 
+                                         i f   ( a )   { 
+                                                 r e t u r n   n e w   D a t e ( D a t e . U T C ( + a [ 1 ] ,   + a [ 2 ]   -   1 ,   + a [ 3 ] ,   + a [ 4 ] , 
+                                                         + a [ 5 ] ,   + a [ 6 ] ) ) ; 
+                                         } 
+                                 } 
+                                 r e t u r n   v a l u e ; 
+                         } ) ; 
+ 
+                         m y D a t a   =   J S O N . p a r s e ( ' [ " D a t e ( 0 9 / 0 9 / 2 0 0 1 ) " ] ' ,   f u n c t i o n   ( k e y ,   v a l u e )   { 
+                                 v a r   d ; 
+                                 i f   ( t y p e o f   v a l u e   = = =   ' s t r i n g '   & & 
+                                                 v a l u e . s l i c e ( 0 ,   5 )   = = =   ' D a t e ( '   & & 
+                                                 v a l u e . s l i c e ( - 1 )   = = =   ' ) ' )   { 
+                                         d   =   n e w   D a t e ( v a l u e . s l i c e ( 5 ,   - 1 ) ) ; 
+                                         i f   ( d )   { 
+                                                 r e t u r n   d ; 
+                                         } 
+                                 } 
+                                 r e t u r n   v a l u e ; 
+                         } ) ; 
+ 
+ 
+         T h i s   i s   a   r e f e r e n c e   i m p l e m e n t a t i o n .   Y o u   a r e   f r e e   t o   c o p y ,   m o d i f y ,   o r 
+         r e d i s t r i b u t e . 
+ * / 
+ 
+ / * j s l i n t   e v i l :   t r u e ,   s t r i c t :   f a l s e   * / 
+ 
+ / * m e m b e r s   " " ,   " \ b " ,   " \ t " ,   " \ n " ,   " \ f " ,   " \ r " ,   " \ " " ,   J S O N ,   " \ \ " ,   a p p l y , 
+         c a l l ,   c h a r C o d e A t ,   g e t U T C D a t e ,   g e t U T C F u l l Y e a r ,   g e t U T C H o u r s , 
+         g e t U T C M i n u t e s ,   g e t U T C M o n t h ,   g e t U T C S e c o n d s ,   h a s O w n P r o p e r t y ,   j o i n , 
+         l a s t I n d e x ,   l e n g t h ,   p a r s e ,   p r o t o t y p e ,   p u s h ,   r e p l a c e ,   s l i c e ,   s t r i n g i f y , 
+         t e s t ,   t o J S O N ,   t o S t r i n g ,   v a l u e O f 
+ * / 
+ 
+ 
+ / /   C r e a t e   a   J S O N   o b j e c t   o n l y   i f   o n e   d o e s   n o t   a l r e a d y   e x i s t .   W e   c r e a t e   t h e 
+ / /   m e t h o d s   i n   a   c l o s u r e   t o   a v o i d   c r e a t i n g   g l o b a l   v a r i a b l e s . 
+ 
+ i f   ( ! t h i s . J S O N )   { 
+         t h i s . J S O N   =   { } ; 
+ } 
+ 
+ ( f u n c t i o n   ( )   { 
+ 
+         f u n c t i o n   f ( n )   { 
+                 / /   F o r m a t   i n t e g e r s   t o   h a v e   a t   l e a s t   t w o   d i g i t s . 
+                 r e t u r n   n   <   1 0   ?   ' 0 '   +   n   :   n ; 
+         } 
+ 
+         i f   ( t y p e o f   D a t e . p r o t o t y p e . t o J S O N   ! = =   ' f u n c t i o n ' )   { 
+ 
+                 D a t e . p r o t o t y p e . t o J S O N   =   f u n c t i o n   ( k e y )   { 
+ 
+                         r e t u r n   i s F i n i t e ( t h i s . v a l u e O f ( ) )   ? 
+                                       t h i s . g e t U T C F u l l Y e a r ( )       +   ' - '   + 
+                                   f ( t h i s . g e t U T C M o n t h ( )   +   1 )   +   ' - '   + 
+                                   f ( t h i s . g e t U T C D a t e ( ) )             +   ' T '   + 
+                                   f ( t h i s . g e t U T C H o u r s ( ) )           +   ' : '   + 
+                                   f ( t h i s . g e t U T C M i n u t e s ( ) )       +   ' : '   + 
+                                   f ( t h i s . g e t U T C S e c o n d s ( ) )       +   ' Z '   :   n u l l ; 
+                 } ; 
+ 
+                 S t r i n g . p r o t o t y p e . t o J S O N   = 
+                 N u m b e r . p r o t o t y p e . t o J S O N   = 
+                 B o o l e a n . p r o t o t y p e . t o J S O N   =   f u n c t i o n   ( k e y )   { 
+                         r e t u r n   t h i s . v a l u e O f ( ) ; 
+                 } ; 
+         } 
+ 
+         v a r   c x   =   / [ \ u 0 0 0 0 \ u 0 0 a d \ u 0 6 0 0 - \ u 0 6 0 4 \ u 0 7 0 f \ u 1 7 b 4 \ u 1 7 b 5 \ u 2 0 0 c - \ u 2 0 0 f \ u 2 0 2 8 - \ u 2 0 2 f \ u 2 0 6 0 - \ u 2 0 6 f \ u f e f f \ u f f f 0 - \ u f f f f ] / g , 
+                 e s c a p a b l e   =   / [ \ \ \ " \ x 0 0 - \ x 1 f \ x 7 f - \ x 9 f \ u 0 0 a d \ u 0 6 0 0 - \ u 0 6 0 4 \ u 0 7 0 f \ u 1 7 b 4 \ u 1 7 b 5 \ u 2 0 0 c - \ u 2 0 0 f \ u 2 0 2 8 - \ u 2 0 2 f \ u 2 0 6 0 - \ u 2 0 6 f \ u f e f f \ u f f f 0 - \ u f f f f ] / g , 
+                 g a p , 
+                 i n d e n t , 
+                 m e t a   =   {         / /   t a b l e   o f   c h a r a c t e r   s u b s t i t u t i o n s 
+                         ' \ b ' :   ' \ \ b ' , 
+                         ' \ t ' :   ' \ \ t ' , 
+                         ' \ n ' :   ' \ \ n ' , 
+                         ' \ f ' :   ' \ \ f ' , 
+                         ' \ r ' :   ' \ \ r ' , 
+                         ' " '   :   ' \ \ " ' , 
+                         ' \ \ ' :   ' \ \ \ \ ' 
+                 } , 
+                 r e p ; 
+ 
+ 
+         f u n c t i o n   q u o t e ( s t r i n g )   { 
+ 
+ / /   I f   t h e   s t r i n g   c o n t a i n s   n o   c o n t r o l   c h a r a c t e r s ,   n o   q u o t e   c h a r a c t e r s ,   a n d   n o 
+ / /   b a c k s l a s h   c h a r a c t e r s ,   t h e n   w e   c a n   s a f e l y   s l a p   s o m e   q u o t e s   a r o u n d   i t . 
+ / /   O t h e r w i s e   w e   m u s t   a l s o   r e p l a c e   t h e   o f f e n d i n g   c h a r a c t e r s   w i t h   s a f e   e s c a p e 
+ / /   s e q u e n c e s . 
+ 
+                 e s c a p a b l e . l a s t I n d e x   =   0 ; 
+                 r e t u r n   e s c a p a b l e . t e s t ( s t r i n g )   ? 
+                         ' " '   +   s t r i n g . r e p l a c e ( e s c a p a b l e ,   f u n c t i o n   ( a )   { 
+                                 v a r   c   =   m e t a [ a ] ; 
+                                 r e t u r n   t y p e o f   c   = = =   ' s t r i n g '   ?   c   : 
+                                         ' \ \ u '   +   ( ' 0 0 0 0 '   +   a . c h a r C o d e A t ( 0 ) . t o S t r i n g ( 1 6 ) ) . s l i c e ( - 4 ) ; 
+                         } )   +   ' " '   : 
+                         ' " '   +   s t r i n g   +   ' " ' ; 
+         } 
+ 
+ 
+         f u n c t i o n   s t r ( k e y ,   h o l d e r )   { 
+ 
+ / /   P r o d u c e   a   s t r i n g   f r o m   h o l d e r [ k e y ] . 
+ 
+                 v a r   i ,                     / /   T h e   l o o p   c o u n t e r . 
+                         k ,                     / /   T h e   m e m b e r   k e y . 
+                         v ,                     / /   T h e   m e m b e r   v a l u e . 
+                         l e n g t h , 
+                         m i n d   =   g a p , 
+                         p a r t i a l , 
+                         v a l u e   =   h o l d e r [ k e y ] ; 
+ 
+ / /   I f   t h e   v a l u e   h a s   a   t o J S O N   m e t h o d ,   c a l l   i t   t o   o b t a i n   a   r e p l a c e m e n t   v a l u e . 
+ 
+                 i f   ( v a l u e   & &   t y p e o f   v a l u e   = = =   ' o b j e c t '   & & 
+                                 t y p e o f   v a l u e . t o J S O N   = = =   ' f u n c t i o n ' )   { 
+                         v a l u e   =   v a l u e . t o J S O N ( k e y ) ; 
+                 } 
+ 
+ / /   I f   w e   w e r e   c a l l e d   w i t h   a   r e p l a c e r   f u n c t i o n ,   t h e n   c a l l   t h e   r e p l a c e r   t o 
+ / /   o b t a i n   a   r e p l a c e m e n t   v a l u e . 
+ 
+                 i f   ( t y p e o f   r e p   = = =   ' f u n c t i o n ' )   { 
+                         v a l u e   =   r e p . c a l l ( h o l d e r ,   k e y ,   v a l u e ) ; 
+                 } 
+ 
+ / /   W h a t   h a p p e n s   n e x t   d e p e n d s   o n   t h e   v a l u e ' s   t y p e . 
+ 
+                 s w i t c h   ( t y p e o f   v a l u e )   { 
+                 c a s e   ' s t r i n g ' : 
+                         r e t u r n   q u o t e ( v a l u e ) ; 
+ 
+                 c a s e   ' n u m b e r ' : 
+ 
+ / /   J S O N   n u m b e r s   m u s t   b e   f i n i t e .   E n c o d e   n o n - f i n i t e   n u m b e r s   a s   n u l l . 
+ 
+                         r e t u r n   i s F i n i t e ( v a l u e )   ?   S t r i n g ( v a l u e )   :   ' n u l l ' ; 
+ 
+                 c a s e   ' b o o l e a n ' : 
+                 c a s e   ' n u l l ' : 
+ 
+ / /   I f   t h e   v a l u e   i s   a   b o o l e a n   o r   n u l l ,   c o n v e r t   i t   t o   a   s t r i n g .   N o t e : 
+ / /   t y p e o f   n u l l   d o e s   n o t   p r o d u c e   ' n u l l ' .   T h e   c a s e   i s   i n c l u d e d   h e r e   i n 
+ / /   t h e   r e m o t e   c h a n c e   t h a t   t h i s   g e t s   f i x e d   s o m e d a y . 
+ 
+                         r e t u r n   S t r i n g ( v a l u e ) ; 
+ 
+ / /   I f   t h e   t y p e   i s   ' o b j e c t ' ,   w e   m i g h t   b e   d e a l i n g   w i t h   a n   o b j e c t   o r   a n   a r r a y   o r 
+ / /   n u l l . 
+ 
+                 c a s e   ' o b j e c t ' : 
+ 
+ / /   D u e   t o   a   s p e c i f i c a t i o n   b l u n d e r   i n   E C M A S c r i p t ,   t y p e o f   n u l l   i s   ' o b j e c t ' , 
+ / /   s o   w a t c h   o u t   f o r   t h a t   c a s e . 
+ 
+                         i f   ( ! v a l u e )   { 
+                                 r e t u r n   ' n u l l ' ; 
+                         } 
+ 
+ / /   M a k e   a n   a r r a y   t o   h o l d   t h e   p a r t i a l   r e s u l t s   o f   s t r i n g i f y i n g   t h i s   o b j e c t   v a l u e . 
+ 
+                         g a p   + =   i n d e n t ; 
+                         p a r t i a l   =   [ ] ; 
+ 
+ / /   I s   t h e   v a l u e   a n   a r r a y ? 
+ 
+                         i f   ( O b j e c t . p r o t o t y p e . t o S t r i n g . a p p l y ( v a l u e )   = = =   ' [ o b j e c t   A r r a y ] ' )   { 
+ 
+ / /   T h e   v a l u e   i s   a n   a r r a y .   S t r i n g i f y   e v e r y   e l e m e n t .   U s e   n u l l   a s   a   p l a c e h o l d e r 
+ / /   f o r   n o n - J S O N   v a l u e s . 
+ 
+                                 l e n g t h   =   v a l u e . l e n g t h ; 
+                                 f o r   ( i   =   0 ;   i   <   l e n g t h ;   i   + =   1 )   { 
+                                         p a r t i a l [ i ]   =   s t r ( i ,   v a l u e )   | |   ' n u l l ' ; 
+                                 } 
+ 
+ / /   J o i n   a l l   o f   t h e   e l e m e n t s   t o g e t h e r ,   s e p a r a t e d   w i t h   c o m m a s ,   a n d   w r a p   t h e m   i n 
+ / /   b r a c k e t s . 
+ 
+                                 v   =   p a r t i a l . l e n g t h   = = =   0   ?   ' [ ] '   : 
+                                         g a p   ?   ' [ \ n '   +   g a p   + 
+                                                         p a r t i a l . j o i n ( ' , \ n '   +   g a p )   +   ' \ n '   + 
+                                                                 m i n d   +   ' ] '   : 
+                                                     ' [ '   +   p a r t i a l . j o i n ( ' , ' )   +   ' ] ' ; 
+                                 g a p   =   m i n d ; 
+                                 r e t u r n   v ; 
+                         } 
+ 
+ / /   I f   t h e   r e p l a c e r   i s   a n   a r r a y ,   u s e   i t   t o   s e l e c t   t h e   m e m b e r s   t o   b e   s t r i n g i f i e d . 
+ 
+                         i f   ( r e p   & &   t y p e o f   r e p   = = =   ' o b j e c t ' )   { 
+                                 l e n g t h   =   r e p . l e n g t h ; 
+                                 f o r   ( i   =   0 ;   i   <   l e n g t h ;   i   + =   1 )   { 
+                                         k   =   r e p [ i ] ; 
+                                         i f   ( t y p e o f   k   = = =   ' s t r i n g ' )   { 
+                                                 v   =   s t r ( k ,   v a l u e ) ; 
+                                                 i f   ( v )   { 
+                                                         p a r t i a l . p u s h ( q u o t e ( k )   +   ( g a p   ?   ' :   '   :   ' : ' )   +   v ) ; 
+                                                 } 
+                                         } 
+                                 } 
+                         }   e l s e   { 
+ 
+ / /   O t h e r w i s e ,   i t e r a t e   t h r o u g h   a l l   o f   t h e   k e y s   i n   t h e   o b j e c t . 
+ 
+                                 f o r   ( k   i n   v a l u e )   { 
+                                         i f   ( O b j e c t . h a s O w n P r o p e r t y . c a l l ( v a l u e ,   k ) )   { 
+                                                 v   =   s t r ( k ,   v a l u e ) ; 
+                                                 i f   ( v )   { 
+                                                         p a r t i a l . p u s h ( q u o t e ( k )   +   ( g a p   ?   ' :   '   :   ' : ' )   +   v ) ; 
+                                                 } 
+                                         } 
+                                 } 
+                         } 
+ 
+ / /   J o i n   a l l   o f   t h e   m e m b e r   t e x t s   t o g e t h e r ,   s e p a r a t e d   w i t h   c o m m a s , 
+ / /   a n d   w r a p   t h e m   i n   b r a c e s . 
+ 
+                         v   =   p a r t i a l . l e n g t h   = = =   0   ?   ' { } '   : 
+                                 g a p   ?   ' { \ n '   +   g a p   +   p a r t i a l . j o i n ( ' , \ n '   +   g a p )   +   ' \ n '   + 
+                                                 m i n d   +   ' } '   :   ' { '   +   p a r t i a l . j o i n ( ' , ' )   +   ' } ' ; 
+                         g a p   =   m i n d ; 
+                         r e t u r n   v ; 
+                 } 
+         } 
+ 
+ / /   I f   t h e   J S O N   o b j e c t   d o e s   n o t   y e t   h a v e   a   s t r i n g i f y   m e t h o d ,   g i v e   i t   o n e . 
+ 
+         i f   ( t y p e o f   J S O N . s t r i n g i f y   ! = =   ' f u n c t i o n ' )   { 
+                 J S O N . s t r i n g i f y   =   f u n c t i o n   ( v a l u e ,   r e p l a c e r ,   s p a c e )   { 
+ 
+ / /   T h e   s t r i n g i f y   m e t h o d   t a k e s   a   v a l u e   a n d   a n   o p t i o n a l   r e p l a c e r ,   a n d   a n   o p t i o n a l 
+ / /   s p a c e   p a r a m e t e r ,   a n d   r e t u r n s   a   J S O N   t e x t .   T h e   r e p l a c e r   c a n   b e   a   f u n c t i o n 
+ / /   t h a t   c a n   r e p l a c e   v a l u e s ,   o r   a n   a r r a y   o f   s t r i n g s   t h a t   w i l l   s e l e c t   t h e   k e y s . 
+ / /   A   d e f a u l t   r e p l a c e r   m e t h o d   c a n   b e   p r o v i d e d .   U s e   o f   t h e   s p a c e   p a r a m e t e r   c a n 
+ / /   p r o d u c e   t e x t   t h a t   i s   m o r e   e a s i l y   r e a d a b l e . 
+ 
+                         v a r   i ; 
+                         g a p   =   ' ' ; 
+                         i n d e n t   =   ' ' ; 
+ 
+ / /   I f   t h e   s p a c e   p a r a m e t e r   i s   a   n u m b e r ,   m a k e   a n   i n d e n t   s t r i n g   c o n t a i n i n g   t h a t 
+ / /   m a n y   s p a c e s . 
+ 
+                         i f   ( t y p e o f   s p a c e   = = =   ' n u m b e r ' )   { 
+                                 f o r   ( i   =   0 ;   i   <   s p a c e ;   i   + =   1 )   { 
+                                         i n d e n t   + =   '   ' ; 
+                                 } 
+ 
+ / /   I f   t h e   s p a c e   p a r a m e t e r   i s   a   s t r i n g ,   i t   w i l l   b e   u s e d   a s   t h e   i n d e n t   s t r i n g . 
+ 
+                         }   e l s e   i f   ( t y p e o f   s p a c e   = = =   ' s t r i n g ' )   { 
+                                 i n d e n t   =   s p a c e ; 
+                         } 
+ 
+ / /   I f   t h e r e   i s   a   r e p l a c e r ,   i t   m u s t   b e   a   f u n c t i o n   o r   a n   a r r a y . 
+ / /   O t h e r w i s e ,   t h r o w   a n   e r r o r . 
+ 
+                         r e p   =   r e p l a c e r ; 
+                         i f   ( r e p l a c e r   & &   t y p e o f   r e p l a c e r   ! = =   ' f u n c t i o n '   & & 
+                                         ( t y p e o f   r e p l a c e r   ! = =   ' o b j e c t '   | | 
+                                           t y p e o f   r e p l a c e r . l e n g t h   ! = =   ' n u m b e r ' ) )   { 
+                                 t h r o w   n e w   E r r o r ( ' J S O N . s t r i n g i f y ' ) ; 
+                         } 
+ 
+ / /   M a k e   a   f a k e   r o o t   o b j e c t   c o n t a i n i n g   o u r   v a l u e   u n d e r   t h e   k e y   o f   ' ' . 
+ / /   R e t u r n   t h e   r e s u l t   o f   s t r i n g i f y i n g   t h e   v a l u e . 
+ 
+                         r e t u r n   s t r ( ' ' ,   { ' ' :   v a l u e } ) ; 
+                 } ; 
+         } 
+ 
+ 
+ / /   I f   t h e   J S O N   o b j e c t   d o e s   n o t   y e t   h a v e   a   p a r s e   m e t h o d ,   g i v e   i t   o n e . 
+ 
+         i f   ( t y p e o f   J S O N . p a r s e   ! = =   ' f u n c t i o n ' )   { 
+                 J S O N . p a r s e   =   f u n c t i o n   ( t e x t ,   r e v i v e r )   { 
+ 
+ / /   T h e   p a r s e   m e t h o d   t a k e s   a   t e x t   a n d   a n   o p t i o n a l   r e v i v e r   f u n c t i o n ,   a n d   r e t u r n s 
+ / /   a   J a v a S c r i p t   v a l u e   i f   t h e   t e x t   i s   a   v a l i d   J S O N   t e x t . 
+ 
+                         v a r   j ; 
+ 
+                         f u n c t i o n   w a l k ( h o l d e r ,   k e y )   { 
+ 
+ / /   T h e   w a l k   m e t h o d   i s   u s e d   t o   r e c u r s i v e l y   w a l k   t h e   r e s u l t i n g   s t r u c t u r e   s o 
+ / /   t h a t   m o d i f i c a t i o n s   c a n   b e   m a d e . 
+ 
+                                 v a r   k ,   v ,   v a l u e   =   h o l d e r [ k e y ] ; 
+                                 i f   ( v a l u e   & &   t y p e o f   v a l u e   = = =   ' o b j e c t ' )   { 
+                                         f o r   ( k   i n   v a l u e )   { 
+                                                 i f   ( O b j e c t . h a s O w n P r o p e r t y . c a l l ( v a l u e ,   k ) )   { 
+                                                         v   =   w a l k ( v a l u e ,   k ) ; 
+                                                         i f   ( v   ! = =   u n d e f i n e d )   { 
+                                                                 v a l u e [ k ]   =   v ; 
+                                                         }   e l s e   { 
+                                                                 d e l e t e   v a l u e [ k ] ; 
+                                                         } 
+                                                 } 
+                                         } 
+                                 } 
+                                 r e t u r n   r e v i v e r . c a l l ( h o l d e r ,   k e y ,   v a l u e ) ; 
+                         } 
+ 
+ 
+ / /   P a r s i n g   h a p p e n s   i n   f o u r   s t a g e s .   I n   t h e   f i r s t   s t a g e ,   w e   r e p l a c e   c e r t a i n 
+ / /   U n i c o d e   c h a r a c t e r s   w i t h   e s c a p e   s e q u e n c e s .   J a v a S c r i p t   h a n d l e s   m a n y   c h a r a c t e r s 
+ / /   i n c o r r e c t l y ,   e i t h e r   s i l e n t l y   d e l e t i n g   t h e m ,   o r   t r e a t i n g   t h e m   a s   l i n e   e n d i n g s . 
+ 
+                         t e x t   =   S t r i n g ( t e x t ) ; 
+                         c x . l a s t I n d e x   =   0 ; 
+                         i f   ( c x . t e s t ( t e x t ) )   { 
+                                 t e x t   =   t e x t . r e p l a c e ( c x ,   f u n c t i o n   ( a )   { 
+                                         r e t u r n   ' \ \ u '   + 
+                                                 ( ' 0 0 0 0 '   +   a . c h a r C o d e A t ( 0 ) . t o S t r i n g ( 1 6 ) ) . s l i c e ( - 4 ) ; 
+                                 } ) ; 
+                         } 
+ 
+ / /   I n   t h e   s e c o n d   s t a g e ,   w e   r u n   t h e   t e x t   a g a i n s t   r e g u l a r   e x p r e s s i o n s   t h a t   l o o k 
+ / /   f o r   n o n - J S O N   p a t t e r n s .   W e   a r e   e s p e c i a l l y   c o n c e r n e d   w i t h   ' ( ) '   a n d   ' n e w ' 
+ / /   b e c a u s e   t h e y   c a n   c a u s e   i n v o c a t i o n ,   a n d   ' = '   b e c a u s e   i t   c a n   c a u s e   m u t a t i o n . 
+ / /   B u t   j u s t   t o   b e   s a f e ,   w e   w a n t   t o   r e j e c t   a l l   u n e x p e c t e d   f o r m s . 
+ 
+ / /   W e   s p l i t   t h e   s e c o n d   s t a g e   i n t o   4   r e g e x p   o p e r a t i o n s   i n   o r d e r   t o   w o r k   a r o u n d 
+ / /   c r i p p l i n g   i n e f f i c i e n c i e s   i n   I E ' s   a n d   S a f a r i ' s   r e g e x p   e n g i n e s .   F i r s t   w e 
+ / /   r e p l a c e   t h e   J S O N   b a c k s l a s h   p a i r s   w i t h   ' @ '   ( a   n o n - J S O N   c h a r a c t e r ) .   S e c o n d ,   w e 
+ / /   r e p l a c e   a l l   s i m p l e   v a l u e   t o k e n s   w i t h   ' ] '   c h a r a c t e r s .   T h i r d ,   w e   d e l e t e   a l l 
+ / /   o p e n   b r a c k e t s   t h a t   f o l l o w   a   c o l o n   o r   c o m m a   o r   t h a t   b e g i n   t h e   t e x t .   F i n a l l y , 
+ / /   w e   l o o k   t o   s e e   t h a t   t h e   r e m a i n i n g   c h a r a c t e r s   a r e   o n l y   w h i t e s p a c e   o r   ' ] '   o r 
+ / /   ' , '   o r   ' : '   o r   ' { '   o r   ' } ' .   I f   t h a t   i s   s o ,   t h e n   t h e   t e x t   i s   s a f e   f o r   e v a l . 
+ 
+                         i f   ( / ^ [ \ ] , : { } \ s ] * $ / . 
+ t e s t ( t e x t . r e p l a c e ( / \ \ ( ? : [ " \ \ \ / b f n r t ] | u [ 0 - 9 a - f A - F ] { 4 } ) / g ,   ' @ ' ) . 
+ r e p l a c e ( / " [ ^ " \ \ \ n \ r ] * " | t r u e | f a l s e | n u l l | - ? \ d + ( ? : \ . \ d * ) ? ( ? : [ e E ] [ + \ - ] ? \ d + ) ? / g ,   ' ] ' ) . 
+ r e p l a c e ( / ( ? : ^ | : | , ) ( ? : \ s * \ [ ) + / g ,   ' ' ) ) )   { 
+ 
+ / /   I n   t h e   t h i r d   s t a g e   w e   u s e   t h e   e v a l   f u n c t i o n   t o   c o m p i l e   t h e   t e x t   i n t o   a 
+ / /   J a v a S c r i p t   s t r u c t u r e .   T h e   ' { '   o p e r a t o r   i s   s u b j e c t   t o   a   s y n t a c t i c   a m b i g u i t y 
+ / /   i n   J a v a S c r i p t :   i t   c a n   b e g i n   a   b l o c k   o r   a n   o b j e c t   l i t e r a l .   W e   w r a p   t h e   t e x t 
+ / /   i n   p a r e n s   t o   e l i m i n a t e   t h e   a m b i g u i t y . 
+ 
+                                 j   =   e v a l ( ' ( '   +   t e x t   +   ' ) ' ) ; 
+ 
+ / /   I n   t h e   o p t i o n a l   f o u r t h   s t a g e ,   w e   r e c u r s i v e l y   w a l k   t h e   n e w   s t r u c t u r e ,   p a s s i n g 
+ / /   e a c h   n a m e / v a l u e   p a i r   t o   a   r e v i v e r   f u n c t i o n   f o r   p o s s i b l e   t r a n s f o r m a t i o n . 
+ 
+                                 r e t u r n   t y p e o f   r e v i v e r   = = =   ' f u n c t i o n '   ? 
+                                         w a l k ( { ' ' :   j } ,   ' ' )   :   j ; 
+                         } 
+ 
+ / /   I f   t h e   t e x t   i s   n o t   J S O N   p a r s e a b l e ,   t h e n   a   S y n t a x E r r o r   i s   t h r o w n . 
+ 
+                         t h r o w   n e w   S y n t a x E r r o r ( ' J S O N . p a r s e ' ) ; 
+                 } ; 
+         } 
+ } ( ) ) ; 
+    0       https://talent.rakuten.careers/plugins/json2.js     æC      æC                    º5        æº[    6    Qæ‚   ç  Q™¨€  ¢˜¦˜Í   ˜Ê¨€ ã 	   JSON‡!«!ÿÿÿÿ            «+’HŽ!«!            !«!        C   L        v       
+                                 áC  ý  áC  ¦                  	‰   Q¹‰   Q‚    ‰   Q‚   ‰ 	  Q‚   ‰ 
+  Qš    5   5   Ä=   IN   æš    5   ‚   6   Qš   5   š   5   š   5   ‚   6   6   6   Qæ    ‰   Q    ‰   Q[   =   ]   =	   ]
+   =   ]   =   ]   =   ]   =   ]   =   ]   ‰   Qš   5   Ä=   I   æš   ‚   6   Qæš   5   Ä=   I   æš   ‚	   6   Qæ™ï¨€  ­˜˜Ö¦ ˜Õ¨€  º˜Ê Ê à¨€  Á˜Ë ˜Ë ˜ ˜ ˜¥˜Ê ˜Ê ˜Ê ˜Ê ˜Ê ˜Ê ˜Ð  ˜¨€ c˜˜Ñ¦˜Ñ¨€ ’˜˜Ñ¦˜Ñ¨€ â 	   Date   prototype   toJSON   function   String   Number   Boolean   \b      \t   	   \n   
+   \f      \r      \"   "   \\   \	   JSON   stringify   parseŒ!«!ÿÿÿÿ      f   cx   escapable   gap   indent	   meta   rep   quote   str   arguments   .this         «+’H!«!          f   ‚    ‚  ¨             Ê5ž!«!          quote F  ¥!  8  ¥!  Ñ               B À   v!  ·   v!  Ú   5          Ê5ž Ê5ž!«!          str ¸!  }0  ¬!  }0  ã      ð       Ê5ž!«!       +   Date.prototype.toJSONb å  ]  Ü  ]  ¯   )          Ê5ž!«!       1   Boolean.prototype.toJSONb Ð    Ç    ¼   ,          Ê5ž Œ!«!Ï   [\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]   Œ!«!ï   [\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]   Ž!«!       Ž!«!   ‹!«!Ž!«!   	‹!«!Ž!«!   
+‹!«!Ž!«!   ‹!«!Ž!«!   ‹!«!Ž!«!   "‹!«!Ž!«!   \‹!«!    !«!           JSON.stringifyb 1  –6  1  –6  d  "   P       Ê5ž !«!          JSON.parseb 07  ØC  '7  ØC  “     S    @    reviver 	   walk   	   walk ø7  Ø:  ë7  Ø:  š     `       Ê5ž   B X<  Ý<  O<  Ý<  ·  1          Ê5ž Ê5žš˜;øÊ5žš˜;ø`Æ¾Ë©ã      '\Z¹\Z¹@4^9 ‚   0    :https://talent.rakuten.careers/plugins/json2.js necko:classified 1 strongly-framed 1 security-info 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 request-method GET response-head HTTP/1.1 200 OK
+Date: Mon, 04 Feb 2019 05:26:27 GMT
+Server: Taleo Web Server 8
+Last-Modified: Wed, 05 Sep 2018 07:18:13 GMT
+Accept-Ranges: bytes
+Content-Length: 17382
+Cache-Control: max-age=31536000
+Expires: Tue, 04 Feb 2020 05:26:27 GMT
+Content-Type: application/javascript
+ original-response-headers Date: Mon, 04 Feb 2019 05:26:27 GMT
+Server: Taleo Web Server 8
+Last-Modified: Wed, 05 Sep 2018 07:18:13 GMT
+Accept-Ranges: bytes
+Content-Length: 17382
+Cache-Control: max-age=31536000
+Expires: Tue, 04 Feb 2020 05:26:27 GMT
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/javascript
+ uncompressed-len 0 net-response-time-onstart 653 net-response-time-onstop 1084 alt-data 1;17382,javascript/moz-bytecode-20190128165852 alt-data-from-child 1   ÔN

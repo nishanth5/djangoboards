@@ -1,0 +1,26 @@
+
+(unity-panel-service:2520): Indicator-Appmenu-WARNING **: Already have a menu for window ID 67108880 with path /com/canonical/menu/4000010 from :1.89, unregistering that one
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed

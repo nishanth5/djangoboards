@@ -1,0 +1,8 @@
+[31mvoid DBusMenuImporter::slotGetLayoutFinished(QDBusPendingCallWatcher*)[0m: "No such interface 'com.canonical.dbusmenu' on object at path /org/ayatana/bamf/window/79691824"
+[31mvoid DBusMenuImporter::slotGetLayoutFinished(QDBusPendingCallWatcher*)[0m: "No such interface 'com.canonical.dbusmenu' on object at path /org/ayatana/bamf/window/79691846"
+QCoreApplication::postEvent: Unexpected null receiver
+[31mvoid DBusMenuImporter::slotGetLayoutFinished(QDBusPendingCallWatcher*)[0m: "No such interface 'com.canonical.dbusmenu' on object at path /org/ayatana/bamf/window/79692187"
+[31mvoid DBusMenuImporter::slotGetLayoutFinished(QDBusPendingCallWatcher*)[0m: "No such interface 'com.canonical.dbusmenu' on object at path /org/ayatana/bamf/window/79691786"
+[31mvoid DBusMenuImporter::slotGetLayoutFinished(QDBusPendingCallWatcher*)[0m: "No such interface 'com.canonical.dbusmenu' on object at path /org/ayatana/bamf/window/54526548"
+[31mvoid DBusMenuImporter::slotGetLayoutFinished(QDBusPendingCallWatcher*)[0m: "No such interface 'com.canonical.dbusmenu' on object at path /org/ayatana/bamf/window/79696287"
+[31mvoid DBusMenuImporter::slotGetLayoutFinished(QDBusPendingCallWatcher*)[0m: "No such interface 'com.canonical.dbusmenu' on object at path /org/ayatana/bamf/window/54525964"

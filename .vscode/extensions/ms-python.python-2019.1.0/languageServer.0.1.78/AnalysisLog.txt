@@ -1,0 +1,114 @@
+[00:00:00] Start: 2019-02-15T06:48:47
+[00:00:00.0669319] GetCurrentSearchPaths: /usr/bin/python3.6, /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/database.path
+[00:00:00.7700140] SearchPaths: /usr/lib/python3.6, /usr/lib/python3.6/lib-dynload, /usr/local/lib/python3.6/dist-packages, /usr/lib/python3/dist-packages
+[00:00:01.4557086] Scrape: /usr/bin/python3.6, -B -E /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py
+[00:00:01.9815102] Scrape: /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py:994: InspectWarning: attribute __abstractmethods__ on <class 'type'> was in dir() but not getattr()
+[00:00:01.9815206] Scrape:   warnings.warn("attribute " + name + " on " + repr(mod) + " was in dir() but not getattr()", InspectWarning)
+[00:00:02.4227862] WriteCachedModule: /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/M2KcDmVDYL_Yq1CJMCom4n3OUETWJLIvUfy8ZvHg0Zw=/python3.pyi
+[00:00:04.0832660] ImportBuiltins: sys, /usr/bin/python3.6
+[00:00:04.1123242] Scrape: /usr/bin/python3.6, -B -E /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py -u8 sys
+[00:00:04.2971917] WriteCachedModule: /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/M2KcDmVDYL_Yq1CJMCom4n3OUETWJLIvUfy8ZvHg0Zw=/python3.sys.pyi
+[00:00:04.2986151] ImportBuiltins: _io, /usr/bin/python3.6
+[00:00:04.3001233] Scrape: /usr/bin/python3.6, -B -E /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py -u8 _io
+[00:00:04.5872924] WriteCachedModule: /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/M2KcDmVDYL_Yq1CJMCom4n3OUETWJLIvUfy8ZvHg0Zw=/python3._io.pyi
+[00:00:04.6146470] ImportNotFound: _io.UnsupportedOperation
+[00:00:04.6912033] UndefinedValue: type(_f.__code__)
+[00:00:04.7040701] RecursiveImport: types
+[00:00:04.7043660] ImportNotFound: types.TracebackType
+[00:00:04.7670175] RecursiveImport: types
+[00:00:04.7673377] RecursiveImport: importlib.abc
+[00:00:04.7675044] ImportNotFound: importlib.abc.Loader
+[00:00:04.7859001] ImportBuiltins: _weakref, /usr/bin/python3.6
+[00:00:04.7868554] Scrape: /usr/bin/python3.6, -B -E /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py -u8 _weakref
+[00:00:04.9154371] WriteCachedModule: /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/M2KcDmVDYL_Yq1CJMCom4n3OUETWJLIvUfy8ZvHg0Zw=/python3._weakref.pyi
+[00:00:04.9663840] RecursiveImport: types
+[00:00:04.9673296] ImportNotFound: types.ModuleType
+[00:00:04.9688156] ImportNotFound: types.FrameType
+[00:00:04.9689878] UndefinedValue: type(_g())
+[00:00:04.9690076] UndefinedValue: _c()
+[00:00:04.9690320] UndefinedValue: _ag()
+[00:00:04.9694948] UndefinedValue: type(tb.tb_frame)
+[00:00:05.0063515] ImportBuiltins: _codecs, /usr/bin/python3.6
+[00:00:05.0072165] Scrape: /usr/bin/python3.6, -B -E /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py -u8 _codecs
+[00:00:05.2510106] WriteCachedModule: /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/M2KcDmVDYL_Yq1CJMCom4n3OUETWJLIvUfy8ZvHg0Zw=/python3._codecs.pyi
+[00:00:05.2663590] RecursiveImport: codecs
+[00:00:05.2744750] UndefinedValue: lookup_error('strict')
+[00:00:05.2745098] UndefinedValue: lookup_error('ignore')
+[00:00:05.2745232] UndefinedValue: lookup_error('replace')
+[00:00:05.2745407] UndefinedValue: lookup_error('xmlcharrefreplace')
+[00:00:05.2745546] UndefinedValue: lookup_error('backslashreplace')
+[00:00:05.2745664] UndefinedValue: lookup_error('namereplace')
+[00:00:05.3255598] ImportBuiltins: posix, /usr/bin/python3.6
+[00:00:05.3262354] Scrape: /usr/bin/python3.6, -B -E /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py -u8 posix
+[00:00:05.5526604] WriteCachedModule: /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/M2KcDmVDYL_Yq1CJMCom4n3OUETWJLIvUfy8ZvHg0Zw=/python3.posix.pyi
+[00:00:05.5558162] RecursiveImport: os
+[00:00:05.5715898] UndefinedValue: type(iter(b''))
+[00:00:05.5716038] UndefinedValue: type(iter(bytearray()))
+[00:00:05.5722787] UndefinedValue: type(iter( {}.keys()))
+[00:00:05.5723142] UndefinedValue: type(iter( {}.values()))
+[00:00:05.5723274] UndefinedValue: type(iter( {}.items()))
+[00:00:05.5723374] UndefinedValue: type(iter( []))
+[00:00:05.5723546] UndefinedValue: type(iter(reversed( [])))
+[00:00:05.5723677] UndefinedValue: type(iter(range(0)))
+[00:00:05.5744999] UndefinedValue: type(iter(range(1 <<1000)))
+[00:00:05.5745275] UndefinedValue: type(iter(set()))
+[00:00:05.5745380] UndefinedValue: type(iter(''))
+[00:00:05.5745576] UndefinedValue: type(iter( ()))
+[00:00:05.5745688] UndefinedValue: type(iter(zip()))
+[00:00:05.5746601] UndefinedValue: _coro()
+[00:00:05.5746864] UndefinedValue: _ag()
+[00:00:05.6004525] RecursiveImport: os
+[00:00:05.6206296] ImportBuiltins: _stat, /usr/bin/python3.6
+[00:00:05.6216650] Scrape: /usr/bin/python3.6, -B -E /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py -u8 _stat
+[00:00:00] Start: 2019-02-19T10:27:33
+[00:00:00.0932621] GetCurrentSearchPaths: /usr/bin/python3.6, /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/database.path
+[00:00:00.6078958] SearchPaths: /usr/lib/python3.6, /usr/lib/python3.6/lib-dynload, /usr/local/lib/python3.6/dist-packages, /usr/lib/python3/dist-packages
+[02:45:48.3085012] ImportBuiltins: _warnings, /usr/bin/python3.6
+[02:45:48.3633593] Scrape: /usr/bin/python3.6, -B -E /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/scrape_module.py -u8 _warnings
+[02:45:48.4936787] WriteCachedModule: /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/M2KcDmVDYL_Yq1CJMCom4n3OUETWJLIvUfy8ZvHg0Zw=/python3._warnings.pyi
+[02:45:48.6066852] ImportBuiltins: sys, /usr/bin/python3.6
+[02:45:48.6385248] ImportBuiltins: _io, /usr/bin/python3.6
+[02:45:48.6517419] ImportNotFound: _io.UnsupportedOperation
+[02:45:48.7250075] UndefinedValue: type(_f.__code__)
+[02:45:48.7361177] RecursiveImport: types
+[02:45:48.7364179] ImportNotFound: types.TracebackType
+[02:45:48.7774943] RecursiveImport: types
+[02:45:48.7777547] RecursiveImport: importlib.abc
+[02:45:48.7779146] ImportNotFound: importlib.abc.Loader
+[02:45:48.8319857] ImportBuiltins: _weakref, /usr/bin/python3.6
+[02:45:48.8900602] RecursiveImport: types
+[02:45:48.8909234] ImportNotFound: types.ModuleType
+[02:45:48.8923446] ImportNotFound: types.FrameType
+[02:45:48.8925106] UndefinedValue: type(_g())
+[02:45:48.8934176] UndefinedValue: _c()
+[02:45:48.8934700] UndefinedValue: _ag()
+[02:45:48.8939353] UndefinedValue: type(tb.tb_frame)
+[02:45:48.9299222] ImportBuiltins: _codecs, /usr/bin/python3.6
+[02:45:49.0211466] RecursiveImport: codecs
+[02:45:49.0274047] UndefinedValue: lookup_error('strict')
+[02:45:49.0274398] UndefinedValue: lookup_error('ignore')
+[02:45:49.0274535] UndefinedValue: lookup_error('replace')
+[02:45:49.0274690] UndefinedValue: lookup_error('xmlcharrefreplace')
+[02:45:49.0274821] UndefinedValue: lookup_error('backslashreplace')
+[02:45:49.0274945] UndefinedValue: lookup_error('namereplace')
+[00:00:00] Start: 2019-02-20T06:37:05
+[00:00:00.1159062] GetCurrentSearchPaths: /usr/bin/python3.6, /home/divum/.vscode/extensions/ms-python.python-2019.1.0/languageServer.0.1.78/database.path
+[00:00:01.0433643] SearchPaths: /usr/lib/python3.6, /usr/lib/python3.6/lib-dynload, /usr/local/lib/python3.6/dist-packages, /usr/lib/python3/dist-packages
+[00:01:33.4228273] ImportBuiltins: _warnings, /usr/bin/python3.6
+[00:01:33.5991388] ImportBuiltins: sys, /usr/bin/python3.6
+[00:01:33.6417457] ImportBuiltins: _io, /usr/bin/python3.6
+[00:01:33.7928762] ImportNotFound: _io.UnsupportedOperation
+[00:01:33.8850092] UndefinedValue: type(_f.__code__)
+[00:01:33.9248871] RecursiveImport: types
+[00:01:33.9251859] ImportNotFound: types.TracebackType
+[00:01:33.9863690] RecursiveImport: types
+[00:01:33.9867020] RecursiveImport: importlib.abc
+[00:01:33.9869073] ImportNotFound: importlib.abc.Loader
+[00:01:34.0706877] ImportBuiltins: _weakref, /usr/bin/python3.6
+[00:01:34.2576754] RecursiveImport: types
+[00:01:34.2590938] ImportNotFound: types.ModuleType
+[00:01:34.2884345] ImportNotFound: types.FrameType
+[00:01:34.2886455] UndefinedValue: type(_g())
+[00:01:34.2886652] UndefinedValue: _c()
+[00:01:34.2886869] UndefinedValue: _ag()
+[00:01:34.2901807] UndefinedValue: type(tb.tb_frame)

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<compiz_session id="10f9c928929bfdfad6154934466470049900000018300048">
+  <window id="10f9c928929bfdfad6154935808586633900000018300051" title="Gmail - Mozilla Firefox" class="Firefox" name="Navigator" role="browser" command="firefox">
+    <geometry x="65" y="24" width="1160" height="454"/>
+    <minimized/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+</compiz_session>

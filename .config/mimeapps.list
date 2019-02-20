@@ -1,0 +1,12 @@
+[Added Associations]
+application/zip=org.gnome.FileRoller.desktop;
+text/plain=pycharm-community_pycharm-community.desktop;code.desktop;
+application/xml=code.desktop;
+application/x-php=firefox.desktop;code.desktop;
+text/x-python=code.desktop;pycharm-community_pycharm-community.desktop;
+
+[Default Applications]
+text/plain=code.desktop
+application/xml=code.desktop
+application/x-php=code.desktop
+text/x-python=code.desktop

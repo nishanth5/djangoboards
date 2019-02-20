@@ -1,0 +1,6 @@
+<application>
+  <component name="NotificationConfiguration">
+    <notification groupId="PyCharm Professional Advertiser" displayType="NONE" />
+    <notification groupId="R Language Support" displayType="NONE" />
+  </component>
+</application>

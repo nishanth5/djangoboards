@@ -1,0 +1,973 @@
+{
+  
+
+    "tutorial-2019-01-03-how-to-use-date-picker-with-django-html": {
+      "title": "How to Use Date Picker with Django",
+      "url": "/tutorial/2019/01/03/how-to-use-date-picker-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2019-01-02-how-to-implement-grouped-model-choice-field-html": {
+      "title": "How to Implement Grouped Model Choice Field",
+      "url": "/tutorial/2019/01/02/how-to-implement-grouped-model-choice-field.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2018-12-19-how-to-use-jwt-authentication-with-django-rest-framework-html": {
+      "title": "How to Use JWT Authentication with Django REST Framework",
+      "url": "/tutorial/2018/12/19/how-to-use-jwt-authentication-with-django-rest-framework.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2018-11-28-advanced-form-rendering-with-django-crispy-forms-html": {
+      "title": "Advanced Form Rendering with Django Crispy Forms",
+      "url": "/tutorial/2018/11/28/advanced-form-rendering-with-django-crispy-forms.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2018-11-22-how-to-implement-token-authentication-using-django-rest-framework-html": {
+      "title": "How to Implement Token Authentication using Django REST Framework",
+      "url": "/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "announcements-2018-11-19-launching-our-community-forum-html": {
+      "title": "Launching our Community Forum",
+      "url": "/announcements/2018/11/19/launching-our-community-forum.html",
+      "author": "Vitor Freitas",
+      "category": "announcements"
+    }
+    ,
+  
+
+    "videos-2018-11-04-django-auth-video-tutorial-html": {
+      "title": "Django Authentication Video Tutorial",
+      "url": "/videos/2018/11/04/django-auth-video-tutorial.html",
+      "author": "Vitor Freitas",
+      "category": "videos"
+    }
+    ,
+  
+
+    "tutorial-2018-08-27-how-to-create-custom-django-management-commands-html": {
+      "title": "How to Create Custom Django Management Commands",
+      "url": "/tutorial/2018/08/27/how-to-create-custom-django-management-commands.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2018-08-13-how-to-use-bootstrap-4-forms-with-django-html": {
+      "title": "How to Use Bootstrap 4 Forms With Django",
+      "url": "/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2018-04-03-how-to-integrate-highcharts-js-with-django-html": {
+      "title": "How to Integrate Highcharts.js with Django",
+      "url": "/tutorial/2018/04/03/how-to-integrate-highcharts-js-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2018-02-10-django-tip-22-designing-better-models-html": {
+      "title": "Django Tips #22 Designing Better Models",
+      "url": "/tips/2018/02/10/django-tip-22-designing-better-models.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2018-02-03-how-to-use-restful-apis-with-django-html": {
+      "title": "How to Use RESTful APIs with Django",
+      "url": "/tutorial/2018/02/03/how-to-use-restful-apis-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2018-01-29-how-to-implement-dependent-or-chained-dropdown-list-with-django-html": {
+      "title": "How to Implement Dependent/Chained Dropdown List with Django",
+      "url": "/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2018-01-18-how-to-implement-multiple-user-types-with-django-html": {
+      "title": "How to Implement Multiple User Types with Django",
+      "url": "/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "series-2017-10-16-a-complete-beginners-guide-to-django-part-7-html": {
+      "title": "A Complete Beginner's Guide to Django - Part 7",
+      "url": "/series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html",
+      "author": "Vitor Freitas",
+      "category": "series"
+    }
+    ,
+  
+
+    "series-2017-10-09-a-complete-beginners-guide-to-django-part-6-html": {
+      "title": "A Complete Beginner's Guide to Django - Part 6",
+      "url": "/series/2017/10/09/a-complete-beginners-guide-to-django-part-6.html",
+      "author": "Vitor Freitas",
+      "category": "series"
+    }
+    ,
+  
+
+    "series-2017-10-02-a-complete-beginners-guide-to-django-part-5-html": {
+      "title": "A Complete Beginner's Guide to Django - Part 5",
+      "url": "/series/2017/10/02/a-complete-beginners-guide-to-django-part-5.html",
+      "author": "Vitor Freitas",
+      "category": "series"
+    }
+    ,
+  
+
+    "tutorial-2017-09-26-how-to-create-django-data-migrations-html": {
+      "title": "How to Create Django Data Migrations",
+      "url": "/tutorial/2017/09/26/how-to-create-django-data-migrations.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "series-2017-09-25-a-complete-beginners-guide-to-django-part-4-html": {
+      "title": "A Complete Beginner's Guide to Django - Part 4",
+      "url": "/series/2017/09/25/a-complete-beginners-guide-to-django-part-4.html",
+      "author": "Vitor Freitas",
+      "category": "series"
+    }
+    ,
+  
+
+    "series-2017-09-18-a-complete-beginners-guide-to-django-part-3-html": {
+      "title": "A Complete Beginner's Guide to Django - Part 3",
+      "url": "/series/2017/09/18/a-complete-beginners-guide-to-django-part-3.html",
+      "author": "Vitor Freitas",
+      "category": "series"
+    }
+    ,
+  
+
+    "series-2017-09-11-a-complete-beginners-guide-to-django-part-2-html": {
+      "title": "A Complete Beginner's Guide to Django - Part 2",
+      "url": "/series/2017/09/11/a-complete-beginners-guide-to-django-part-2.html",
+      "author": "Vitor Freitas",
+      "category": "series"
+    }
+    ,
+  
+
+    "series-2017-09-04-a-complete-beginners-guide-to-django-part-1-html": {
+      "title": "A Complete Beginner's Guide to Django - Part 1",
+      "url": "/series/2017/09/04/a-complete-beginners-guide-to-django-part-1.html",
+      "author": "Vitor Freitas",
+      "category": "series"
+    }
+    ,
+  
+
+    "tutorial-2017-08-20-how-to-use-celery-with-django-html": {
+      "title": "How to Use Celery and RabbitMQ with Django",
+      "url": "/tutorial/2017/08/20/how-to-use-celery-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "article-2017-08-19-how-to-render-django-form-manually-html": {
+      "title": "How to Render Django Form Manually",
+      "url": "/article/2017/08/19/how-to-render-django-form-manually.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    ,
+  
+
+    "tips-2017-08-11-django-tip-21-redirects-app-html": {
+      "title": "Django Tips #21 Using The Redirects App",
+      "url": "/tips/2017/08/11/django-tip-21-redirects-app.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "article-2017-08-07-a-minimal-django-application-html": {
+      "title": "A Minimal Django Application",
+      "url": "/article/2017/08/07/a-minimal-django-application.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    ,
+  
+
+    "questions-2017-08-03-wordpress-or-self-made-blog-html": {
+      "title": "Ask Vitor #4: WordPress or Self-Made Blog?",
+      "url": "/questions/2017/08/03/wordpress-or-self-made-blog.html",
+      "author": "Vitor Freitas",
+      "category": "questions"
+    }
+    ,
+  
+
+    "tutorial-2017-08-01-how-to-setup-amazon-s3-in-a-django-project-html": {
+      "title": "How to Setup Amazon S3 in a Django Project",
+      "url": "/tutorial/2017/08/01/how-to-setup-amazon-s3-in-a-django-project.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "questions-2017-07-07-mocking-emails-html": {
+      "title": "Ask Vitor #3: Mocking Emails",
+      "url": "/questions/2017/07/07/mocking-emails.html",
+      "author": "Vitor Freitas",
+      "category": "questions"
+    }
+    ,
+  
+
+    "tips-2017-07-03-django-tip-20-working-with-multiple-settings-modules-html": {
+      "title": "Django Tips #20 Working With Multiple Settings Modules",
+      "url": "/tips/2017/07/03/django-tip-20-working-with-multiple-settings-modules.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2017-05-27-how-to-configure-mailgun-to-send-emails-in-a-django-app-html": {
+      "title": "How to Configure Mailgun To Send Emails in a Django Project",
+      "url": "/tutorial/2017/05/27/how-to-configure-mailgun-to-send-emails-in-a-django-app.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2017-05-23-how-to-deploy-a-django-application-on-rhel-html": {
+      "title": "How to Deploy a Django Application on RHEL 7",
+      "url": "/tutorial/2017/05/23/how-to-deploy-a-django-application-on-rhel.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "questions-2017-03-22-how-to-dynamically-filter-modelchoices-queryset-in-a-modelform-html": {
+      "title": "Ask Vitor #2: How to dynamically filter ModelChoice's queryset in a ModelForm?",
+      "url": "/questions/2017/03/22/how-to-dynamically-filter-modelchoices-queryset-in-a-modelform.html",
+      "author": "Vitor Freitas",
+      "category": "questions"
+    }
+    ,
+  
+
+    "article-2017-03-21-class-based-views-vs-function-based-views-html": {
+      "title": "Class-Based Views vs. Function-Based Views",
+      "url": "/article/2017/03/21/class-based-views-vs-function-based-views.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    ,
+  
+
+    "questions-2017-03-17-getting-form-data-to-appear-in-url-and-for-use-in-the-next-view-html": {
+      "title": "Ask Vitor #1: Getting form data to appear in URL and for use in the next view",
+      "url": "/questions/2017/03/17/getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html",
+      "author": "Vitor Freitas",
+      "category": "questions"
+    }
+    ,
+  
+
+    "tutorial-2017-03-14-how-to-create-django-admin-list-actions-html": {
+      "title": "How to Create Django Admin List Actions",
+      "url": "/tutorial/2017/03/14/how-to-create-django-admin-list-actions.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2017-03-13-how-to-create-infinite-scroll-with-django-html": {
+      "title": "How to Create Infinite Scroll With Django",
+      "url": "/tutorial/2017/03/13/how-to-create-infinite-scroll-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2017-03-02-how-to-crop-images-in-a-django-application-html": {
+      "title": "How to Crop Images in a Django Application",
+      "url": "/tutorial/2017/03/02/how-to-crop-images-in-a-django-application.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2017-02-21-how-to-add-recaptcha-to-django-site-html": {
+      "title": "How to Add reCAPTCHA to a Django Site",
+      "url": "/tutorial/2017/02/21/how-to-add-recaptcha-to-django-site.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2017-02-18-how-to-create-user-sign-up-view-html": {
+      "title": "How to Create User Sign Up View",
+      "url": "/tutorial/2017/02/18/how-to-create-user-sign-up-view.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2017-02-06-how-to-implement-case-insensitive-username-html": {
+      "title": "How to Implement Case-Insensitive Username",
+      "url": "/tutorial/2017/02/06/how-to-implement-case-insensitive-username.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-12-06-how-to-create-group-by-queries-html": {
+      "title": "How to Create Group By Queries With Django ORM",
+      "url": "/tutorial/2016/12/06/how-to-create-group-by-queries.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-11-28-how-to-filter-querysets-dynamically-html": {
+      "title": "How to Filter QuerySets Dynamically",
+      "url": "/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-11-23-how-to-add-user-profile-to-django-admin-html": {
+      "title": "How to Add User Profile To Django Admin",
+      "url": "/tutorial/2016/11/23/how-to-add-user-profile-to-django-admin.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-11-22-django-multiple-file-upload-using-ajax-html": {
+      "title": "Django Multiple Files Upload Using Ajax",
+      "url": "/tutorial/2016/11/22/django-multiple-file-upload-using-ajax.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-11-15-how-to-implement-a-crud-using-ajax-and-json-html": {
+      "title": "How to Implement CRUD Using Ajax and Json",
+      "url": "/tutorial/2016/11/15/how-to-implement-a-crud-using-ajax-and-json.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "article-2016-11-08-django-under-the-hood-html": {
+      "title": "Django Under the Hood 2016",
+      "url": "/article/2016/11/08/django-under-the-hood.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    ,
+  
+
+    "tips-2016-11-01-django-tip-19-protecting-sensitive-information-html": {
+      "title": "Django Tips #19 Protecting Sensitive Information",
+      "url": "/tips/2016/11/01/django-tip-19-protecting-sensitive-information.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-10-31-how-to-handle-github-webhooks-using-django-html": {
+      "title": "How to Handle GitHub Webhooks Using Django",
+      "url": "/tutorial/2016/10/31/how-to-handle-github-webhooks-using-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-10-24-how-to-add-social-login-to-django-html": {
+      "title": "How to Add Social Login to Django",
+      "url": "/tutorial/2016/10/24/how-to-add-social-login-to-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2016-10-17-django-tip-18-translations-html": {
+      "title": "Django Tips #18 Difference Between ugettext And ugettext_lazy",
+      "url": "/tips/2016/10/17/django-tip-18-translations.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-10-14-how-to-deploy-to-digital-ocean-html": {
+      "title": "How to Deploy a Django Application to Digital Ocean",
+      "url": "/tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-10-13-how-to-use-generic-relations-html": {
+      "title": "How to Use Django's Generic Relations",
+      "url": "/tutorial/2016/10/13/how-to-use-generic-relations.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "packages-2016-10-11-django-hosts-html": {
+      "title": "How to Use django-hosts Library",
+      "url": "/packages/2016/10/11/django-hosts.html",
+      "author": "Vitor Freitas",
+      "category": "packages"
+    }
+    ,
+  
+
+    "references-2016-10-10-url-patterns-html": {
+      "title": "List of Useful URL Patterns",
+      "url": "/references/2016/10/10/url-patterns.html",
+      "author": "Vitor Freitas",
+      "category": "references"
+    }
+    ,
+  
+
+    "packages-2016-10-08-isort-html": {
+      "title": "How to Use Python isort Library",
+      "url": "/packages/2016/10/08/isort.html",
+      "author": "Vitor Freitas",
+      "category": "packages"
+    }
+    ,
+  
+
+    "tips-2016-10-06-django-tip-17-earliest-and-latest-html": {
+      "title": "Django Tips #17 Using QuerySet Latest &amp; Earliest Methods",
+      "url": "/tips/2016/10/06/django-tip-17-earliest-and-latest.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tips-2016-10-05-django-tip-16-simple-database-access-optimizations-html": {
+      "title": "Django Tips #16 Simple Database Access Optimizations",
+      "url": "/tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-10-04-how-to-use-django-flatpages-app-html": {
+      "title": "How to Use Django's Flatpages App",
+      "url": "/tutorial/2016/10/04/how-to-use-django-flatpages-app.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "article-2016-10-03-effort-estimation-html": {
+      "title": "Estimating the Effort of Development of a Django Application",
+      "url": "/article/2016/10/03/effort-estimation.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    ,
+  
+
+    "tips-2016-09-27-django-tip-15-cbv-mixins-html": {
+      "title": "Django Tips #15 Using Mixins With Class-Based Views",
+      "url": "/tips/2016/09/27/django-tip-15-cbv-mixins.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-09-19-how-to-create-password-reset-view-html": {
+      "title": "How to Create a Password Reset View",
+      "url": "/tutorial/2016/09/19/how-to-create-password-reset-view.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "article-2016-09-12-shortcuts-html": {
+      "title": "Django Shortcuts",
+      "url": "/article/2016/09/12/shortcuts.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    ,
+  
+
+    "tips-2016-09-06-django-tip-14-messages-framework-html": {
+      "title": "Django Tips #14 Using the Messages Framework",
+      "url": "/tips/2016/09/06/django-tip-14-messages-framework.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-08-29-how-to-work-with-ajax-request-with-django-html": {
+      "title": "How to Work With AJAX Request With Django",
+      "url": "/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-08-24-how-to-create-one-time-link-html": {
+      "title": "How to Create a One Time Link",
+      "url": "/tutorial/2016/08/24/how-to-create-one-time-link.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2016-08-23-django-tip-13-f-expressions-html": {
+      "title": "Django Tips #13 Using F() Expressions",
+      "url": "/tips/2016/08/23/django-tip-13-f-expressions.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "snippet-2016-08-22-dealing-with-querystring-parameters-html": {
+      "title": "Dealing With QueryString Parameters",
+      "url": "/snippet/2016/08/22/dealing-with-querystring-parameters.html",
+      "author": "Vitor Freitas",
+      "category": "snippet"
+    }
+    ,
+  
+
+    "tips-2016-08-19-django-tip-12-disabling-migrations-to-speed-up-unit-tests-html": {
+      "title": "Django Tips #12 Disabling Migrations to Speed Up Unit Tests",
+      "url": "/tips/2016/08/19/django-tip-12-disabling-migrations-to-speed-up-unit-tests.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "packages-2016-08-18-pendulum-html": {
+      "title": "How to Use Python Pendulum Library",
+      "url": "/packages/2016/08/18/pendulum.html",
+      "author": "Vitor Freitas",
+      "category": "packages"
+    }
+    ,
+  
+
+    "article-2016-08-17-exploring-django-utils-2-html": {
+      "title": "Exploring Django Utils #2",
+      "url": "/article/2016/08/17/exploring-django-utils-2.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    ,
+  
+
+    "tips-2016-08-16-django-tip-11-custom-manager-with-chainable-querysets-html": {
+      "title": "Django Tips #11 Custom Manager With Chainable QuerySets",
+      "url": "/tips/2016/08/16/django-tip-11-custom-manager-with-chainable-querysets.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-08-15-how-to-create-a-password-confirmation-view-html": {
+      "title": "How to Create a Password Confirmation View",
+      "url": "/tutorial/2016/08/15/how-to-create-a-password-confirmation-view.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2016-08-12-django-tip-10-authentication-form-custom-login-policy-html": {
+      "title": "Django Tips #10 AuthenticationForm Custom Login Policy",
+      "url": "/tips/2016/08/12/django-tip-10-authentication-form-custom-login-policy.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "packages-2016-08-11-django-import-export-html": {
+      "title": "How to Use django-import-export",
+      "url": "/packages/2016/08/11/django-import-export.html",
+      "author": "Vitor Freitas",
+      "category": "packages"
+    }
+    ,
+  
+
+    "article-2016-08-10-exploring-django-utils-1-html": {
+      "title": "Exploring Django Utils #1",
+      "url": "/article/2016/08/10/exploring-django-utils-1.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    ,
+  
+
+    "tutorial-2016-08-09-how-to-deploy-django-applications-on-heroku-html": {
+      "title": "How to Deploy Django Applications on Heroku",
+      "url": "/tutorial/2016/08/09/how-to-deploy-django-applications-on-heroku.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-08-08-how-to-export-to-pdf-html": {
+      "title": "How to Export to PDF",
+      "url": "/tutorial/2016/08/08/how-to-export-to-pdf.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "packages-2016-08-05-flake8-html": {
+      "title": "How to Use Flake8",
+      "url": "/packages/2016/08/05/flake8.html",
+      "author": "Vitor Freitas",
+      "category": "packages"
+    }
+    ,
+  
+
+    "tips-2016-08-04-django-tip-9-password-change-form-html": {
+      "title": "Django Tips #9 How to Create a Change Password View",
+      "url": "/tips/2016/08/04/django-tip-9-password-change-form.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-08-03-how-to-paginate-with-django-html": {
+      "title": "How to Paginate with Django",
+      "url": "/tutorial/2016/08/03/how-to-paginate-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-08-02-how-to-split-views-into-multiple-files-html": {
+      "title": "How to Split Views Into Multiple Files",
+      "url": "/tutorial/2016/08/02/how-to-split-views-into-multiple-files.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-08-01-how-to-upload-files-with-django-html": {
+      "title": "How to Upload Files With Django",
+      "url": "/tutorial/2016/08/01/how-to-upload-files-with-django.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-07-29-how-to-export-to-excel-html": {
+      "title": "How to Export to Excel",
+      "url": "/tutorial/2016/07/29/how-to-export-to-excel.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-07-28-how-to-create-django-signals-html": {
+      "title": "How to Create Django Signals",
+      "url": "/tutorial/2016/07/28/how-to-create-django-signals.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-07-27-how-to-return-json-encoded-response-html": {
+      "title": "How to Return JSON-Encoded Response",
+      "url": "/tutorial/2016/07/27/how-to-return-json-encoded-response.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tutorial-2016-07-26-how-to-reset-migrations-html": {
+      "title": "How to Reset Migrations",
+      "url": "/tutorial/2016/07/26/how-to-reset-migrations.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2016-07-25-django-tip-8-blank-or-null-html": {
+      "title": "Django Tips #8 Blank or Null?",
+      "url": "/tips/2016/07/25/django-tip-8-blank-or-null.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-07-22-how-to-extend-django-user-model-html": {
+      "title": "How to Extend Django User Model",
+      "url": "/tutorial/2016/07/22/how-to-extend-django-user-model.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2016-07-20-django-tip-7-how-to-get-the-current-url-within-a-django-template-html": {
+      "title": "Django Tips #7 How to Get the Current URL Within a Django Template",
+      "url": "/tips/2016/07/20/django-tip-7-how-to-get-the-current-url-within-a-django-template.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-07-18-how-to-create-a-custom-django-middleware-html": {
+      "title": "How to Create a Custom Django Middleware",
+      "url": "/tutorial/2016/07/18/how-to-create-a-custom-django-middleware.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2016-07-14-django-tip-6-get-or-create-html": {
+      "title": "Django Tips #6 get_or_create",
+      "url": "/tips/2016/07/14/django-tip-6-get-or-create.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-06-27-how-to-use-djangos-built-in-login-system-html": {
+      "title": "How to Use Django's Built-in Login System",
+      "url": "/tutorial/2016/06/27/how-to-use-djangos-built-in-login-system.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "references-2016-06-21-date-filter-html": {
+      "title": "Date Template Filter",
+      "url": "/references/2016/06/21/date-filter.html",
+      "author": "Vitor Freitas",
+      "category": "references"
+    }
+    ,
+  
+
+    "tips-2016-06-20-django-tip-5-how-to-merge-querysets-html": {
+      "title": "Django Tips #5 How to Merge QuerySets",
+      "url": "/tips/2016/06/20/django-tip-5-how-to-merge-querysets.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-06-13-how-to-send-email-html": {
+      "title": "How to Send Email in a Django App",
+      "url": "/tutorial/2016/06/13/how-to-send-email.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2016-05-23-django-tip-4-automatic-datetime-fields-html": {
+      "title": "Django Tips #4 Automatic DateTime Fields",
+      "url": "/tips/2016/05/23/django-tip-4-automatic-datetime-fields.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tips-2016-05-16-django-tip-3-optimize-database-queries-html": {
+      "title": "Django Tips #3 Optimize Database Queries",
+      "url": "/tips/2016/05/16/django-tip-3-optimize-database-queries.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tutorial-2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application-html": {
+      "title": "How to Setup a SSL Certificate on Nginx for a Django Application",
+      "url": "/tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "tips-2016-05-09-django-tip-2-humanize-html": {
+      "title": "Django Tips #2 humanize",
+      "url": "/tips/2016/05/09/django-tip-2-humanize.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "tips-2016-05-05-django-tip-1-redirect-html": {
+      "title": "Django Tips #1 redirect",
+      "url": "/tips/2016/05/05/django-tip-1-redirect.html",
+      "author": "Vitor Freitas",
+      "category": "tips"
+    }
+    ,
+  
+
+    "2015-12-07-working-with-django-view-decorators-html": {
+      "title": "Working with Django View Decorators",
+      "url": "/2015/12/07/working-with-django-view-decorators.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "2015-12-04-package-of-the-week-django-widget-tweaks-html": {
+      "title": "How to Use Django Widget Tweaks",
+      "url": "/2015/12/04/package-of-the-week-django-widget-tweaks.html",
+      "author": "Vitor Freitas",
+      "category": "packages"
+    }
+    ,
+  
+
+    "2015-11-30-starting-a-new-django-18-project-html": {
+      "title": "Starting a New Django 1.8 Project",
+      "url": "/2015/11/30/starting-a-new-django-18-project.html",
+      "author": "Vitor Freitas",
+      "category": "tutorial"
+    }
+    ,
+  
+
+    "2015-11-26-package-of-the-week-python-decouple-html": {
+      "title": "How to Use Python Decouple",
+      "url": "/2015/11/26/package-of-the-week-python-decouple.html",
+      "author": "Vitor Freitas",
+      "category": "packages"
+    }
+    ,
+  
+
+    "2015-11-23-small-open-source-django-projects-to-get-started-html": {
+      "title": "Small Open-Source Django Projects to Get Started",
+      "url": "/2015/11/23/small-open-source-django-projects-to-get-started.html",
+      "author": "Vitor Freitas",
+      "category": "article"
+    }
+    
+  
+}Í~i°2      \j¨2\j¨2@Ò6\lŒ∂   7    :https://simpleisbetterthancomplex.com/search_data.json necko:classified 1 strongly-framed 1 security-info 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 request-method GET response-head HTTP/1.1 200 OK
+Server: nginx/1.10.3 (Ubuntu)
+Date: Mon, 18 Feb 2019 12:59:30 GMT
+Content-Type: application/json
+Content-Length: 29893
+Last-Modified: Sat, 02 Feb 2019 08:21:22 GMT
+ETag: "5c555302-74c5"
+Accept-Ranges: bytes
+ original-response-headers Server: nginx/1.10.3 (Ubuntu)
+Date: Mon, 18 Feb 2019 12:59:30 GMT
+Content-Type: application/json
+Content-Length: 29893
+Last-Modified: Sat, 02 Feb 2019 08:21:22 GMT
+Connection: keep-alive
+ETag: "5c555302-74c5"
+Accept-Ranges: bytes
+ net-response-time-onstart 228 net-response-time-onstop 453   t≈

@@ -1,0 +1,449 @@
+<record>
+  <date>2019-01-17T11:38:03</date>
+  <millis>1547705283655</millis>
+  <sequence>30</sequence>
+  <level>300</level>
+  <thread>14</thread>
+  <message>CPU INFO</message>
+  <param>4</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:03</date>
+  <millis>1547705283666</millis>
+  <sequence>32</sequence>
+  <level>300</level>
+  <thread>14</thread>
+  <message>SCREEN SIZE</message>
+  <param>1366</param>
+  <param>768</param>
+  <param>1</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:03</date>
+  <millis>1547705283667</millis>
+  <sequence>33</sequence>
+  <level>700</level>
+  <thread>14</thread>
+  <message>IDE_STARTUP</message>
+</record>
+<record>
+  <date>2019-01-17T11:38:05</date>
+  <millis>1547705285379</millis>
+  <sequence>54</sequence>
+  <logger>org.netbeans.ui.metrics.laf</logger>
+  <level>800</level>
+  <thread>14</thread>
+  <message>USG_LOOK_AND_FEEL</message>
+  <param>GTK</param>
+  <param>GTK look and feel</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:06</date>
+  <millis>1547705286492</millis>
+  <sequence>55</sequence>
+  <logger>org.netbeans.core.nativeaccess.NativeWindowSystemImpl</logger>
+  <level>800</level>
+  <thread>45</thread>
+  <exception>
+    <message>java.lang.NoClassDefFoundError: Could not initialize class com.sun.jna.Native</message>
+    <frame>
+      <class>com.sun.jna.platform.unix.X11</class>
+      <method>&lt;clinit&gt;</method>
+      <line>380</line>
+      <file>${netbeans.home}modules/ext/jna-platform-4.1.0.jar</file>
+    </frame>
+    <frame>
+      <class>com.sun.jna.platform.WindowUtils$X11WindowUtils</class>
+      <method>getAlphaVisualIDs</method>
+      <line>1537</line>
+      <file>${netbeans.home}modules/ext/jna-platform-4.1.0.jar</file>
+    </frame>
+    <frame>
+      <class>com.sun.jna.platform.WindowUtils$X11WindowUtils</class>
+      <method>isWindowAlphaSupported</method>
+      <line>1487</line>
+      <file>${netbeans.home}modules/ext/jna-platform-4.1.0.jar</file>
+    </frame>
+    <frame>
+      <class>com.sun.jna.platform.WindowUtils</class>
+      <method>isWindowAlphaSupported</method>
+      <line>1823</line>
+      <file>${netbeans.home}modules/ext/jna-platform-4.1.0.jar</file>
+    </frame>
+    <frame>
+      <class>org.netbeans.core.nativeaccess.NativeWindowSystemImpl</class>
+      <method>isWindowAlphaSupported</method>
+      <file>${netbeans.home}modules/org-netbeans-core-nativeaccess.jar</file>
+    </frame>
+    <frame>
+      <class>org.netbeans.core.windows.FloatingWindowTransparencyManager$1</class>
+      <method>run</method>
+      <file>${netbeans.home}modules/org-netbeans-core-windows.jar</file>
+    </frame>
+    <frame>
+      <class>java.lang.Thread</class>
+      <method>run</method>
+      <line>748</line>
+      <file>${java.home}lib/rt.jar</file>
+    </frame>
+  </exception>
+</record>
+<record>
+  <date>2019-01-17T11:38:09</date>
+  <millis>1547705289037</millis>
+  <sequence>60</sequence>
+  <level>800</level>
+  <thread>28</thread>
+  <message>MEMORY</message>
+  <key>MEMORY</key>
+  <catalog>&lt;null&gt;</catalog>
+  <param>8292556800</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:14</date>
+  <millis>1547705294130</millis>
+  <sequence>61</sequence>
+  <logger>org.netbeans.ui.metrics.projects</logger>
+  <level>800</level>
+  <thread>19</thread>
+  <message>USG_SHOW_START_PAGE</message>
+  <key>USG_SHOW_START_PAGE</key>
+  <catalog>org.netbeans.modules.welcome.resources.Bundle</catalog>
+  <param>false</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:18</date>
+  <millis>1547705298374</millis>
+  <sequence>62</sequence>
+  <logger>org.netbeans.ui.metrics.projects</logger>
+  <level>800</level>
+  <thread>19</thread>
+  <message>USG_START_PAGE_LINK</message>
+  <key>USG_START_PAGE_LINK</key>
+  <catalog>org.netbeans.modules.welcome.resources.Bundle</catalog>
+  <param>WelcomePage/GettingStartedLinks/tour.url</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:19</date>
+  <millis>1547705299232</millis>
+  <sequence>64</sequence>
+  <logger>org.netbeans.ui.focus</logger>
+  <level>500</level>
+  <thread>19</thread>
+  <message>LOG_WINDOW_DEACTIVATED</message>
+  <key>LOG_WINDOW_DEACTIVATED</key>
+  <catalog>org.netbeans.core.ui.warmup.Bundle</catalog>
+</record>
+<record>
+  <date>2019-01-17T11:38:23</date>
+  <millis>1547705303634</millis>
+  <sequence>65</sequence>
+  <logger>org.netbeans.ui.metrics.projects</logger>
+  <level>800</level>
+  <thread>19</thread>
+  <message>USG_START_PAGE_LINK</message>
+  <key>USG_START_PAGE_LINK</key>
+  <catalog>org.netbeans.modules.welcome.resources.Bundle</catalog>
+  <param>WelcomePage/GettingStartedLinks/sampleproject.instance</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:23</date>
+  <millis>1547705303819</millis>
+  <sequence>67</sequence>
+  <logger>org.netbeans.ui.focus</logger>
+  <level>500</level>
+  <thread>13</thread>
+  <message>LOG_WINDOW_ACTIVATED</message>
+  <key>LOG_WINDOW_ACTIVATED</key>
+  <catalog>org.netbeans.core.ui.warmup.Bundle</catalog>
+  <param>6</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:31</date>
+  <millis>1547705311702</millis>
+  <sequence>68</sequence>
+  <logger>org.netbeans.ui.actions</logger>
+  <level>400</level>
+  <thread>19</thread>
+  <message>UI_ACTION_BUTTON_PRESS</message>
+  <key>UI_ACTION_BUTTON_PRESS</key>
+  <catalog>org.openide.awt.Bundle</catalog>
+  <param>org.openide.awt.Toolbar$DefaultIconButton[]</param>
+  <param>org.openide.awt.Toolbar$DefaultIconButton</param>
+  <param>org.netbeans.modules.project.ui.actions.NewFile[&amp;New File...]</param>
+  <param>org.netbeans.modules.project.ui.actions.NewFile</param>
+  <param>&amp;New File...</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:31</date>
+  <millis>1547705311703</millis>
+  <sequence>69</sequence>
+  <logger>org.netbeans.ui.actions</logger>
+  <level>500</level>
+  <thread>19</thread>
+  <message>UI_ACTION_BUTTON_PRESS</message>
+  <key>UI_ACTION_BUTTON_PRESS</key>
+  <catalog>&lt;null&gt;</catalog>
+  <param>org.openide.awt.Toolbar$DefaultIconButton[]</param>
+  <param>org.openide.awt.Toolbar$DefaultIconButton</param>
+  <param>org.netbeans.modules.project.ui.actions.NewFile[&amp;New File...]</param>
+  <param>org.netbeans.modules.project.ui.actions.NewFile</param>
+  <param>&amp;New File...</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:44</date>
+  <millis>1547705324833</millis>
+  <sequence>70</sequence>
+  <logger>org.netbeans.ui.actions</logger>
+  <level>400</level>
+  <thread>19</thread>
+  <message>UI_ACTION_BUTTON_PRESS</message>
+  <key>UI_ACTION_BUTTON_PRESS</key>
+  <catalog>org.openide.awt.Bundle</catalog>
+  <param>org.openide.awt.Toolbar$DefaultIconButton[]</param>
+  <param>org.openide.awt.Toolbar$DefaultIconButton</param>
+  <param>org.openide.awt.AlwaysEnabledAction[Ne&amp;w Project...]</param>
+  <param>org.openide.awt.AlwaysEnabledAction</param>
+  <param>Ne&amp;w Project...</param>
+</record>
+<record>
+  <date>2019-01-17T11:38:55</date>
+  <millis>1547705335304</millis>
+  <sequence>71</sequence>
+  <logger>org.netbeans.ui.actions</logger>
+  <level>400</level>
+  <thread>19</thread>
+  <message>UI_ACTION_BUTTON_PRESS</message>
+  <key>UI_ACTION_BUTTON_PRESS</key>
+  <catalog>org.openide.awt.Bundle</catalog>
+  <param>org.openide.awt.Actions$MenuItem[Open Project...]</param>
+  <param>org.openide.awt.Actions$MenuItem</param>
+  <param>org.netbeans.modules.project.ui.actions.OpenProject[Open Proj&amp;ect...]</param>
+  <param>org.netbeans.modules.project.ui.actions.OpenProject</param>
+  <param>Open Proj&amp;ect...</param>
+</record>
+<record>
+  <date>2019-01-17T11:40:19</date>
+  <millis>1547705419438</millis>
+  <sequence>72</sequence>
+  <logger>org.netbeans.ui.indexing</logger>
+  <level>800</level>
+  <thread>86</thread>
+  <message>INDEXING_STARTED</message>
+  <key>INDEXING_STARTED</key>
+  <catalog>org.netbeans.modules.parsing.impl.indexing.Bundle</catalog>
+  <param>0</param>
+</record>
+<record>
+  <date>2019-01-17T11:40:19</date>
+  <millis>1547705419447</millis>
+  <sequence>73</sequence>
+  <logger>org.netbeans.ui.indexing</logger>
+  <level>800</level>
+  <thread>86</thread>
+  <message>INDEXING_FINISHED</message>
+  <key>INDEXING_FINISHED</key>
+  <catalog>org.netbeans.modules.parsing.impl.indexing.Bundle</catalog>
+  <param>6</param>
+</record>
+<record>
+  <date>2019-01-17T11:40:19</date>
+  <millis>1547705419564</millis>
+  <sequence>77</sequence>
+  <logger>org.netbeans.ui.focus</logger>
+  <level>500</level>
+  <thread>19</thread>
+  <message>LOG_WINDOW_DEACTIVATED</message>
+  <key>LOG_WINDOW_DEACTIVATED</key>
+  <catalog>org.netbeans.core.ui.warmup.Bundle</catalog>
+</record>
+<record>
+  <date>2019-01-18T11:30:14</date>
+  <millis>1547791214964</millis>
+  <sequence>37</sequence>
+  <level>300</level>
+  <thread>14</thread>
+  <message>CPU INFO</message>
+  <param>4</param>
+</record>
+<record>
+  <date>2019-01-18T11:30:15</date>
+  <millis>1547791215197</millis>
+  <sequence>38</sequence>
+  <level>300</level>
+  <thread>14</thread>
+  <message>SCREEN SIZE</message>
+  <param>1366</param>
+  <param>768</param>
+  <param>1</param>
+</record>
+<record>
+  <date>2019-01-18T11:30:15</date>
+  <millis>1547791215217</millis>
+  <sequence>39</sequence>
+  <level>700</level>
+  <thread>14</thread>
+  <message>IDE_STARTUP</message>
+</record>
+<record>
+  <date>2019-01-18T11:30:19</date>
+  <millis>1547791219959</millis>
+  <sequence>55</sequence>
+  <logger>org.netbeans.ui.metrics.laf</logger>
+  <level>800</level>
+  <thread>14</thread>
+  <message>USG_LOOK_AND_FEEL</message>
+  <param>GTK</param>
+  <param>GTK look and feel</param>
+</record>
+<record>
+  <date>2019-01-18T11:30:23</date>
+  <millis>1547791223833</millis>
+  <sequence>56</sequence>
+  <logger>org.netbeans.core.nativeaccess.NativeWindowSystemImpl</logger>
+  <level>800</level>
+  <thread>45</thread>
+  <exception>
+    <message>java.lang.NoClassDefFoundError: Could not initialize class com.sun.jna.Native</message>
+    <frame>
+      <class>com.sun.jna.platform.unix.X11</class>
+      <method>&lt;clinit&gt;</method>
+      <line>380</line>
+      <file>${netbeans.home}modules/ext/jna-platform-4.1.0.jar</file>
+    </frame>
+    <frame>
+      <class>com.sun.jna.platform.WindowUtils$X11WindowUtils</class>
+      <method>getAlphaVisualIDs</method>
+      <line>1537</line>
+      <file>${netbeans.home}modules/ext/jna-platform-4.1.0.jar</file>
+    </frame>
+    <frame>
+      <class>com.sun.jna.platform.WindowUtils$X11WindowUtils</class>
+      <method>isWindowAlphaSupported</method>
+      <line>1487</line>
+      <file>${netbeans.home}modules/ext/jna-platform-4.1.0.jar</file>
+    </frame>
+    <frame>
+      <class>com.sun.jna.platform.WindowUtils</class>
+      <method>isWindowAlphaSupported</method>
+      <line>1823</line>
+      <file>${netbeans.home}modules/ext/jna-platform-4.1.0.jar</file>
+    </frame>
+    <frame>
+      <class>org.netbeans.core.nativeaccess.NativeWindowSystemImpl</class>
+      <method>isWindowAlphaSupported</method>
+      <file>${netbeans.home}modules/org-netbeans-core-nativeaccess.jar</file>
+    </frame>
+    <frame>
+      <class>org.netbeans.core.windows.FloatingWindowTransparencyManager$1</class>
+      <method>run</method>
+      <file>${netbeans.home}modules/org-netbeans-core-windows.jar</file>
+    </frame>
+    <frame>
+      <class>java.lang.Thread</class>
+      <method>run</method>
+      <line>748</line>
+      <file>${java.home}lib/rt.jar</file>
+    </frame>
+  </exception>
+</record>
+<record>
+  <date>2019-01-18T11:30:26</date>
+  <millis>1547791226759</millis>
+  <sequence>59</sequence>
+  <level>800</level>
+  <thread>13</thread>
+  <message>MEMORY</message>
+  <key>MEMORY</key>
+  <catalog>&lt;null&gt;</catalog>
+  <param>8292564992</param>
+</record>
+<record>
+  <date>2019-01-18T11:30:28</date>
+  <millis>1547791228888</millis>
+  <sequence>61</sequence>
+  <logger>org.netbeans.ui.actions</logger>
+  <level>400</level>
+  <thread>33</thread>
+  <message>UI_ACTION_BUTTON_PRESS</message>
+  <key>UI_ACTION_BUTTON_PRESS</key>
+  <catalog>org.openide.awt.Bundle</catalog>
+  <param>org.openide.awt.Actions$MenuItem[Open Project...]</param>
+  <param>org.openide.awt.Actions$MenuItem</param>
+  <param>org.netbeans.modules.project.ui.actions.OpenProject[Open Proj&amp;ect...]</param>
+  <param>org.netbeans.modules.project.ui.actions.OpenProject</param>
+  <param>Open Proj&amp;ect...</param>
+</record>
+<record>
+  <date>2019-01-18T11:31:20</date>
+  <millis>1547791280267</millis>
+  <sequence>62</sequence>
+  <logger>org.netbeans.ui.actions</logger>
+  <level>400</level>
+  <thread>33</thread>
+  <message>UI_ACTION_BUTTON_PRESS</message>
+  <key>UI_ACTION_BUTTON_PRESS</key>
+  <catalog>org.openide.awt.Bundle</catalog>
+  <param>org.openide.awt.Actions$MenuItem[Open File...]</param>
+  <param>org.openide.awt.Actions$MenuItem</param>
+  <param>org.openide.awt.AlwaysEnabledAction[&amp;Open File...]</param>
+  <param>org.openide.awt.AlwaysEnabledAction</param>
+  <param>&amp;Open File...</param>
+</record>
+<record>
+  <date>2019-01-18T11:32:03</date>
+  <millis>1547791323195</millis>
+  <sequence>66</sequence>
+  <logger>org.netbeans.ui.metrics.vcs</logger>
+  <level>800</level>
+  <thread>92</thread>
+  <message>USG_VCS_CLIENT</message>
+  <param>GIT</param>
+  <param>JAVALIB</param>
+</record>
+<record>
+  <date>2019-01-18T11:32:26</date>
+  <millis>1547791346547</millis>
+  <sequence>67</sequence>
+  <logger>org.netbeans.ui.metrics.editor</logger>
+  <level>800</level>
+  <thread>32</thread>
+  <message>USG_EDITOR_MIME_TYPE</message>
+  <param>text/plain</param>
+  <param>1</param>
+</record>
+<record>
+  <date>2019-01-18T11:32:26</date>
+  <millis>1547791346678</millis>
+  <sequence>68</sequence>
+  <logger>org.netbeans.ui.indexing</logger>
+  <level>800</level>
+  <thread>90</thread>
+  <message>INDEXING_STARTED</message>
+  <key>INDEXING_STARTED</key>
+  <catalog>org.netbeans.modules.parsing.impl.indexing.Bundle</catalog>
+  <param>0</param>
+</record>
+<record>
+  <date>2019-01-18T11:32:26</date>
+  <millis>1547791346818</millis>
+  <sequence>72</sequence>
+  <logger>org.netbeans.ui.focus</logger>
+  <level>500</level>
+  <thread>33</thread>
+  <message>LOG_WINDOW_DEACTIVATED</message>
+  <key>LOG_WINDOW_DEACTIVATED</key>
+  <catalog>org.netbeans.core.ui.warmup.Bundle</catalog>
+</record>
+<record>
+  <date>2019-01-18T11:32:26</date>
+  <millis>1547791346828</millis>
+  <sequence>73</sequence>
+  <logger>org.netbeans.ui.indexing</logger>
+  <level>800</level>
+  <thread>90</thread>
+  <message>INDEXING_FINISHED</message>
+  <key>INDEXING_FINISHED</key>
+  <catalog>org.netbeans.modules.parsing.impl.indexing.Bundle</catalog>
+  <param>21</param>
+</record>

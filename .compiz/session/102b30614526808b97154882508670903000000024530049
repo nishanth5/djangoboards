@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<compiz_session id="102b30614526808b97154882508670903000000024530049">
+  <window id="102b30614526808b97154885517999717100000024530055" title="Monthly_Report-40.csv (read-only) - LibreOffice Calc" class="libreoffice-calc" name="libreoffice" command="soffice">
+    <geometry x="65" y="24" width="1251" height="718"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+  <window id="102b30614526808b97154885517999717100000024530055" title="Monthly_Report-44.csv (read-only) - LibreOffice Calc" class="libreoffice-calc" name="libreoffice" command="soffice">
+    <geometry x="65" y="24" width="1251" height="718"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+  <window id="102b30614526808b97154882520020275300000024530050" title="Monthly Report / Magento Admin - Mozilla Firefox" class="Firefox" name="Navigator" role="browser" command="firefox">
+    <geometry x="65" y="24" width="1160" height="510"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+  <window id="102b30614526808b97154885517999717100000024530055" title="Monthly_Report-47.csv (read-only) - LibreOffice Calc" class="libreoffice-calc" name="libreoffice" command="soffice">
+    <geometry x="65" y="24" width="1251" height="718"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+  <window id="102b30614526808b97154885517999717100000024530055" title="Monthly_Report-45.csv (read-only) - LibreOffice Calc" class="libreoffice-calc" name="libreoffice" command="soffice">
+    <geometry x="65" y="24" width="1251" height="718"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+</compiz_session>

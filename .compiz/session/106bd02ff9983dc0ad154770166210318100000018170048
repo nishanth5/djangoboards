@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<compiz_session id="106bd02ff9983dc0ad154770166210318100000018170048">
+  <window id="106bd02ff9983dc0ad154773249283632000000018170065" title="Monthly_Report-18.csv (read-only) - LibreOffice Calc" class="libreoffice-calc" name="libreoffice" command="soffice">
+    <geometry x="65" y="24" width="1251" height="718"/>
+    <minimized/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+  <window id="106bd02ff9983dc0ad154770168393038900000018170049" title="Monthly Report / Magento Admin - Mozilla Firefox" class="Firefox" name="Navigator" role="browser" command="firefox">
+    <geometry x="65" y="24" width="1301" height="688"/>
+    <maximized vert="yes" horz="yes"/>
+    <workspace index="0"/>
+  </window>
+</compiz_session>

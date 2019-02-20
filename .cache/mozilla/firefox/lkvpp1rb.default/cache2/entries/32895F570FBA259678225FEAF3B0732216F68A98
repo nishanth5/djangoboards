@@ -1,0 +1,468 @@
+(function () {
+    ! function (e, t) {
+        "undefined" != typeof module && module.exports ? module.exports = t() : "function" == typeof define && define.amd ? define([], function () {
+            return e.TimeMe = t()
+        }) : e.TimeMe = t()
+    }(this, function () {
+        var e = {
+            startStopTimes: {},
+            idleTimeoutMs: 3e4,
+            currentIdleTimeMs: 0,
+            checkStateRateMs: 250,
+            active: !1,
+            idle: !1,
+            currentPageName: "default-page-name",
+            timeElapsedCallbacks: [],
+            userLeftCallbacks: [],
+            userReturnCallbacks: [],
+            trackTimeOnElement: function (t) {
+                var n = document.getElementById(t);
+                n && (n.addEventListener("mouseover", function () {
+                    e.startTimer(t)
+                }), n.addEventListener("mousemove", function () {
+                    e.startTimer(t)
+                }), n.addEventListener("mouseleave", function () {
+                    e.stopTimer(t)
+                }), n.addEventListener("keypress", function () {
+                    e.startTimer(t)
+                }), n.addEventListener("focus", function () {
+                    e.startTimer(t)
+                }))
+            },
+            getTimeOnElementInSeconds: function (t) {
+                var n = e.getTimeOnPageInSeconds(t);
+                return n || 0
+            },
+            startTimer: function (t) {
+                if (t || (t = e.currentPageName), void 0 === e.startStopTimes[t]) e.startStopTimes[t] = [];
+                else {
+                    var n = e.startStopTimes[t],
+                        i = n[n.length - 1];
+                    if (void 0 !== i && void 0 === i.stopTime) return
+                }
+                e.startStopTimes[t].push({
+                    startTime: new Date,
+                    stopTime: void 0
+                }), e.active = !0
+            },
+            stopAllTimers: function () {
+                for (var t = Object.keys(e.startStopTimes), n = 0; n < t.length; n++) e.stopTimer(t[n])
+            },
+            stopTimer: function (t) {
+                t || (t = e.currentPageName);
+                var n = e.startStopTimes[t];
+                void 0 !== n && 0 !== n.length && (void 0 === n[n.length - 1].stopTime && (n[n.length - 1].stopTime = new Date), e.active = !1)
+            },
+            getTimeOnCurrentPageInSeconds: function () {
+                return e.getTimeOnPageInSeconds(e.currentPageName)
+            },
+            getTimeOnPageInSeconds: function (t) {
+                return void 0 === e.getTimeOnPageInMilliseconds(t) ? void 0 : e.getTimeOnPageInMilliseconds(t) / 1e3
+            },
+            getTimeOnCurrentPageInMilliseconds: function () {
+                return e.getTimeOnPageInMilliseconds(e.currentPageName)
+            },
+            getTimeOnPageInMilliseconds: function (t) {
+                var n = e.startStopTimes[t];
+                if (void 0 !== n) {
+                    for (var i = 0, s = 0; s < n.length; s++) {
+                        var o = n[s].startTime,
+                            r = n[s].stopTime;
+                        void 0 === r && (r = new Date), i += r - o
+                    }
+                    return Number(i)
+                }
+            },
+            getTimeOnAllPagesInSeconds: function () {
+                for (var t = [], n = Object.keys(e.startStopTimes), i = 0; i < n.length; i++) {
+                    var s = n[i],
+                        o = e.getTimeOnPageInSeconds(s);
+                    t.push({
+                        pageName: s,
+                        timeOnPage: o
+                    })
+                }
+                return t
+            },
+            setIdleDurationInSeconds: function (t) {
+                var n = parseFloat(t);
+                if (!1 !== isNaN(n)) throw {
+                    name: "InvalidDurationException",
+                    message: "An invalid duration time (" + t + ") was provided."
+                };
+                return e.idleTimeoutMs = 1e3 * t, this
+            },
+            setCurrentPageName: function (t) {
+                return e.currentPageName = t, this
+            },
+            resetRecordedPageTime: function (t) {
+                delete e.startStopTimes[t]
+            },
+            resetAllRecordedPageTimes: function () {
+                for (var t = Object.keys(e.startStopTimes), n = 0; n < t.length; n++) e.resetRecordedPageTime(t[n])
+            },
+            resetIdleCountdown: function () {
+                e.idle && e.triggerUserHasReturned(), e.idle = !1, e.currentIdleTimeMs = 0
+            },
+            callWhenUserLeaves: function (e, t) {
+                this.userLeftCallbacks.push({
+                    callback: e,
+                    numberOfTimesToInvoke: t
+                })
+            },
+            callWhenUserReturns: function (e, t) {
+                this.userReturnCallbacks.push({
+                    callback: e,
+                    numberOfTimesToInvoke: t
+                })
+            },
+            triggerUserHasReturned: function () {
+                if (!e.active)
+                    for (var t = 0; t < this.userReturnCallbacks.length; t++) {
+                        var n = this.userReturnCallbacks[t],
+                            i = n.numberOfTimesToInvoke;
+                        (isNaN(i) || void 0 === i || i > 0) && (n.numberOfTimesToInvoke -= 1, n.callback())
+                    }
+                e.startTimer()
+            },
+            triggerUserHasLeftPage: function () {
+                if (e.active)
+                    for (var t = 0; t < this.userLeftCallbacks.length; t++) {
+                        var n = this.userLeftCallbacks[t],
+                            i = n.numberOfTimesToInvoke;
+                        (isNaN(i) || void 0 === i || i > 0) && (n.numberOfTimesToInvoke -= 1, n.callback())
+                    }
+                e.stopAllTimers()
+            },
+            callAfterTimeElapsedInSeconds: function (t, n) {
+                e.timeElapsedCallbacks.push({
+                    timeInSeconds: t,
+                    callback: n,
+                    pending: !0
+                })
+            },
+            checkState: function () {
+                for (var t = 0; t < e.timeElapsedCallbacks.length; t++) e.timeElapsedCallbacks[t].pending && e.getTimeOnCurrentPageInSeconds() > e.timeElapsedCallbacks[t].timeInSeconds && (e.timeElapsedCallbacks[t].callback(), e.timeElapsedCallbacks[t].pending = !1);
+                !1 === e.idle && e.currentIdleTimeMs > e.idleTimeoutMs ? (e.idle = !0, e.triggerUserHasLeftPage()) : e.currentIdleTimeMs += e.checkStateRateMs
+            },
+            visibilityChangeEventName: void 0,
+            hiddenPropName: void 0,
+            listenForVisibilityEvents: function () {
+                void 0 !== document.hidden ? (e.hiddenPropName = "hidden", e.visibilityChangeEventName = "visibilitychange") : void 0 !== document.mozHidden ? (e.hiddenPropName = "mozHidden", e.visibilityChangeEventName = "mozvisibilitychange") : void 0 !== document.msHidden ? (e.hiddenPropName = "msHidden", e.visibilityChangeEventName = "msvisibilitychange") : void 0 !== document.webkitHidden && (e.hiddenPropName = "webkitHidden", e.visibilityChangeEventName = "webkitvisibilitychange"), document.addEventListener(e.visibilityChangeEventName, function () {
+                    document[e.hiddenPropName] ? e.triggerUserHasLeftPage() : e.triggerUserHasReturned()
+                }, !1), window.addEventListener("blur", function () {
+                    e.triggerUserHasLeftPage()
+                }), window.addEventListener("focus", function () {
+                    e.triggerUserHasReturned()
+                }), document.addEventListener("mousemove", function () {
+                    e.resetIdleCountdown()
+                }), document.addEventListener("keyup", function () {
+                    e.resetIdleCountdown()
+                }), document.addEventListener("touchstart", function () {
+                    e.resetIdleCountdown()
+                }), window.addEventListener("scroll", function () {
+                    e.resetIdleCountdown()
+                }), setInterval(function () {
+                    e.checkState()
+                }, e.checkStateRateMs)
+            },
+            websocket: void 0,
+            websocketHost: void 0,
+            setUpWebsocket: function (t) {
+                if (window.WebSocket && t) {
+                    var n = t.websocketHost;
+                    try {
+                        e.websocket = new WebSocket(n), window.onbeforeunload = function (n) {
+                            e.sendCurrentTime(t.appId)
+                        }, e.websocket.onopen = function () {
+                            e.sendInitWsRequest(t.appId)
+                        }, e.websocket.onerror = function (e) {
+                            console && console.log("Error occurred in websocket connection: " + e)
+                        }, e.websocket.onmessage = function (e) {
+                            console && console.log(e.data)
+                        }
+                    } catch (e) {
+                        console && console.error("Failed to connect to websocket host.  Error:" + e)
+                    }
+                }
+                return this
+            },
+            websocketSend: function (t) {
+                e.websocket.send(JSON.stringify(t))
+            },
+            sendCurrentTime: function (t) {
+                var n = {
+                    type: "INSERT_TIME",
+                    appId: t,
+                    timeOnPageMs: e.getTimeOnCurrentPageInMilliseconds(),
+                    pageName: e.currentPageName
+                };
+                e.websocketSend(n)
+            },
+            sendInitWsRequest: function (t) {
+                var n = {
+                    type: "INIT",
+                    appId: t
+                };
+                e.websocketSend(n)
+            },
+            initialize: function (t) {
+                var n = e.idleTimeoutMs || 30,
+                    i = e.currentPageName || "default-page-name",
+                    s = void 0;
+                t && (n = t.idleTimeoutInSeconds || n, i = t.currentPageName || i, s = t.websocketOptions), e.setIdleDurationInSeconds(n).setCurrentPageName(i).setUpWebsocket(s).listenForVisibilityEvents(), e.startTimer()
+            }
+        };
+        return e
+    })
+})(window);
+
+         20190128165852                                                Õ)      ( f u n c t i o n   ( )   {  
+         !   f u n c t i o n   ( e ,   t )   {  
+                 " u n d e f i n e d "   ! =   t y p e o f   m o d u l e   & &   m o d u l e . e x p o r t s   ?   m o d u l e . e x p o r t s   =   t ( )   :   " f u n c t i o n "   = =   t y p e o f   d e f i n e   & &   d e f i n e . a m d   ?   d e f i n e ( [ ] ,   f u n c t i o n   ( )   {  
+                         r e t u r n   e . T i m e M e   =   t ( )  
+                 } )   :   e . T i m e M e   =   t ( )  
+         } ( t h i s ,   f u n c t i o n   ( )   {  
+                 v a r   e   =   {  
+                         s t a r t S t o p T i m e s :   { } ,  
+                         i d l e T i m e o u t M s :   3 e 4 ,  
+                         c u r r e n t I d l e T i m e M s :   0 ,  
+                         c h e c k S t a t e R a t e M s :   2 5 0 ,  
+                         a c t i v e :   ! 1 ,  
+                         i d l e :   ! 1 ,  
+                         c u r r e n t P a g e N a m e :   " d e f a u l t - p a g e - n a m e " ,  
+                         t i m e E l a p s e d C a l l b a c k s :   [ ] ,  
+                         u s e r L e f t C a l l b a c k s :   [ ] ,  
+                         u s e r R e t u r n C a l l b a c k s :   [ ] ,  
+                         t r a c k T i m e O n E l e m e n t :   f u n c t i o n   ( t )   {  
+                                 v a r   n   =   d o c u m e n t . g e t E l e m e n t B y I d ( t ) ;  
+                                 n   & &   ( n . a d d E v e n t L i s t e n e r ( " m o u s e o v e r " ,   f u n c t i o n   ( )   {  
+                                         e . s t a r t T i m e r ( t )  
+                                 } ) ,   n . a d d E v e n t L i s t e n e r ( " m o u s e m o v e " ,   f u n c t i o n   ( )   {  
+                                         e . s t a r t T i m e r ( t )  
+                                 } ) ,   n . a d d E v e n t L i s t e n e r ( " m o u s e l e a v e " ,   f u n c t i o n   ( )   {  
+                                         e . s t o p T i m e r ( t )  
+                                 } ) ,   n . a d d E v e n t L i s t e n e r ( " k e y p r e s s " ,   f u n c t i o n   ( )   {  
+                                         e . s t a r t T i m e r ( t )  
+                                 } ) ,   n . a d d E v e n t L i s t e n e r ( " f o c u s " ,   f u n c t i o n   ( )   {  
+                                         e . s t a r t T i m e r ( t )  
+                                 } ) )  
+                         } ,  
+                         g e t T i m e O n E l e m e n t I n S e c o n d s :   f u n c t i o n   ( t )   {  
+                                 v a r   n   =   e . g e t T i m e O n P a g e I n S e c o n d s ( t ) ;  
+                                 r e t u r n   n   | |   0  
+                         } ,  
+                         s t a r t T i m e r :   f u n c t i o n   ( t )   {  
+                                 i f   ( t   | |   ( t   =   e . c u r r e n t P a g e N a m e ) ,   v o i d   0   = = =   e . s t a r t S t o p T i m e s [ t ] )   e . s t a r t S t o p T i m e s [ t ]   =   [ ] ;  
+                                 e l s e   {  
+                                         v a r   n   =   e . s t a r t S t o p T i m e s [ t ] ,  
+                                                 i   =   n [ n . l e n g t h   -   1 ] ;  
+                                         i f   ( v o i d   0   ! = =   i   & &   v o i d   0   = = =   i . s t o p T i m e )   r e t u r n  
+                                 }  
+                                 e . s t a r t S t o p T i m e s [ t ] . p u s h ( {  
+                                         s t a r t T i m e :   n e w   D a t e ,  
+                                         s t o p T i m e :   v o i d   0  
+                                 } ) ,   e . a c t i v e   =   ! 0  
+                         } ,  
+                         s t o p A l l T i m e r s :   f u n c t i o n   ( )   {  
+                                 f o r   ( v a r   t   =   O b j e c t . k e y s ( e . s t a r t S t o p T i m e s ) ,   n   =   0 ;   n   <   t . l e n g t h ;   n + + )   e . s t o p T i m e r ( t [ n ] )  
+                         } ,  
+                         s t o p T i m e r :   f u n c t i o n   ( t )   {  
+                                 t   | |   ( t   =   e . c u r r e n t P a g e N a m e ) ;  
+                                 v a r   n   =   e . s t a r t S t o p T i m e s [ t ] ;  
+                                 v o i d   0   ! = =   n   & &   0   ! = =   n . l e n g t h   & &   ( v o i d   0   = = =   n [ n . l e n g t h   -   1 ] . s t o p T i m e   & &   ( n [ n . l e n g t h   -   1 ] . s t o p T i m e   =   n e w   D a t e ) ,   e . a c t i v e   =   ! 1 )  
+                         } ,  
+                         g e t T i m e O n C u r r e n t P a g e I n S e c o n d s :   f u n c t i o n   ( )   {  
+                                 r e t u r n   e . g e t T i m e O n P a g e I n S e c o n d s ( e . c u r r e n t P a g e N a m e )  
+                         } ,  
+                         g e t T i m e O n P a g e I n S e c o n d s :   f u n c t i o n   ( t )   {  
+                                 r e t u r n   v o i d   0   = = =   e . g e t T i m e O n P a g e I n M i l l i s e c o n d s ( t )   ?   v o i d   0   :   e . g e t T i m e O n P a g e I n M i l l i s e c o n d s ( t )   /   1 e 3  
+                         } ,  
+                         g e t T i m e O n C u r r e n t P a g e I n M i l l i s e c o n d s :   f u n c t i o n   ( )   {  
+                                 r e t u r n   e . g e t T i m e O n P a g e I n M i l l i s e c o n d s ( e . c u r r e n t P a g e N a m e )  
+                         } ,  
+                         g e t T i m e O n P a g e I n M i l l i s e c o n d s :   f u n c t i o n   ( t )   {  
+                                 v a r   n   =   e . s t a r t S t o p T i m e s [ t ] ;  
+                                 i f   ( v o i d   0   ! = =   n )   {  
+                                         f o r   ( v a r   i   =   0 ,   s   =   0 ;   s   <   n . l e n g t h ;   s + + )   {  
+                                                 v a r   o   =   n [ s ] . s t a r t T i m e ,  
+                                                         r   =   n [ s ] . s t o p T i m e ;  
+                                                 v o i d   0   = = =   r   & &   ( r   =   n e w   D a t e ) ,   i   + =   r   -   o  
+                                         }  
+                                         r e t u r n   N u m b e r ( i )  
+                                 }  
+                         } ,  
+                         g e t T i m e O n A l l P a g e s I n S e c o n d s :   f u n c t i o n   ( )   {  
+                                 f o r   ( v a r   t   =   [ ] ,   n   =   O b j e c t . k e y s ( e . s t a r t S t o p T i m e s ) ,   i   =   0 ;   i   <   n . l e n g t h ;   i + + )   {  
+                                         v a r   s   =   n [ i ] ,  
+                                                 o   =   e . g e t T i m e O n P a g e I n S e c o n d s ( s ) ;  
+                                         t . p u s h ( {  
+                                                 p a g e N a m e :   s ,  
+                                                 t i m e O n P a g e :   o  
+                                         } )  
+                                 }  
+                                 r e t u r n   t  
+                         } ,  
+                         s e t I d l e D u r a t i o n I n S e c o n d s :   f u n c t i o n   ( t )   {  
+                                 v a r   n   =   p a r s e F l o a t ( t ) ;  
+                                 i f   ( ! 1   ! = =   i s N a N ( n ) )   t h r o w   {  
+                                         n a m e :   " I n v a l i d D u r a t i o n E x c e p t i o n " ,  
+                                         m e s s a g e :   " A n   i n v a l i d   d u r a t i o n   t i m e   ( "   +   t   +   " )   w a s   p r o v i d e d . "  
+                                 } ;  
+                                 r e t u r n   e . i d l e T i m e o u t M s   =   1 e 3   *   t ,   t h i s  
+                         } ,  
+                         s e t C u r r e n t P a g e N a m e :   f u n c t i o n   ( t )   {  
+                                 r e t u r n   e . c u r r e n t P a g e N a m e   =   t ,   t h i s  
+                         } ,  
+                         r e s e t R e c o r d e d P a g e T i m e :   f u n c t i o n   ( t )   {  
+                                 d e l e t e   e . s t a r t S t o p T i m e s [ t ]  
+                         } ,  
+                         r e s e t A l l R e c o r d e d P a g e T i m e s :   f u n c t i o n   ( )   {  
+                                 f o r   ( v a r   t   =   O b j e c t . k e y s ( e . s t a r t S t o p T i m e s ) ,   n   =   0 ;   n   <   t . l e n g t h ;   n + + )   e . r e s e t R e c o r d e d P a g e T i m e ( t [ n ] )  
+                         } ,  
+                         r e s e t I d l e C o u n t d o w n :   f u n c t i o n   ( )   {  
+                                 e . i d l e   & &   e . t r i g g e r U s e r H a s R e t u r n e d ( ) ,   e . i d l e   =   ! 1 ,   e . c u r r e n t I d l e T i m e M s   =   0  
+                         } ,  
+                         c a l l W h e n U s e r L e a v e s :   f u n c t i o n   ( e ,   t )   {  
+                                 t h i s . u s e r L e f t C a l l b a c k s . p u s h ( {  
+                                         c a l l b a c k :   e ,  
+                                         n u m b e r O f T i m e s T o I n v o k e :   t  
+                                 } )  
+                         } ,  
+                         c a l l W h e n U s e r R e t u r n s :   f u n c t i o n   ( e ,   t )   {  
+                                 t h i s . u s e r R e t u r n C a l l b a c k s . p u s h ( {  
+                                         c a l l b a c k :   e ,  
+                                         n u m b e r O f T i m e s T o I n v o k e :   t  
+                                 } )  
+                         } ,  
+                         t r i g g e r U s e r H a s R e t u r n e d :   f u n c t i o n   ( )   {  
+                                 i f   ( ! e . a c t i v e )  
+                                         f o r   ( v a r   t   =   0 ;   t   <   t h i s . u s e r R e t u r n C a l l b a c k s . l e n g t h ;   t + + )   {  
+                                                 v a r   n   =   t h i s . u s e r R e t u r n C a l l b a c k s [ t ] ,  
+                                                         i   =   n . n u m b e r O f T i m e s T o I n v o k e ;  
+                                                 ( i s N a N ( i )   | |   v o i d   0   = = =   i   | |   i   >   0 )   & &   ( n . n u m b e r O f T i m e s T o I n v o k e   - =   1 ,   n . c a l l b a c k ( ) )  
+                                         }  
+                                 e . s t a r t T i m e r ( )  
+                         } ,  
+                         t r i g g e r U s e r H a s L e f t P a g e :   f u n c t i o n   ( )   {  
+                                 i f   ( e . a c t i v e )  
+                                         f o r   ( v a r   t   =   0 ;   t   <   t h i s . u s e r L e f t C a l l b a c k s . l e n g t h ;   t + + )   {  
+                                                 v a r   n   =   t h i s . u s e r L e f t C a l l b a c k s [ t ] ,  
+                                                         i   =   n . n u m b e r O f T i m e s T o I n v o k e ;  
+                                                 ( i s N a N ( i )   | |   v o i d   0   = = =   i   | |   i   >   0 )   & &   ( n . n u m b e r O f T i m e s T o I n v o k e   - =   1 ,   n . c a l l b a c k ( ) )  
+                                         }  
+                                 e . s t o p A l l T i m e r s ( )  
+                         } ,  
+                         c a l l A f t e r T i m e E l a p s e d I n S e c o n d s :   f u n c t i o n   ( t ,   n )   {  
+                                 e . t i m e E l a p s e d C a l l b a c k s . p u s h ( {  
+                                         t i m e I n S e c o n d s :   t ,  
+                                         c a l l b a c k :   n ,  
+                                         p e n d i n g :   ! 0  
+                                 } )  
+                         } ,  
+                         c h e c k S t a t e :   f u n c t i o n   ( )   {  
+                                 f o r   ( v a r   t   =   0 ;   t   <   e . t i m e E l a p s e d C a l l b a c k s . l e n g t h ;   t + + )   e . t i m e E l a p s e d C a l l b a c k s [ t ] . p e n d i n g   & &   e . g e t T i m e O n C u r r e n t P a g e I n S e c o n d s ( )   >   e . t i m e E l a p s e d C a l l b a c k s [ t ] . t i m e I n S e c o n d s   & &   ( e . t i m e E l a p s e d C a l l b a c k s [ t ] . c a l l b a c k ( ) ,   e . t i m e E l a p s e d C a l l b a c k s [ t ] . p e n d i n g   =   ! 1 ) ;  
+                                 ! 1   = = =   e . i d l e   & &   e . c u r r e n t I d l e T i m e M s   >   e . i d l e T i m e o u t M s   ?   ( e . i d l e   =   ! 0 ,   e . t r i g g e r U s e r H a s L e f t P a g e ( ) )   :   e . c u r r e n t I d l e T i m e M s   + =   e . c h e c k S t a t e R a t e M s  
+                         } ,  
+                         v i s i b i l i t y C h a n g e E v e n t N a m e :   v o i d   0 ,  
+                         h i d d e n P r o p N a m e :   v o i d   0 ,  
+                         l i s t e n F o r V i s i b i l i t y E v e n t s :   f u n c t i o n   ( )   {  
+                                 v o i d   0   ! = =   d o c u m e n t . h i d d e n   ?   ( e . h i d d e n P r o p N a m e   =   " h i d d e n " ,   e . v i s i b i l i t y C h a n g e E v e n t N a m e   =   " v i s i b i l i t y c h a n g e " )   :   v o i d   0   ! = =   d o c u m e n t . m o z H i d d e n   ?   ( e . h i d d e n P r o p N a m e   =   " m o z H i d d e n " ,   e . v i s i b i l i t y C h a n g e E v e n t N a m e   =   " m o z v i s i b i l i t y c h a n g e " )   :   v o i d   0   ! = =   d o c u m e n t . m s H i d d e n   ?   ( e . h i d d e n P r o p N a m e   =   " m s H i d d e n " ,   e . v i s i b i l i t y C h a n g e E v e n t N a m e   =   " m s v i s i b i l i t y c h a n g e " )   :   v o i d   0   ! = =   d o c u m e n t . w e b k i t H i d d e n   & &   ( e . h i d d e n P r o p N a m e   =   " w e b k i t H i d d e n " ,   e . v i s i b i l i t y C h a n g e E v e n t N a m e   =   " w e b k i t v i s i b i l i t y c h a n g e " ) ,   d o c u m e n t . a d d E v e n t L i s t e n e r ( e . v i s i b i l i t y C h a n g e E v e n t N a m e ,   f u n c t i o n   ( )   {  
+                                         d o c u m e n t [ e . h i d d e n P r o p N a m e ]   ?   e . t r i g g e r U s e r H a s L e f t P a g e ( )   :   e . t r i g g e r U s e r H a s R e t u r n e d ( )  
+                                 } ,   ! 1 ) ,   w i n d o w . a d d E v e n t L i s t e n e r ( " b l u r " ,   f u n c t i o n   ( )   {  
+                                         e . t r i g g e r U s e r H a s L e f t P a g e ( )  
+                                 } ) ,   w i n d o w . a d d E v e n t L i s t e n e r ( " f o c u s " ,   f u n c t i o n   ( )   {  
+                                         e . t r i g g e r U s e r H a s R e t u r n e d ( )  
+                                 } ) ,   d o c u m e n t . a d d E v e n t L i s t e n e r ( " m o u s e m o v e " ,   f u n c t i o n   ( )   {  
+                                         e . r e s e t I d l e C o u n t d o w n ( )  
+                                 } ) ,   d o c u m e n t . a d d E v e n t L i s t e n e r ( " k e y u p " ,   f u n c t i o n   ( )   {  
+                                         e . r e s e t I d l e C o u n t d o w n ( )  
+                                 } ) ,   d o c u m e n t . a d d E v e n t L i s t e n e r ( " t o u c h s t a r t " ,   f u n c t i o n   ( )   {  
+                                         e . r e s e t I d l e C o u n t d o w n ( )  
+                                 } ) ,   w i n d o w . a d d E v e n t L i s t e n e r ( " s c r o l l " ,   f u n c t i o n   ( )   {  
+                                         e . r e s e t I d l e C o u n t d o w n ( )  
+                                 } ) ,   s e t I n t e r v a l ( f u n c t i o n   ( )   {  
+                                         e . c h e c k S t a t e ( )  
+                                 } ,   e . c h e c k S t a t e R a t e M s )  
+                         } ,  
+                         w e b s o c k e t :   v o i d   0 ,  
+                         w e b s o c k e t H o s t :   v o i d   0 ,  
+                         s e t U p W e b s o c k e t :   f u n c t i o n   ( t )   {  
+                                 i f   ( w i n d o w . W e b S o c k e t   & &   t )   {  
+                                         v a r   n   =   t . w e b s o c k e t H o s t ;  
+                                         t r y   {  
+                                                 e . w e b s o c k e t   =   n e w   W e b S o c k e t ( n ) ,   w i n d o w . o n b e f o r e u n l o a d   =   f u n c t i o n   ( n )   {  
+                                                         e . s e n d C u r r e n t T i m e ( t . a p p I d )  
+                                                 } ,   e . w e b s o c k e t . o n o p e n   =   f u n c t i o n   ( )   {  
+                                                         e . s e n d I n i t W s R e q u e s t ( t . a p p I d )  
+                                                 } ,   e . w e b s o c k e t . o n e r r o r   =   f u n c t i o n   ( e )   {  
+                                                         c o n s o l e   & &   c o n s o l e . l o g ( " E r r o r   o c c u r r e d   i n   w e b s o c k e t   c o n n e c t i o n :   "   +   e )  
+                                                 } ,   e . w e b s o c k e t . o n m e s s a g e   =   f u n c t i o n   ( e )   {  
+                                                         c o n s o l e   & &   c o n s o l e . l o g ( e . d a t a )  
+                                                 }  
+                                         }   c a t c h   ( e )   {  
+                                                 c o n s o l e   & &   c o n s o l e . e r r o r ( " F a i l e d   t o   c o n n e c t   t o   w e b s o c k e t   h o s t .     E r r o r : "   +   e )  
+                                         }  
+                                 }  
+                                 r e t u r n   t h i s  
+                         } ,  
+                         w e b s o c k e t S e n d :   f u n c t i o n   ( t )   {  
+                                 e . w e b s o c k e t . s e n d ( J S O N . s t r i n g i f y ( t ) )  
+                         } ,  
+                         s e n d C u r r e n t T i m e :   f u n c t i o n   ( t )   {  
+                                 v a r   n   =   {  
+                                         t y p e :   " I N S E R T _ T I M E " ,  
+                                         a p p I d :   t ,  
+                                         t i m e O n P a g e M s :   e . g e t T i m e O n C u r r e n t P a g e I n M i l l i s e c o n d s ( ) ,  
+                                         p a g e N a m e :   e . c u r r e n t P a g e N a m e  
+                                 } ;  
+                                 e . w e b s o c k e t S e n d ( n )  
+                         } ,  
+                         s e n d I n i t W s R e q u e s t :   f u n c t i o n   ( t )   {  
+                                 v a r   n   =   {  
+                                         t y p e :   " I N I T " ,  
+                                         a p p I d :   t  
+                                 } ;  
+                                 e . w e b s o c k e t S e n d ( n )  
+                         } ,  
+                         i n i t i a l i z e :   f u n c t i o n   ( t )   {  
+                                 v a r   n   =   e . i d l e T i m e o u t M s   | |   3 0 ,  
+                                         i   =   e . c u r r e n t P a g e N a m e   | |   " d e f a u l t - p a g e - n a m e " ,  
+                                         s   =   v o i d   0 ;  
+                                 t   & &   ( n   =   t . i d l e T i m e o u t I n S e c o n d s   | |   n ,   i   =   t . c u r r e n t P a g e N a m e   | |   i ,   s   =   t . w e b s o c k e t O p t i o n s ) ,   e . s e t I d l e D u r a t i o n I n S e c o n d s ( n ) . s e t C u r r e n t P a g e N a m e ( i ) . s e t U p W e b s o c k e t ( s ) . l i s t e n F o r V i s i b i l i t y E v e n t s ( ) ,   e . s t a r t T i m e r ( )  
+                         }  
+                 } ;  
+                 r e t u r n   e  
+         } )  
+ } ) ( w i n d o w ) ;  
+  
+    )       https://adpxljs.adpxl.co/timeme.min-2.js     Õ)      Õ)                    Ç    ö    Á QôòÆÄ  ⁄≠ò¨Ä  ‹    windowá!´!ˇˇˇˇ            ´+íHç!´!       C                                                   
+   ø)     ø)                   GπW   QÇ    V   Ç   :  QôßòÆ…®ò≠Ä  ⁄ å!´!ˇˇˇˇ      .this         ´+íHç!´!       C  ï                                            Ä                             G=    ö   'E   ÊQö   5   Ê   Êö   à   :  6   Z   Ê=   ö   'E   ÊQö   5   Ê"   Êö   ù   Z    Ç    Á    Êà   à   :  6   ÊQô°òùŸ—ò3”òŸ⁄ò…®Àò †ò    undefined   module   exports   function   define   amd   TimeMeå!´!ˇˇˇˇ      e   t       ´+íHç!´!        B  π   Î   ∞   Î      ê           5û öò;¯ 5ûç!´!       C   ê      *   Â                                         ª)    ª)                    [   [    ]    X0u]   >]   X˙ ]   B]   B]   =   ]   Z    ]   Z    ]	   Z    ]
+   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç	   ]   Ç
+   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   Ç   ]   >(]    >(]!   Ç   ]"   >(]#   >(]$   Ç   ]%   Ç   ]&   Ç   ]'   Ç   ](   Ç   ])   â   Qà   ô†ò•ò †ò»†ò¶ò»†ò¶ò¶ò †ò †ò †ò †ò ® ò ®$ò ®0ò ®3ò ®8ò ®;ò ®>ò ®Aò ®Lò ®Wò ®_ò ®bò ®eò ®hò ®kò ®qò ®wò ®Ä  Äò ®Ä  âò ®Ä  êò ††††òòßòòßò ®Ä  ©òòßòòßò ®Ä  æò †††ò ®Ä   ò ®Ä  —ò–®Ä  ÿò•ò    startStopTimes   idleTimeoutMs#   currentIdleTimeMs!   checkStateRateMs   active	   idle#   default-page-name   currentPageName)   timeElapsedCallbacks#   userLeftCallbacks'   userReturnCallbacks%   trackTimeOnElement3   getTimeOnElementInSeconds   startTimer   stopAllTimers   stopTimer;   getTimeOnCurrentPageInSeconds-   getTimeOnPageInSecondsE   getTimeOnCurrentPageInMilliseconds7   getTimeOnPageInMilliseconds5   getTimeOnAllPagesInSeconds1   setIdleDurationInSeconds%   setCurrentPageName+   resetRecordedPageTime3   resetAllRecordedPageTimes%   resetIdleCountdown%   callWhenUserLeaves'   callWhenUserReturns-   triggerUserHasReturned-   triggerUserHasLeftPage;   callAfterTimeElapsedInSeconds   checkState3   visibilityChangeEventName   hiddenPropName3   listenForVisibilityEvents   websocket   websocketHost   setUpWebsocket   websocketSend   sendCurrentTime#   sendInitWsRequest   initializeå!´!ˇˇˇˇ      e         ´+íHé!´!            ç!´!        %   trackTimeOnElementB ≥    ™       )              t    B  .  j  %  j     ?           5û    B  ñ  “  ç  “     =           5û    B  ˇ  :  ˆ  :     >           5û    B  e  °  \  °     <           5û    B  …    ¿       9           5û  5ûç!´!       3   getTimeOnElementInSecondsB I  ≤  @  ≤      0           5ûç!´!          startTimerB ÷  »  Õ  »  $   !            5ûç!´!          stopAllTimersB  Ô  k  Ê  k  0   $           5ûç!´!          stopTimerB é  ê	  Ö  ê	  3               5ûç!´!       ;   getTimeOnCurrentPageInSecondsB  «	  
+  æ	  
+  8   4           5ûç!´!       -   getTimeOnPageInSecondsB N
+  ÿ
+  E
+  ÿ
+  ;   -           5û ç!´!       E   getTimeOnCurrentPageInMillisecondsB    p    p  >   9           5û ç!´!       7   getTimeOnPageInMillisecondsB •  B  ú  B  A   2   0        5ûç!´!       5   getTimeOnAllPagesInSecondsB  v  ˜  m  ˜  L   1            5ûç!´!       1   setIdleDurationInSecondsB )  i     i  W   /           5û ç!´!       %   setCurrentPageNameB ï  ›  å  ›  _   )           5û ç!´!       +   resetRecordedPageTimeB   L    L  b   ,           5ûç!´!       3   resetAllRecordedPageTimesB      v    e   0           5ûç!´!       %   resetIdleCountdownB  3  ¢  *  ¢  h   )           5û ç!´!       %   callWhenUserLeavesB Œ  x  ≈  x  k   )           5û ç!´!       '   callWhenUserReturnsB •  Q  ú  Q  q   *           5ûç!´!       -   triggerUserHasReturnedB  Å  !  x  !  w   -   "        5ûç!´!       -   triggerUserHasLeftPageB  Q  Ô  H  Ô  Ä   -   "        5ûç!´!       ;   callAfterTimeElapsedInSecondsB &  Í    Í  â   4           5ûç!´!          checkStateB    Œ    Œ  ê   !           5û ç!´!       3   listenForVisibilityEventsB  V  <!  M  <!  ñ   0            B  â  
+  Ä  
+  ó   -          5û    B  :  Å  1  Å  ô   A           5û    B  Æ  ı  •  ı  õ   >           5û    B  (  k    k  ù   D           5û    B  ö  ›  ë  ›  ü   @           5û    B     T      T   °   E           5û    B  Ç   ≈   y   ≈   £   ?           5û    B  ›   !  ‘   !  •   )           5û  5ûç!´!          setUpWebsocketB ®!  S%  ü!  S%  ´   %   b          t    B "  ◊"  v"  ◊"  Ø   Y           5û    B  ˜"  P#  Ó"  P#  ±   9           5û    B q#  ı#  h#  ı#  ≥   :           5û    B $  t$  $  t$  µ   <           5û  5ûç!´!          websocketSendB z%  √%  q%  √%  æ   $           5ûç!´!          sendCurrentTimeB Ï%  '  „%  '  ¡   &           5ûç!´!       #   sendInitWsRequestB C'  Î'  :'  Î'      (           5ûç!´!          initializeB (  ñ)  (  ñ)  —   !           5û é!´!    )   é!´!   startStopTimesã!´!é!´!   idleTimeoutMsã!´!é!´!#   currentIdleTimeMsã!´!é!´!!   checkStateRateMsã!´!é!´!   activeã!´!é!´!	   idleã!´!é!´!   currentPageNameã!´!é!´!)   timeElapsedCallbacksã!´!é!´!#   userLeftCallbacksã!´!é!´!'   userReturnCallbacksã!´!é!´!%   trackTimeOnElementã!´!é!´!3   getTimeOnElementInSecondsã!´!é!´!   startTimerã!´!é!´!   stopAllTimersã!´!é!´!   stopTimerã!´!é!´!;   getTimeOnCurrentPageInSecondsã!´!é!´!-   getTimeOnPageInSecondsã!´!é!´!E   getTimeOnCurrentPageInMillisecondsã!´!é!´!7   getTimeOnPageInMillisecondsã!´!é!´!5   getTimeOnAllPagesInSecondsã!´!é!´!1   setIdleDurationInSecondsã!´!é!´!%   setCurrentPageNameã!´!é!´!+   resetRecordedPageTimeã!´!é!´!3   resetAllRecordedPageTimesã!´!é!´!%   resetIdleCountdownã!´!é!´!%   callWhenUserLeavesã!´!é!´!'   callWhenUserReturnsã!´!é!´!-   triggerUserHasReturnedã!´!é!´!-   triggerUserHasLeftPageã!´!é!´!;   callAfterTimeElapsedInSecondsã!´!é!´!   checkStateã!´!é!´!3   visibilityChangeEventNameã!´!é!´!   hiddenPropNameã!´!é!´!3   listenForVisibilityEventsã!´!é!´!   websocketã!´!é!´!   websocketHostã!´!é!´!   setUpWebsocketã!´!é!´!   websocketSendã!´!é!´!   sendCurrentTimeã!´!é!´!#   sendInitWsRequestã!´!é!´!   initializeã!´!    öò;¯ 5û öò;¯ 5ûöò;¯$Ì9‘      \bZÃ\bZÃ@â–\kî    )    :https://adpxljs.adpxl.co/timeme.min-2.js strongly-framed 1 security-info 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 request-method GET response-head HTTP/1.1 200 OK
+Server: nginx/1.10.3 (Ubuntu)
+Date: Tue, 12 Feb 2019 05:31:55 GMT
+Content-Type: application/javascript
+Content-Length: 10701
+Last-Modified: Wed, 20 Jun 2018 03:41:03 GMT
+Accept-Ranges: bytes
+ETag: "7a142783488d41:0"
+X-Powered-By: ASP.NET
+ original-response-headers Server: nginx/1.10.3 (Ubuntu)
+Date: Tue, 12 Feb 2019 05:31:55 GMT
+Content-Type: application/javascript
+Content-Length: 10701
+Connection: keep-alive
+Last-Modified: Wed, 20 Jun 2018 03:41:03 GMT
+Accept-Ranges: bytes
+ETag: "7a142783488d41:0"
+X-Powered-By: ASP.NET
+ uncompressed-len 0 net-response-time-onstart 955 net-response-time-onstop 956 necko:classified 1 alt-data 1;10701,javascript/moz-bytecode-20190128165852 alt-data-from-child 1   ó«
