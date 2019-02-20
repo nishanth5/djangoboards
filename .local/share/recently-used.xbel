@@ -5164,12 +5164,12 @@
       </metadata>
     </info>
   </bookmark>
-  <bookmark href="file:///home/divum/Development/myproject/myproject/myproject/urls.py" added="2019-02-15T07:10:08Z" modified="2019-02-20T06:36:22Z" visited="2019-02-15T07:10:08Z">
+  <bookmark href="file:///home/divum/Development/myproject/myproject/myproject/urls.py" added="2019-02-15T07:10:08Z" modified="2019-02-20T10:10:32Z" visited="2019-02-15T07:10:08Z">
     <info>
       <metadata owner="http://freedesktop.org">
         <mime:mime-type type="text/x-python"/>
         <bookmark:applications>
-          <bookmark:application name="nautilus" exec="&apos;/usr/share/code/code --unity-launch %F&apos;" modified="2019-02-20T06:36:22Z" count="12"/>
+          <bookmark:application name="nautilus" exec="&apos;/usr/share/code/code --unity-launch %F&apos;" modified="2019-02-20T10:10:32Z" count="13"/>
         </bookmark:applications>
       </metadata>
     </info>
@@ -5247,12 +5247,12 @@
       </metadata>
     </info>
   </bookmark>
-  <bookmark href="file:///home/divum/Development/myproject/myproject/templates/topics.html" added="2019-02-15T12:53:34Z" modified="2019-02-19T12:45:56Z" visited="2019-02-15T12:53:35Z">
+  <bookmark href="file:///home/divum/Development/myproject/myproject/templates/topics.html" added="2019-02-15T12:53:34Z" modified="2019-02-20T10:19:14Z" visited="2019-02-15T12:53:35Z">
     <info>
       <metadata owner="http://freedesktop.org">
         <mime:mime-type type="text/html"/>
         <bookmark:applications>
-          <bookmark:application name="nautilus" exec="&apos;/usr/share/code/code --unity-launch %F&apos;" modified="2019-02-19T12:45:56Z" count="7"/>
+          <bookmark:application name="nautilus" exec="&apos;/usr/share/code/code --unity-launch %F&apos;" modified="2019-02-20T10:19:14Z" count="8"/>
         </bookmark:applications>
       </metadata>
     </info>
@@ -6171,6 +6171,16 @@
         <mime:mime-type type="application/x-compressed-tar"/>
         <bookmark:applications>
           <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2019-02-20T08:03:45Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/divum/Development/myproject/myproject/templates/edit_post.html" added="2019-02-20T10:21:09Z" modified="2019-02-20T10:21:09Z" visited="2019-02-20T10:21:10.236252Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:applications>
+          <bookmark:application name="nautilus" exec="&apos;/usr/share/code/code --unity-launch %F&apos;" modified="2019-02-20T10:21:09Z" count="1"/>
         </bookmark:applications>
       </metadata>
     </info>

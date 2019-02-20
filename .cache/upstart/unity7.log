@@ -107,3 +107,5 @@ debconf: DbDriver "passwords" warning: could not open /var/cache/debconf/passwor
 [90m[main 2019-02-20T09:03:18.350Z][0m update#setState idle
 [90m[main 2019-02-20T10:03:17.201Z][0m update#setState checking for updates
 [90m[main 2019-02-20T10:03:18.126Z][0m update#setState idle
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+[Parent 4260, Gecko_IOThread] WARNING: pipe error (109): Connection reset by peer: file /build/firefox-1juj5k/firefox-65.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 349

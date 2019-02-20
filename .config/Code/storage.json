@@ -8,11 +8,13 @@
             "file:///var/www/html/magento/nuawoman-consumer-magento"
         ],
         "files2": [
+            "file:///home/divum/Development/myproject/myproject/templates/edit_post.html",
+            "file:///home/divum/Development/myproject/myproject/templates/topics.html",
+            "file:///home/divum/Development/myproject/myproject/myproject/urls.py",
             "file:///home/divum/Development/myproject/myproject/boards/views.py",
             "file:///home/divum/Development/myproject/myproject/boards/tests/test_view_board_topics.py",
             "file:///home/divum/Development/myproject/myproject/boards/tests/test_view_new_topic.py",
             "file:///home/divum/.local/share/Trash/files/boards/forms.py",
-            "file:///home/divum/Development/myproject/myproject/myproject/urls.py",
             "file:///home/divum/Development/myproject/myproject/accounts/views.py",
             "file:///home/divum/Development/myproject/myproject/accounts/admin.py",
             "file:///home/divum/Development/myproject/myproject/accounts/forms.py",
@@ -26,7 +28,6 @@
             "file:///home/divum/Development/myproject/myproject/templates/new_topic.html",
             "file:///home/divum/Development/myproject/myproject/templates/replay_topic.html",
             "file:///home/divum/Development/myproject/myproject/boards/forms.py",
-            "file:///home/divum/Development/myproject/myproject/templates/topics.html",
             "file:///home/divum/Development/myproject/myproject/templates/topic_posts.html",
             "file:///home/divum/Development/myproject/myproject/boards/tests/test_view_topic_posts.py",
             "file:///home/divum/Development/myproject/myproject/accounts/tests/test_view_password_reset.py",
@@ -106,8 +107,7 @@
             "file:///var/www/html/magento/nuawoman-consumer-magento/app/code/local/Divum/Ship/Model/Carrier/Demo.php",
             "file:///var/www/html/magento/nuawoman-consumer-magento/app/code/local/Divum/Bludart/etc/config.xml",
             "file:///var/www/html/magento/nuawoman-consumer-magento/app/etc/modules/Divum_Shippingmethod.xml",
-            "file:///var/www/html/magento/nuawoman-consumer-magento/app/etc/modules/Divum_Bludart.xml",
-            "file:///var/www/html/magento/nuawoman-consumer-magento/app/code/local/Divum/Bludart/Helper/Data.php"
+            "file:///var/www/html/magento/nuawoman-consumer-magento/app/etc/modules/Divum_Bludart.xml"
         ]
     },
     "windowsState": {
