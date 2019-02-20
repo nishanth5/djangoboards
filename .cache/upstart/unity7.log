@@ -47,3 +47,63 @@ Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
 
 
 (firefox:4260): LIBDBUSMENU-GTK-CRITICAL **: dbusmenu_menuitem_property_set_shortcut: assertion 'gtk_accelerator_valid(key, modifier)' failed
+ERROR 2019-02-20 13:15:15 nux.gestures_subscription GesturesSubscription.cpp:93 Failed to deactivate Geis subscription.
+ERROR 2019-02-20 13:15:15 nux.gestures_subscription GesturesSubscription.cpp:93 Failed to deactivate Geis subscription.
+ERROR 2019-02-20 13:15:15 nux.gestures_subscription GesturesSubscription.cpp:93 Failed to deactivate Geis subscription.
+** Message: Remote error from secret service: org.freedesktop.Secret.Error.IsLocked: Cannot create an item in a locked collection
+** Message: Remote error from secret service: org.freedesktop.Secret.Error.IsLocked: Cannot create an item in a locked collection
+** Message: Remote error from secret service: org.freedesktop.Secret.Error.IsLocked: Cannot create an item in a locked collection
+[18758:18758:0220/132450.855770:ERROR:textfield.cc(1777)] Not implemented reached in virtual bool views::Textfield::ShouldDoLearning()
+[18758:19422:0220/133047.533544:ERROR:cert_verify_proc_nss.cc(974)] CERT_PKIXVerifyCert for adobesync.beringmedia.com failed err=-8181
+WARN  2019-02-20 13:31:52 unityreak_table (break_type) <unknown>:0 Invalid UTF-8 string passed to pango_layout_set_text()
+WARN  2019-02-20 13:31:52 unityreak_table (break_type) <unknown>:0 Invalid UTF-8 string passed to pango_layout_set_text()
+WARN  2019-02-20 13:31:52 unityreak_table (break_type) <unknown>:0 Invalid UTF-8 string passed to pango_layout_set_text()
+
+(nautilus:19585): GLib-GIO-CRITICAL **: g_dbus_interface_skeleton_unexport: assertion 'interface_->priv->connections != NULL' failed
+
+(nautilus:19585): GLib-GIO-CRITICAL **: g_dbus_interface_skeleton_unexport: assertion 'interface_->priv->connections != NULL' failed
+
+(nautilus:19585): Gtk-CRITICAL **: gtk_icon_theme_get_for_screen: assertion 'GDK_IS_SCREEN (screen)' failed
+
+(nautilus:19585): GLib-GObject-WARNING **: invalid (NULL) pointer instance
+
+(nautilus:19585): GLib-GObject-CRITICAL **: g_signal_connect_object: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+[90m[main 2019-02-20T08:03:17.166Z][0m update#setState checking for updates
+
+(nautilus:19662): GLib-GIO-CRITICAL **: g_dbus_interface_skeleton_unexport: assertion 'interface_->priv->connections != NULL' failed
+
+(nautilus:19662): GLib-GIO-CRITICAL **: g_dbus_interface_skeleton_unexport: assertion 'interface_->priv->connections != NULL' failed
+
+(nautilus:19662): Gtk-CRITICAL **: gtk_icon_theme_get_for_screen: assertion 'GDK_IS_SCREEN (screen)' failed
+
+(nautilus:19662): GLib-GObject-WARNING **: invalid (NULL) pointer instance
+
+(nautilus:19662): GLib-GObject-CRITICAL **: g_signal_connect_object: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+[90m[main 2019-02-20T08:03:18.001Z][0m update#setState idle
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+/usr/lib/python3/dist-packages/AptUrl/gtk/GtkUI.py:1: PyGIWarning: Gtk was imported without specifying a version first. Use gi.require_version('Gtk', '3.0') before import to ensure that the right version gets loaded.
+  from gi.repository import Gtk
+/usr/lib/python3/dist-packages/UpdateManager/UnitySupport.py:29: PyGIWarning: Dbusmenu was imported without specifying a version first. Use gi.require_version('Dbusmenu', '0.4') before import to ensure that the right version gets loaded.
+  from gi.repository import Dbusmenu, Unity
+/usr/lib/python3/dist-packages/UpdateManager/UnitySupport.py:29: PyGIWarning: Unity was imported without specifying a version first. Use gi.require_version('Unity', '7.0') before import to ensure that the right version gets loaded.
+  from gi.repository import Dbusmenu, Unity
+/usr/lib/python3/dist-packages/AptUrl/gtk/GtkUI.py:91: PyGIWarning: WebKit2 was imported without specifying a version first. Use gi.require_version('WebKit2', '4.0') before import to ensure that the right version gets loaded.
+  from gi.repository import WebKit2
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+debconf: DbDriver "passwords" warning: could not open /var/cache/debconf/passwords.dat: Permission denied
+debconf: DbDriver "passwords" warning: could not open /var/cache/debconf/passwords.dat: Permission denied
+debconf: DbDriver "passwords" warning: could not open /var/cache/debconf/passwords.dat: Permission denied
+** Message: Remote error from secret service: org.freedesktop.Secret.Error.IsLocked: Cannot create an item in a locked collection
+** Message: Remote error from secret service: org.freedesktop.Secret.Error.IsLocked: Cannot create an item in a locked collection
+** Message: Remote error from secret service: org.freedesktop.Secret.Error.IsLocked: Cannot create an item in a locked collection
+[21088:21088:0220/134634.931275:ERROR:textfield.cc(1777)] Not implemented reached in virtual bool views::Textfield::ShouldDoLearning()
+** Message: Remote error from secret service: org.freedesktop.Secret.Error.IsLocked: Cannot create an item in a locked collection
+[21088:21122:0220/134637.048098:ERROR:native_backend_libsecret.cc(366)] Libsecret add raw login failed: Cannot create an item in a locked collection
+[WARNING:flash/platform/pepper/pep_module.cpp(63)] SANDBOXED
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+[90m[main 2019-02-20T09:03:17.197Z][0m update#setState checking for updates
+[90m[main 2019-02-20T09:03:18.350Z][0m update#setState idle
+[90m[main 2019-02-20T10:03:17.201Z][0m update#setState checking for updates
+[90m[main 2019-02-20T10:03:18.126Z][0m update#setState idle

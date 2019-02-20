@@ -94,3 +94,29 @@ fatal: no upstream configured for branch 'master'
 > git check-ignore -z --stdin
 > git add -A -- .
 > git commit --quiet --allow-empty-message --file - --all
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse master
+> git rev-parse --symbolic-full-name master@{u}
+fatal: no upstream configured for branch 'master'
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git check-ignore -z --stdin
+> git show :Development/myproject/myproject/boards/tests/test_view_new_topic.py
+> git check-ignore -z --stdin
+> git show :.local/share/Trash/files/boards/forms.py
+> git show :Development/myproject/myproject/boards/tests/test_view_new_topic.py
+> git show :Development/myproject/myproject/boards/tests/test_view_board_topics.py
+> git show :Development/myproject/myproject/boards/tests/test_view_new_topic.py
+> git show :Development/myproject/myproject/boards/tests/test_view_board_topics.py
+> git show :Development/myproject/myproject/boards/views.py
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse master
+> git rev-parse --symbolic-full-name master@{u}
+fatal: no upstream configured for branch 'master'
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git check-ignore -z --stdin
+> git add -A -- .
+> git commit --quiet --allow-empty-message --file - --all

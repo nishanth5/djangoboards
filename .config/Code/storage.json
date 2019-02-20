@@ -8,6 +8,9 @@
             "file:///var/www/html/magento/nuawoman-consumer-magento"
         ],
         "files2": [
+            "file:///home/divum/Development/myproject/myproject/boards/views.py",
+            "file:///home/divum/Development/myproject/myproject/boards/tests/test_view_board_topics.py",
+            "file:///home/divum/Development/myproject/myproject/boards/tests/test_view_new_topic.py",
             "file:///home/divum/.local/share/Trash/files/boards/forms.py",
             "file:///home/divum/Development/myproject/myproject/myproject/urls.py",
             "file:///home/divum/Development/myproject/myproject/accounts/views.py",
@@ -19,9 +22,7 @@
             "file:///home/divum/.local/share/Trash/files/boards/models.py",
             "file:///home/divum/.local/share/Trash/files/boards/views.py",
             "file:///home/divum/Development/myproject/myproject/accounts/models.py",
-            "file:///home/divum/Development/myproject/myproject/boards/views.py",
             "file:///home/divum/Development/myproject/myproject/accounts/tests/test_view_password_change.py",
-            "file:///home/divum/Development/myproject/myproject/boards/tests/test_view_new_topic.py",
             "file:///home/divum/Development/myproject/myproject/templates/new_topic.html",
             "file:///home/divum/Development/myproject/myproject/templates/replay_topic.html",
             "file:///home/divum/Development/myproject/myproject/boards/forms.py",
@@ -34,7 +35,6 @@
             "file:///home/divum/Development/myproject/myproject/boards/tests/test_views.py",
             "file:///home/divum/Development/myproject/myproject/boards/tests/tests_views.py",
             "file:///home/divum/Development/myproject/myproject/boards/tests/test_view_home.py",
-            "file:///home/divum/Development/myproject/myproject/boards/tests/test_view_board_topics.py",
             "file:///home/divum/Development/myproject/myproject/templates/password_change_done.html",
             "file:///home/divum/Development/myproject/myproject/templates/password_change.html",
             "file:///home/divum/Development/myproject/myproject/templates/password_reset_complete.html",

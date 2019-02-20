@@ -1,0 +1,2 @@
+
+(unity-settings-daemon:2500): power-plugin-WARNING **: failed to turn the kbd backlight off: GDBus.Error:org.freedesktop.DBus.Error.UnknownMethod: No such interface 'org.freedesktop.UPower.KbdBacklight' on object at path /org/freedesktop/UPower/KbdBacklight

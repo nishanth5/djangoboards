@@ -26,3 +26,9 @@
 (unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
 
 (unity-panel-service:2520): LIBDBUSMENU-GLIB-WARNING **: Unable to replace properties on 7: Error getting properties for ID
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'IS_WINDOW_MENU(wm)' failed
+
+(unity-panel-service:2520): Indicator-Appmenu-WARNING **: Already have a menu for window ID 67109677 with path /com/canonical/menu/400032D from :1.89, unregistering that one
