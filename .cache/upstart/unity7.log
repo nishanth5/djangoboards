@@ -42,3 +42,8 @@ Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
 Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
 Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
 Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+(firefox:4260): LIBDBUSMENU-GTK-CRITICAL **: dbusmenu_menuitem_property_set_shortcut: assertion 'gtk_accelerator_valid(key, modifier)' failed

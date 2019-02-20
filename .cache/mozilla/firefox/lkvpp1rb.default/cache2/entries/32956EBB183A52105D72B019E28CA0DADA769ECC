@@ -992,7 +992,7 @@ input[type="submit"], button {
         word-break: break-word;
     }
 }
-›Éaó”      \lþ\lþ@7V\m¨.   6    :http://127.0.0.1:8000/static/admin/css/responsive.css strongly-framed 1 request-method GET response-head HTTP/1.1 200 OK
+ùñÄó”      \lþ<\lþ@+\m¨.   6    :http://127.0.0.1:8000/static/admin/css/responsive.css strongly-framed 1 request-method GET response-head HTTP/1.1 200 OK
 Content-Type: text/css
 Content-Length: 17976
 Last-Modified: Fri, 15 Feb 2019 06:14:41 GMT
